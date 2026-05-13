@@ -1,6 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { loadProfile, saveProfile } from '@/utils/storage';
 
+export interface HabitGoalConfig {
+  count: number;
+  period: 'daily' | 'weekly' | 'monthly';
+}
+
 export interface ScheduleConfig {
   categoryRotations: {
     [category: string]: {
@@ -11,11 +16,19 @@ export interface ScheduleConfig {
   habitWeekdays: {
     [habitId: string]: number[];
   };
+  habitModes: {
+    [habitId: string]: 'weekdays' | 'goal';
+  };
+  habitGoals: {
+    [habitId: string]: HabitGoalConfig;
+  };
 }
 
 export const DEFAULT_SCHEDULE: ScheduleConfig = {
   categoryRotations: {},
   habitWeekdays: {},
+  habitModes: {},
+  habitGoals: {},
 };
 
 export interface UserProfile {

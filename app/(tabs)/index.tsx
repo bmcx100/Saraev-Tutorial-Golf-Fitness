@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { ScrollView, View, Text, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -13,7 +13,10 @@ import { CATEGORY_META, type HabitCategory } from '@/constants/habits';
 import { ChallengeCard } from '@/components/challenge-card';
 import { HabitRow } from '@/components/habit-row';
 import { Confetti } from '@/components/confetti';
+import { PaceToast } from '@/components/pace-toast';
 import { playSound } from '@/constants/sounds';
+import { usePace } from '@/hooks/use-pace';
+import { loadPaceToastShown, savePaceToastShown, formatDate } from '@/utils/storage';
 
 export default function TodayScreen() {
   const { todayHabits, logHabit, getHabitProgress } = useHabits();
@@ -24,12 +27,43 @@ export default function TodayScreen() {
   const [confettiActive, setConfettiActive] = useState(false);
   const [confettiMessage, setConfettiMessage] = useState<string | undefined>();
 
+  const { paceMap, celebrationHabits, warningHabits } = usePace();
+  const [showCelebrationToast, setShowCelebrationToast] = useState(false);
+  const [showWarningToast, setShowWarningToast] = useState(false);
+  const toastCheckedRef = useRef<string | null>(null);
+
   const displayDate = devDateOverride ? new Date(devDateOverride + 'T00:00:00') : new Date();
   const dateStr = displayDate.toLocaleDateString('en-US', {
     weekday: 'short',
     month: 'long',
     day: 'numeric',
   });
+
+  const todayStr = devDateOverride ?? formatDate(new Date());
+
+  // Pace toast logic — once per day
+  useEffect(() => {
+    if (toastCheckedRef.current === todayStr) return;
+    if (celebrationHabits.length === 0 && warningHabits.length === 0) return;
+
+    (async () => {
+      const alreadyShown = await loadPaceToastShown(todayStr);
+      if (alreadyShown) {
+        toastCheckedRef.current = todayStr;
+        return;
+      }
+      toastCheckedRef.current = todayStr;
+
+      if (celebrationHabits.length > 0) {
+        setShowCelebrationToast(true);
+      }
+      if (warningHabits.length > 0) {
+        setShowWarningToast(true);
+      }
+
+      await savePaceToastShown(todayStr);
+    })();
+  }, [todayStr, celebrationHabits, warningHabits]);
 
   const handleLog = useCallback(
     (habitId: string) => {
@@ -94,6 +128,24 @@ export default function TodayScreen() {
         onComplete={() => setConfettiActive(false)}
       />
 
+      {showCelebrationToast && celebrationHabits.length > 0 && (
+        <PaceToast
+          message={`You're crushing ${celebrationHabits[0]}! Keep it\u00A0up!`}
+          variant="celebration"
+          visible={showCelebrationToast}
+          onDismiss={() => setShowCelebrationToast(false)}
+        />
+      )}
+      {showWarningToast && warningHabits.length > 0 && (
+        <PaceToast
+          message={`${warningHabits[0]} needs attention. Time to get after\u00A0it!`}
+          variant="warning"
+          visible={showWarningToast}
+          onDismiss={() => setShowWarningToast(false)}
+          delay={celebrationHabits.length > 0 ? 3500 : 0}
+        />
+      )}
+
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.headerRow}>
@@ -155,6 +207,7 @@ export default function TodayScreen() {
                     target={target}
                     complete={complete}
                     onLog={() => handleLog(habit.id)}
+                    paceStatus={paceMap.get(habit.id)?.status}
                   />
                 );
               })}

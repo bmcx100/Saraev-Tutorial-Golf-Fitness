@@ -76,7 +76,13 @@ export async function loadProfile(): Promise<UserProfile | null> {
   if (!raw) return null;
   const profile = JSON.parse(raw) as UserProfile;
   if (!profile.schedule) {
-    profile.schedule = { categoryRotations: {}, habitWeekdays: {} };
+    profile.schedule = { categoryRotations: {}, habitWeekdays: {}, habitModes: {}, habitGoals: {} };
+  }
+  if (!profile.schedule.habitModes) {
+    profile.schedule.habitModes = {};
+  }
+  if (!profile.schedule.habitGoals) {
+    profile.schedule.habitGoals = {};
   }
   return profile;
 }
@@ -157,6 +163,17 @@ export async function loadExerciseDefaults(): Promise<Record<string, { weight: n
 
 export async function saveExerciseDefaults(defaults: Record<string, { weight: number | null; reps: number }[]>): Promise<void> {
   await AsyncStorage.setItem('strength-exercise-defaults', JSON.stringify(defaults));
+}
+
+// ── Pace toast dedup ─────────────────────────────────────────
+
+export async function loadPaceToastShown(date: string): Promise<boolean> {
+  const raw = await AsyncStorage.getItem(`pace-toast-shown-${date}`);
+  return raw === 'true';
+}
+
+export async function savePaceToastShown(date: string): Promise<void> {
+  await AsyncStorage.setItem(`pace-toast-shown-${date}`, 'true');
 }
 
 // ── Old format detection ──────────────────────────────────────

@@ -4,8 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { HABIT_LIBRARY, CATEGORY_META, type Habit, type HabitCategory } from '@/constants/habits';
-import { useUser } from '@/contexts/user-context';
-import { type ScheduleConfig } from '@/contexts/user-context';
+import { useUser, type ScheduleConfig, type HabitGoalConfig } from '@/contexts/user-context';
 import { useColors } from '@/hooks/use-colors';
 import { useHabits } from '@/contexts/habit-context';
 import { useChallenges } from '@/contexts/challenge-context';
@@ -13,6 +12,7 @@ import { clearAllData, generateStreakData, saveLogs, formatDate } from '@/utils/
 import { scheduleDaily } from '@/utils/notifications';
 import { WeekdayPicker } from '@/components/weekday-picker';
 import { Confetti } from '@/components/confetti';
+import { getGoalWeekdays } from '@/utils/schedule';
 
 export default function SettingsScreen() {
   const colors = useColors();
@@ -44,15 +44,6 @@ export default function SettingsScreen() {
   };
 
   const schedule = profile.schedule;
-
-  const updateWeekdays = (habitId: string, days: number[]) => {
-    updateProfile({
-      schedule: {
-        ...schedule,
-        habitWeekdays: { ...schedule.habitWeekdays, [habitId]: days },
-      },
-    });
-  };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -334,7 +325,7 @@ export default function SettingsScreen() {
           <HabitDetailPanel
             habit={detailHabit}
             schedule={schedule}
-            onUpdateWeekdays={updateWeekdays}
+            onUpdateSchedule={(newSchedule) => updateProfile({ schedule: newSchedule })}
             onClose={() => setDetailHabit(null)}
           />
         )}
@@ -343,19 +334,80 @@ export default function SettingsScreen() {
   );
 }
 
+const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const PERIODS: HabitGoalConfig['period'][] = ['daily', 'weekly', 'monthly'];
+
 function HabitDetailPanel({
   habit,
   schedule,
-  onUpdateWeekdays,
+  onUpdateSchedule,
   onClose,
 }: {
   habit: Habit;
   schedule: ScheduleConfig;
-  onUpdateWeekdays: (habitId: string, days: number[]) => void;
+  onUpdateSchedule: (schedule: ScheduleConfig) => void;
   onClose: () => void;
 }) {
   const colors = useColors();
   const { profile, updateProfile } = useUser();
+
+  const currentMode = schedule.habitModes?.[habit.id] ?? 'weekdays';
+  const currentGoal = schedule.habitGoals?.[habit.id] ?? { count: 3, period: 'weekly' as const };
+
+  const [mode, setMode] = useState<'weekdays' | 'goal'>(currentMode);
+  const [goalCount, setGoalCount] = useState(currentGoal.count);
+  const [goalPeriod, setGoalPeriod] = useState<HabitGoalConfig['period']>(currentGoal.period);
+
+  const previewDays = getGoalWeekdays({ count: goalCount, period: goalPeriod });
+  const previewText = previewDays.map((d) => DAY_LABELS[d]).join(', ');
+
+  const saveMode = (
+    newMode: 'weekdays' | 'goal',
+    newCount?: number,
+    newPeriod?: HabitGoalConfig['period'],
+  ) => {
+    const count = newCount ?? goalCount;
+    const period = newPeriod ?? goalPeriod;
+    const next = { ...schedule };
+    next.habitModes = { ...next.habitModes, [habit.id]: newMode };
+
+    if (newMode === 'goal') {
+      next.habitGoals = { ...next.habitGoals, [habit.id]: { count, period } };
+      next.habitWeekdays = {
+        ...next.habitWeekdays,
+        [habit.id]: getGoalWeekdays({ count, period }),
+      };
+    } else {
+      const { [habit.id]: _, ...restGoals } = next.habitGoals ?? {};
+      next.habitGoals = restGoals;
+    }
+
+    onUpdateSchedule(next);
+  };
+
+  const handleModeChange = (newMode: 'weekdays' | 'goal') => {
+    setMode(newMode);
+    saveMode(newMode);
+  };
+
+  const handleCountChange = (delta: number) => {
+    const next = Math.max(1, Math.min(31, goalCount + delta));
+    setGoalCount(next);
+    saveMode('goal', next, goalPeriod);
+  };
+
+  const handlePeriodChange = (p: HabitGoalConfig['period']) => {
+    setGoalPeriod(p);
+    saveMode('goal', goalCount, p);
+  };
+
+  const handleWeekdayChange = (days: number[]) => {
+    const next = {
+      ...schedule,
+      habitWeekdays: { ...schedule.habitWeekdays, [habit.id]: days },
+    };
+    onUpdateSchedule(next);
+  };
 
   const protocolLabel =
     profile.speedProtocol === 'superspeed-l1'
@@ -389,16 +441,113 @@ function HabitDetailPanel({
         <Text style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: 24 }]}>
           Schedule
         </Text>
-        <View style={styles.weekdaySection}>
-          <Text style={[styles.weekdayLabel, { color: colors.text }]}>Active days</Text>
-          <WeekdayPicker
-            selectedDays={schedule.habitWeekdays[habit.id] ?? []}
-            onChange={(days) => onUpdateWeekdays(habit.id, days)}
-          />
-          <Text style={[styles.weekdayHint, { color: colors.textSecondary }]}>
-            No days selected = every day
-          </Text>
+
+        {/* Mode toggle */}
+        <View style={[styles.segmentRow, { borderColor: colors.border }]}>
+          <Pressable
+            onPress={() => handleModeChange('weekdays')}
+            style={[
+              styles.segmentBtn,
+              mode === 'weekdays' && { backgroundColor: colors.accent },
+              mode !== 'weekdays' && { borderColor: colors.border, borderWidth: 1 },
+            ]}
+          >
+            <Text
+              style={[
+                styles.segmentText,
+                { color: mode === 'weekdays' ? '#fff' : colors.text },
+              ]}
+            >
+              Specific Days
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => handleModeChange('goal')}
+            style={[
+              styles.segmentBtn,
+              mode === 'goal' && { backgroundColor: colors.accent },
+              mode !== 'goal' && { borderColor: colors.border, borderWidth: 1 },
+            ]}
+          >
+            <Text
+              style={[
+                styles.segmentText,
+                { color: mode === 'goal' ? '#fff' : colors.text },
+              ]}
+            >
+              Count Goal
+            </Text>
+          </Pressable>
         </View>
+
+        {mode === 'weekdays' && (
+          <View style={styles.weekdaySection}>
+            <Text style={[styles.weekdayLabel, { color: colors.text }]}>Active days</Text>
+            <WeekdayPicker
+              selectedDays={schedule.habitWeekdays[habit.id] ?? []}
+              onChange={handleWeekdayChange}
+            />
+            <Text style={[styles.weekdayHint, { color: colors.textSecondary }]}>
+              No days selected = every day
+            </Text>
+          </View>
+        )}
+
+        {mode === 'goal' && (
+          <View style={styles.weekdaySection}>
+            {/* Count stepper */}
+            <Text style={[styles.weekdayLabel, { color: colors.text }]}>Goal count</Text>
+            <View style={styles.stepperRow}>
+              <Pressable
+                onPress={() => handleCountChange(-1)}
+                style={[styles.stepperBtn, { backgroundColor: colors.accent + '20' }]}
+              >
+                <Text style={[styles.stepperBtnText, { color: colors.accent }]}>-</Text>
+              </Pressable>
+              <Text style={[styles.stepperValue, { color: colors.text }]}>{goalCount}</Text>
+              <Pressable
+                onPress={() => handleCountChange(1)}
+                style={[styles.stepperBtn, { backgroundColor: colors.accent + '20' }]}
+              >
+                <Text style={[styles.stepperBtnText, { color: colors.accent }]}>+</Text>
+              </Pressable>
+            </View>
+
+            {/* Period pills */}
+            <Text style={[styles.weekdayLabel, { color: colors.text, marginTop: 16 }]}>Period</Text>
+            <View style={styles.pillRow}>
+              {PERIODS.map((p) => (
+                <Pressable
+                  key={p}
+                  onPress={() => handlePeriodChange(p)}
+                  style={[
+                    styles.pill,
+                    goalPeriod === p
+                      ? { backgroundColor: colors.accent }
+                      : { borderColor: colors.border, borderWidth: 1 },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.pillText,
+                      { color: goalPeriod === p ? '#fff' : colors.text },
+                    ]}
+                  >
+                    {p.charAt(0).toUpperCase() + p.slice(1)}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+
+            {/* Preview */}
+            <Text style={[styles.weekdayHint, { color: colors.textSecondary, marginTop: 12 }]}>
+              Shows on {previewText}
+            </Text>
+            <Text style={[styles.weekdayHint, { color: colors.textSecondary, marginTop: 4 }]}>
+              We&apos;ll track your pace and cheer you&nbsp;on
+            </Text>
+          </View>
+        )}
 
         {/* Strength Protocol — only for gym */}
         {habit.id === 'gym' && (
@@ -573,6 +722,56 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     textAlign: 'center',
+    fontWeight: '600',
+  },
+  segmentRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 12,
+  },
+  segmentBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  segmentText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  stepperRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  stepperBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepperBtnText: {
+    fontSize: 22,
+    fontWeight: '700',
+  },
+  stepperValue: {
+    fontSize: 24,
+    fontWeight: '700',
+    minWidth: 40,
+    textAlign: 'center',
+  },
+  pillRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  pill: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+  },
+  pillText: {
+    fontSize: 14,
     fontWeight: '600',
   },
 });

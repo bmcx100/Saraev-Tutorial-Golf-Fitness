@@ -8,6 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { type Habit } from '@/constants/habits';
 import { useColors } from '@/hooks/use-colors';
+import type { PaceStatus } from '@/utils/pace';
 
 interface HabitRowProps {
   habit: Habit;
@@ -15,9 +16,17 @@ interface HabitRowProps {
   target: number;
   complete: boolean;
   onLog: () => void;
+  paceStatus?: PaceStatus;
 }
 
-export function HabitRow({ habit, count, target, complete, onLog }: HabitRowProps) {
+const PACE_CONFIG: Record<string, { dotColor: string; label: string | null; textColor: string }> = {
+  celebrate: { dotColor: '#52B788', label: 'Ahead!', textColor: '#52B788' },
+  ahead: { dotColor: '#52B788', label: null, textColor: '#52B788' },
+  behind: { dotColor: '#F59E0B', label: 'Behind', textColor: '#F59E0B' },
+  'far-behind': { dotColor: '#E63946', label: 'Behind!', textColor: '#E63946' },
+};
+
+export function HabitRow({ habit, count, target, complete, onLog, paceStatus }: HabitRowProps) {
   const colors = useColors();
   const iconScale = useSharedValue(1);
 
@@ -83,6 +92,16 @@ export function HabitRow({ habit, count, target, complete, onLog }: HabitRowProp
           <Text style={[styles.countText, { color: colors.tint }]}>{count}</Text>
         </View>
       )}
+      {paceStatus && paceStatus !== 'on-track' && PACE_CONFIG[paceStatus] && (
+        <View style={styles.paceIndicator}>
+          <View style={[styles.paceDot, { backgroundColor: PACE_CONFIG[paceStatus].dotColor }]} />
+          {PACE_CONFIG[paceStatus].label && (
+            <Text style={[styles.paceLabel, { color: PACE_CONFIG[paceStatus].textColor }]}>
+              {PACE_CONFIG[paceStatus].label}
+            </Text>
+          )}
+        </View>
+      )}
       <MaterialIcons
         name={complete ? 'check-circle' : 'radio-button-unchecked'}
         size={28}
@@ -125,5 +144,19 @@ const styles = StyleSheet.create({
   countText: {
     fontSize: 14,
     fontWeight: '700',
+  },
+  paceIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  paceDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  paceLabel: {
+    fontSize: 12,
+    fontWeight: '600',
   },
 });
