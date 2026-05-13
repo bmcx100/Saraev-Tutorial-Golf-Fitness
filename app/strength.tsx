@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { View, Text, Pressable, ScrollView, Modal, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Pressable, ScrollView, Modal, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -24,11 +24,8 @@ import {
   type ExerciseSet,
   type StrengthSession,
 } from '@/constants/strength-protocols';
-import { SpeedNumpad } from '@/components/speed-numpad';
 
 // ── Types ─────────────────────────────────────────────────────
-
-type FieldId = string; // e.g. 'calf-raises.0.weight' or 'calf-raises.1.reps'
 
 type ExerciseDefaults = Record<string, { weight: number | null; reps: number }[]>;
 
@@ -50,7 +47,7 @@ function buildExerciseLogs(
     const sets: ExerciseSet[] = [];
     for (let i = 0; i < SETS_PER_EXERCISE; i++) {
       sets.push({
-        weight: exDefaults?.[i]?.weight ?? null,
+        weight: exDefaults?.[i]?.weight ?? 50,
         reps: exDefaults?.[i]?.reps ?? ex.defaultReps,
         completed: false,
       });
@@ -67,17 +64,6 @@ function anySetsCompleted(exercises: ExerciseLog[]): boolean {
   return exercises.some((ex) => ex.sets.some((s) => s.completed));
 }
 
-function getFieldIds(dayKey: WorkoutDay): FieldId[] {
-  const dayDef = WORKOUT_DAYS.find((d) => d.key === dayKey)!;
-  const ids: FieldId[] = [];
-  for (const ex of dayDef.exercises) {
-    for (let s = 0; s < SETS_PER_EXERCISE; s++) {
-      ids.push(`${ex.id}.${s}.weight`, `${ex.id}.${s}.reps`);
-    }
-  }
-  return ids;
-}
-
 // ── Protocol Picker ───────────────────────────────────────────
 
 function ProtocolPicker({ onSelect }: { onSelect: (p: 'lplp') => void }) {
@@ -86,7 +72,7 @@ function ProtocolPicker({ onSelect }: { onSelect: (p: 'lplp') => void }) {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.topBar}>
-        <Pressable onPress={() => router.back()} hitSlop={12}>
+        <Pressable onPress={() => router.replace('/(tabs)')} hitSlop={12}>
           <MaterialIcons name="arrow-back" size={24} color={colors.text} />
         </Pressable>
         <Text style={[styles.topTitle, { color: colors.text }]}>Strength Training</Text>
@@ -150,7 +136,6 @@ function WorkoutTracker() {
   const exercisesRef = useRef(exercises);
   exercisesRef.current = exercises;
   const [defaults, setDefaults] = useState<ExerciseDefaults>({});
-  const [activeField, setActiveField] = useState<FieldId | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [showDiscard, setShowDiscard] = useState(false);
   const [existingSession, setExistingSession] = useState<StrengthSession | null>(null);
@@ -185,7 +170,6 @@ function WorkoutTracker() {
   // Switch workout day
   const handleDayChange = useCallback(
     (day: WorkoutDay) => {
-      setActiveField(null);
       setSelectedDay(day);
       setExercises(buildExerciseLogs(day, defaults));
       setExistingSession(null);
@@ -193,30 +177,16 @@ function WorkoutTracker() {
     [defaults],
   );
 
-  // Get/set field values from exercises
-  const getFieldValue = useCallback(
-    (fieldId: FieldId): number | null => {
-      const [exId, setIdx, field] = fieldId.split('.');
-      const ex = exercises.find((e) => e.exerciseId === exId);
-      if (!ex) return null;
-      const set = ex.sets[parseInt(setIdx, 10)];
-      if (!set) return null;
-      return field === 'weight' ? set.weight : set.reps;
-    },
-    [exercises],
-  );
-
+  // Update a single field in an exercise set
   const setFieldValue = useCallback(
-    (fieldId: FieldId, value: number | null) => {
-      const [exId, setIdx, field] = fieldId.split('.');
-      const si = parseInt(setIdx, 10);
+    (exId: string, setIdx: number, field: 'weight' | 'reps', value: number | null) => {
       setExercises((prev) =>
         prev.map((ex) => {
           if (ex.exerciseId !== exId) return ex;
           return {
             ...ex,
             sets: ex.sets.map((s, i) => {
-              if (i !== si) return s;
+              if (i !== setIdx) return s;
               return field === 'weight' ? { ...s, weight: value } : { ...s, reps: value ?? 0 };
             }),
           };
@@ -244,49 +214,12 @@ function WorkoutTracker() {
     [],
   );
 
-  // Numpad handlers
-  const handleDigit = useCallback(
-    (d: string) => {
-      if (!activeField) return;
-      const current = getFieldValue(activeField);
-      const currentStr = current !== null ? String(current) : '';
-      if (currentStr.length >= 4) return;
-      const newStr = currentStr + d;
-      setFieldValue(activeField, parseInt(newStr, 10));
-    },
-    [activeField, getFieldValue, setFieldValue],
-  );
-
-  const handleDelete = useCallback(() => {
-    if (!activeField) return;
-    const current = getFieldValue(activeField);
-    if (current === null) return;
-    const str = String(current);
-    if (str.length <= 1) {
-      setFieldValue(activeField, null);
-    } else {
-      setFieldValue(activeField, parseInt(str.slice(0, -1), 10));
-    }
-  }, [activeField, getFieldValue, setFieldValue]);
-
-  const handleTab = useCallback(() => {
-    const fieldIds = getFieldIds(selectedDay);
-    if (!activeField) {
-      setActiveField(fieldIds[0]);
-      return;
-    }
-    const idx = fieldIds.indexOf(activeField);
-    const nextIdx = (idx + 1) % fieldIds.length;
-    setActiveField(fieldIds[nextIdx]);
-  }, [activeField, selectedDay]);
-
   // Back / discard
   const handleBack = useCallback(() => {
-    setActiveField(null);
     if (anySetsCompleted(exercisesRef.current) && !existingSession) {
       setShowDiscard(true);
     } else {
-      router.back();
+      router.replace('/(tabs)');
     }
   }, [existingSession]);
 
@@ -319,7 +252,7 @@ function WorkoutTracker() {
     ]);
 
     logHabit('gym');
-    router.back();
+    router.replace('/(tabs)');
   }, [today, selectedDay, defaults, logHabit]);
 
   const dayDef = WORKOUT_DAYS.find((d) => d.key === selectedDay)!;
@@ -398,55 +331,44 @@ function WorkoutTracker() {
                 <View style={{ width: 36 }} />
               </View>
 
-              {exLog?.sets.map((set, si) => {
-                const weightFieldId = `${exDef.id}.${si}.weight`;
-                const repsFieldId = `${exDef.id}.${si}.reps`;
-
-                return (
+              {exLog?.sets.map((set, si) => (
                   <View key={si} style={[styles.setRow, { borderColor: colors.border }]}>
                     {/* Set number */}
                     <Text style={[styles.setNumber, { color: colors.textSecondary }]}>{si + 1}</Text>
 
                     {/* Weight field */}
-                    <Pressable
-                      onPress={() => setActiveField(weightFieldId)}
-                      style={[
-                        styles.inputField,
-                        {
-                          backgroundColor: colors.surface,
-                          borderColor: activeField === weightFieldId ? colors.accent : colors.border,
-                          borderWidth: activeField === weightFieldId ? 2 : 1,
-                        },
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.inputValue,
-                          { color: set.weight !== null ? colors.text : colors.textSecondary },
-                        ]}
-                      >
-                        {set.weight !== null ? String(set.weight) : '--'}
-                      </Text>
+                    <View style={[styles.inputField, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1 }]}>
+                      <TextInput
+                        style={[styles.textInput, { color: colors.text }]}
+                        value={set.weight !== null ? String(set.weight) : ''}
+                        onChangeText={(text) => {
+                          const num = text === '' ? null : parseInt(text, 10);
+                          if (text !== '' && isNaN(num!)) return;
+                          setFieldValue(exDef.id, si, 'weight', num);
+                        }}
+                        keyboardType="number-pad"
+                        placeholder="--"
+                        placeholderTextColor={colors.textSecondary}
+                        selectTextOnFocus
+                      />
                       <Text style={[styles.inputUnit, { color: colors.textSecondary }]}>lbs</Text>
-                    </Pressable>
+                    </View>
 
                     {/* Reps field */}
-                    <Pressable
-                      onPress={() => setActiveField(repsFieldId)}
-                      style={[
-                        styles.inputField,
-                        {
-                          backgroundColor: colors.surface,
-                          borderColor: activeField === repsFieldId ? colors.accent : colors.border,
-                          borderWidth: activeField === repsFieldId ? 2 : 1,
-                        },
-                      ]}
-                    >
-                      <Text style={[styles.inputValue, { color: colors.text }]}>
-                        {String(set.reps)}
-                      </Text>
+                    <View style={[styles.inputField, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1 }]}>
+                      <TextInput
+                        style={[styles.textInput, { color: colors.text }]}
+                        value={String(set.reps)}
+                        onChangeText={(text) => {
+                          const num = text === '' ? 0 : parseInt(text, 10);
+                          if (isNaN(num)) return;
+                          setFieldValue(exDef.id, si, 'reps', num);
+                        }}
+                        keyboardType="number-pad"
+                        selectTextOnFocus
+                      />
                       <Text style={[styles.inputUnit, { color: colors.textSecondary }]}>reps</Text>
-                    </Pressable>
+                    </View>
 
                     {/* Completion checkbox */}
                     <Pressable
@@ -460,8 +382,7 @@ function WorkoutTracker() {
                       />
                     </Pressable>
                   </View>
-                );
-              })}
+                ))}
             </View>
           );
         })}
@@ -485,13 +406,6 @@ function WorkoutTracker() {
         </Pressable>
       </View>
 
-      {/* Numpad */}
-      <SpeedNumpad
-        onDigit={handleDigit}
-        onDelete={handleDelete}
-        onTab={handleTab}
-      />
-
       {/* Discard confirmation */}
       <Modal visible={showDiscard} transparent animationType="fade">
         <View style={styles.discardOverlay}>
@@ -512,7 +426,7 @@ function WorkoutTracker() {
               <Pressable
                 onPress={() => {
                   setShowDiscard(false);
-                  router.back();
+                  router.replace('/(tabs)');
                 }}
                 style={[styles.discardBtn, { backgroundColor: '#EF4444', borderColor: '#EF4444' }]}
               >
@@ -626,7 +540,7 @@ const styles = StyleSheet.create({
   // Exercise list
   exerciseList: {
     padding: 20,
-    paddingBottom: 120,
+    paddingBottom: 20,
     gap: 20,
   },
   exerciseBlock: {
@@ -670,15 +584,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 8,
     gap: 3,
+    overflow: 'hidden',
   },
   inputValue: {
     fontSize: 18,
     fontWeight: '700',
     fontVariant: ['tabular-nums'],
   },
+  textInput: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '700',
+    fontVariant: ['tabular-nums'],
+    textAlign: 'center',
+    padding: 0,
+  },
   inputUnit: {
     fontSize: 11,
     fontWeight: '500',
+    flexShrink: 0,
   },
   // Bottom bar
   bottomBar: {
