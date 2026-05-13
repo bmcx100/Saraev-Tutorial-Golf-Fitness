@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { View, Text, Pressable, ScrollView, Alert, StyleSheet } from 'react-native';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { View, Text, Pressable, ScrollView, Modal, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -158,10 +158,13 @@ function SpeedWizard({ protocol }: { protocol: string }) {
   const today = formatDate(new Date());
 
   const [session, setSession] = useState<SpeedSession>(() => emptySession(today, protocol));
+  const sessionRef = useRef(session);
+  sessionRef.current = session;
   const [step, setStep] = useState(0);
   const [activeField, setActiveField] = useState<FieldId | null>(null);
   const [errors, setErrors] = useState<Set<string>>(new Set());
   const [loaded, setLoaded] = useState(false);
+  const [showDiscard, setShowDiscard] = useState(false);
 
   // Load existing session for today
   useEffect(() => {
@@ -220,20 +223,13 @@ function SpeedWizard({ protocol }: { protocol: string }) {
     if (step > 0) {
       setStep(step - 1);
     } else {
-      if (hasAnyData(session)) {
-        Alert.alert(
-          'Discard this session?',
-          'Your entered speeds will be lost.',
-          [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'Discard', style: 'destructive', onPress: () => router.back() },
-          ],
-        );
+      if (hasAnyData(sessionRef.current)) {
+        setShowDiscard(true);
       } else {
         router.back();
       }
     }
-  }, [step, session]);
+  }, [step]);
 
   const handleNext = useCallback(() => {
     setActiveField(null);
@@ -241,16 +237,17 @@ function SpeedWizard({ protocol }: { protocol: string }) {
   }, [step]);
 
   const handleSubmit = useCallback(async () => {
-    if (!allFieldsFilled(session)) {
-      setErrors(emptyFieldIds(session));
+    const current = sessionRef.current;
+    if (!allFieldsFilled(current)) {
+      setErrors(emptyFieldIds(current));
       setActiveField(null);
       return;
     }
-    const final: SpeedSession = { ...session, completedAt: new Date().toISOString() };
+    const final: SpeedSession = { ...current, completedAt: new Date().toISOString() };
     await saveSpeedSession(final);
     logHabit('speed-sticks');
     router.back();
-  }, [session, logHabit]);
+  }, [logHabit]);
 
   const isLastStep = step === 2;
 
@@ -402,6 +399,37 @@ function SpeedWizard({ protocol }: { protocol: string }) {
         onDelete={handleDelete}
         onTab={handleTab}
       />
+
+      {/* Discard confirmation */}
+      <Modal visible={showDiscard} transparent animationType="fade">
+        <View style={styles.discardOverlay}>
+          <View style={[styles.discardCard, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.discardTitle, { color: colors.text }]}>
+              Discard this session?
+            </Text>
+            <Text style={[styles.discardBody, { color: colors.textSecondary }]}>
+              Your entered speeds will be lost.
+            </Text>
+            <View style={styles.discardActions}>
+              <Pressable
+                onPress={() => setShowDiscard(false)}
+                style={[styles.discardBtn, { borderColor: colors.border }]}
+              >
+                <Text style={[styles.discardBtnText, { color: colors.text }]}>Cancel</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  setShowDiscard(false);
+                  router.back();
+                }}
+                style={[styles.discardBtn, { backgroundColor: '#EF4444', borderColor: '#EF4444' }]}
+              >
+                <Text style={[styles.discardBtnText, { color: '#FFFFFF' }]}>Discard</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -554,5 +582,44 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 17,
     fontWeight: '700',
+  },
+  discardOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 32,
+  },
+  discardCard: {
+    borderRadius: 16,
+    padding: 24,
+    width: '100%',
+    maxWidth: 320,
+    gap: 8,
+  },
+  discardTitle: {
+    fontSize: 17,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  discardBody: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+  discardActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  discardBtn: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    alignItems: 'center',
+  },
+  discardBtnText: {
+    fontSize: 15,
+    fontWeight: '600',
   },
 });

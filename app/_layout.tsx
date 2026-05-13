@@ -6,6 +6,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { UserProvider } from '@/contexts/user-context';
+import { HabitProvider } from '@/contexts/habit-context';
 import { migrateIfNeeded } from '@/utils/migration';
 
 const GolfLightTheme = {
@@ -39,16 +40,18 @@ export default function RootLayout() {
 
   return (
     <UserProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? GolfDarkTheme : GolfLightTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-          <Stack.Screen name="settings" options={{ headerShown: false, presentation: 'card' }} />
-          <Stack.Screen name="speed" options={{ headerShown: false, presentation: 'card' }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
+      <HabitProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? GolfDarkTheme : GolfLightTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+            <Stack.Screen name="settings" options={{ headerShown: false, presentation: 'card' }} />
+            <Stack.Screen name="speed" options={{ headerShown: false, presentation: 'card' }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+          </Stack>
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </HabitProvider>
     </UserProvider>
   );
 }
