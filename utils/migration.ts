@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LEGACY_HABIT_IDS } from '@/constants/habits';
 import type { HabitLog } from '@/contexts/habit-context';
-import { DEFAULT_SCHEDULE, type UserProfile } from '@/contexts/user-context';
+import { DEFAULT_SCHEDULE } from '@/contexts/user-context';
+import type { UserProfile } from '@/contexts/user-context';
 import { loadProfile, saveProfile, saveLogs, formatDate } from '@/utils/storage';
 
 /**

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { HabitLog } from '@/contexts/habit-context';
 import type { Challenge } from '@/contexts/challenge-context';
-import { DEFAULT_SCHEDULE, type UserProfile } from '@/contexts/user-context';
+import type { UserProfile } from '@/contexts/user-context';
 
 // ── Date helpers ──────────────────────────────────────────────
 
@@ -10,7 +10,10 @@ export function todayKey(): string {
 }
 
 export function formatDate(d: Date): string {
-  return d.toISOString().slice(0, 10);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 export function dateRange(startDate: string, days: number): string[] {
@@ -71,7 +74,7 @@ export async function loadProfile(): Promise<UserProfile | null> {
   if (!raw) return null;
   const profile = JSON.parse(raw) as UserProfile;
   if (!profile.schedule) {
-    profile.schedule = DEFAULT_SCHEDULE;
+    profile.schedule = { categoryRotations: {}, habitWeekdays: {} };
   }
   return profile;
 }
