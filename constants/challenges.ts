@@ -3,11 +3,37 @@ export interface ChallengeTemplate {
   name: string;
   description: string;
   habitId: string;
+  habitIds?: string[];
   targetTotal: number;
   durationDays: number;
 }
 
 export const CHALLENGE_TEMPLATES: ChallengeTemplate[] = [
+  {
+    id: 'get-long',
+    name: 'Get Long',
+    description: 'Build swing speed: 12 speed stick sessions this month.',
+    habitId: 'speed-sticks',
+    targetTotal: 12,
+    durationDays: 30,
+  },
+  {
+    id: 'get-strong',
+    name: 'Get Strong',
+    description: 'Build strength: 12 gym sessions this month.',
+    habitId: 'gym',
+    targetTotal: 12,
+    durationDays: 30,
+  },
+  {
+    id: 'tighten-it-up',
+    name: 'Tighten It Up',
+    description: 'Stay sharp: 12 cardio or core sessions this month.',
+    habitId: 'cardio',
+    habitIds: ['cardio', 'core'],
+    targetTotal: 12,
+    durationDays: 30,
+  },
   {
     id: 'speed-week',
     name: 'Speed Week',
@@ -41,15 +67,3 @@ export const CHALLENGE_TEMPLATES: ChallengeTemplate[] = [
     durationDays: 30,
   },
 ];
-
-/** Creates a 3-day onboarding challenge for the user's first selected habit */
-export function createOnboardingTemplate(habitId: string): ChallengeTemplate {
-  return {
-    id: 'onboarding-3day',
-    name: '3-Day Kickoff',
-    description: 'Complete 3 sessions in 3 days to build your first streak!',
-    habitId,
-    targetTotal: 3,
-    durationDays: 3,
-  };
-}

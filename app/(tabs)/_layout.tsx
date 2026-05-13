@@ -4,7 +4,6 @@ import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useColors } from '@/hooks/use-colors';
 import { useUser } from '@/contexts/user-context';
-import { ChallengeProvider } from '@/contexts/challenge-context';
 
 export default function TabLayout() {
   const colors = useColors();
@@ -17,8 +16,7 @@ export default function TabLayout() {
   }
 
   return (
-    <ChallengeProvider>
-      <Tabs
+    <Tabs
           screenOptions={{
             tabBarActiveTintColor: colors.tint,
             headerShown: false,
@@ -58,6 +56,5 @@ export default function TabLayout() {
           />
           <Tabs.Screen name="explore" options={{ href: null }} />
       </Tabs>
-    </ChallengeProvider>
   );
 }

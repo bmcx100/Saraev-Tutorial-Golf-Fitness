@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import {
   CHALLENGE_TEMPLATES,
-  createOnboardingTemplate,
   type ChallengeTemplate,
 } from '@/constants/challenges';
 import { useHabits } from '@/contexts/habit-context';
@@ -19,6 +18,7 @@ export interface Challenge {
   name: string;
   description: string;
   habitId: string;
+  habitIds?: string[];
   targetTotal: number;
   durationDays: number;
   startDate: string;
@@ -30,7 +30,7 @@ interface ChallengeContextType {
   challengeProgress: number;
   availableChallenges: ChallengeTemplate[];
   completedChallenges: Challenge[];
-  startChallenge: (templateId: string) => void;
+  startChallenge: (templateId: string) => Promise<void>;
   checkChallengeCompletion: () => void;
 }
 
@@ -39,7 +39,7 @@ const ChallengeContext = createContext<ChallengeContextType>({
   challengeProgress: 0,
   availableChallenges: [],
   completedChallenges: [],
-  startChallenge: () => {},
+  startChallenge: async () => {},
   checkChallengeCompletion: () => {},
 });
 
@@ -72,9 +72,12 @@ export function ChallengeProvider({ children }: { children: React.ReactNode }) {
   // Filter available templates to habits the user has active
   const availableChallenges = useMemo(
     () =>
-      CHALLENGE_TEMPLATES.filter((t) =>
-        profile.activeHabitIds.includes(t.habitId),
-      ),
+      CHALLENGE_TEMPLATES.filter((t) => {
+        if (t.habitIds) {
+          return t.habitIds.some((hid) => profile.activeHabitIds.includes(hid));
+        }
+        return profile.activeHabitIds.includes(t.habitId);
+      }),
     [profile.activeHabitIds],
   );
 
@@ -88,10 +91,14 @@ export function ChallengeProvider({ children }: { children: React.ReactNode }) {
     (async () => {
       const dates = dateRange(activeChallenge.startDate, activeChallenge.durationDays);
       const logsMap = await loadLogsForRange(dates);
+      const matchIds = activeChallenge.habitIds ?? [activeChallenge.habitId];
       let total = 0;
       for (const logs of logsMap.values()) {
-        const log = logs.find((l) => l.habitId === activeChallenge.habitId);
-        if (log) total += log.count;
+        for (const log of logs) {
+          if (matchIds.includes(log.habitId)) {
+            total += log.count;
+          }
+        }
       }
       setChallengeProgress(total);
     })();
@@ -131,16 +138,10 @@ export function ChallengeProvider({ children }: { children: React.ReactNode }) {
   }, [checkChallengeCompletion]);
 
   const startChallenge = useCallback(
-    (templateId: string) => {
+    async (templateId: string) => {
       if (activeChallenge) return; // Only one at a time
 
-      let template: ChallengeTemplate | undefined;
-      if (templateId === 'onboarding-3day') {
-        const firstHabit = profile.activeHabitIds[0];
-        if (firstHabit) template = createOnboardingTemplate(firstHabit);
-      } else {
-        template = CHALLENGE_TEMPLATES.find((t) => t.id === templateId);
-      }
+      const template = CHALLENGE_TEMPLATES.find((t) => t.id === templateId);
       if (!template) return;
 
       const newChallenge: Challenge = {
@@ -148,19 +149,19 @@ export function ChallengeProvider({ children }: { children: React.ReactNode }) {
         name: template.name,
         description: template.description,
         habitId: template.habitId,
+        ...(template.habitIds && { habitIds: template.habitIds }),
         targetTotal: template.targetTotal,
         durationDays: template.durationDays,
         startDate: formatDate(new Date()),
         status: 'active',
       };
 
-      setChallenges((prev) => {
-        const next = [...prev, newChallenge];
-        saveChallenges(next);
-        return next;
-      });
+      const stored = await loadChallenges();
+      const next = [...stored, newChallenge];
+      await saveChallenges(next);
+      setChallenges(next);
     },
-    [activeChallenge, profile.activeHabitIds],
+    [activeChallenge],
   );
 
   return (
