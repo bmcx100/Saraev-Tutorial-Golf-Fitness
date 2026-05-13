@@ -1,35 +1,66 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs, Redirect } from 'expo-router';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useColors } from '@/hooks/use-colors';
+import { useUser } from '@/contexts/user-context';
+import { HabitProvider } from '@/contexts/habit-context';
+import { ChallengeProvider } from '@/contexts/challenge-context';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const colors = useColors();
+  const { isOnboardingComplete, isLoading } = useUser();
+
+  if (isLoading) return null;
+
+  if (!isOnboardingComplete) {
+    return <Redirect href="/onboarding" />;
+  }
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
+    <HabitProvider>
+      <ChallengeProvider>
+        <Tabs
+          screenOptions={{
+            tabBarActiveTintColor: colors.tint,
+            headerShown: false,
+            tabBarButton: HapticTab,
+            tabBarStyle: {
+              backgroundColor: colors.surface,
+              borderTopColor: colors.border,
+            },
+          }}
+        >
+          <Tabs.Screen
+            name="index"
+            options={{
+              title: 'Today',
+              tabBarIcon: ({ color }) => (
+                <IconSymbol size={28} name="checkmark.circle.fill" color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="challenges"
+            options={{
+              title: 'Challenges',
+              tabBarIcon: ({ color }) => (
+                <IconSymbol size={28} name="flag.fill" color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="stats"
+            options={{
+              title: 'Stats',
+              tabBarIcon: ({ color }) => (
+                <IconSymbol size={28} name="chart.bar.fill" color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen name="explore" options={{ href: null }} />
+        </Tabs>
+      </ChallengeProvider>
+    </HabitProvider>
   );
 }

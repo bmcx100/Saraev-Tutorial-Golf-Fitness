@@ -1,41 +1,63 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
 import { Platform } from 'react-native';
-
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
 
 export const Colors = {
   light: {
     text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
+    textSecondary: '#687076',
+    background: '#FFFFFF',
+    surface: '#F8F9FA',
+    tint: '#2D6A4F',
+    accent: '#52B788',
+    accentLight: '#D8F3DC',
     icon: '#687076',
     tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    tabIconSelected: '#2D6A4F',
+    border: '#E9ECEF',
+    progressTrack: '#E9ECEF',
+    progressFill: '#52B788',
+    ringBackground: '#E9ECEF',
+    challengeGradientStart: '#2D6A4F',
+    challengeGradientEnd: '#52B788',
+    streakBadge: '#F59E0B',
+    paceGood: '#52B788',
+    paceBehind: '#F59E0B',
+    durationGreen: '#52B788',
+    durationRed: '#E63946',
+    durationBlue: '#457B9D',
+    durationAmber: '#F59E0B',
   },
   dark: {
     text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
+    textSecondary: '#9BA1A6',
+    background: '#0D1B0D',
+    surface: '#1A2E1A',
+    tint: '#52B788',
+    accent: '#52B788',
+    accentLight: '#1B4332',
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    tabIconSelected: '#52B788',
+    border: '#2D3436',
+    progressTrack: '#2D3436',
+    progressFill: '#52B788',
+    ringBackground: '#2D3436',
+    challengeGradientStart: '#1B4332',
+    challengeGradientEnd: '#52B788',
+    streakBadge: '#F59E0B',
+    paceGood: '#52B788',
+    paceBehind: '#F59E0B',
+    durationGreen: '#52B788',
+    durationRed: '#E63946',
+    durationBlue: '#457B9D',
+    durationAmber: '#F59E0B',
   },
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: 'ui-monospace',
   },
   default: {
