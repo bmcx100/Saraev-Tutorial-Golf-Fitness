@@ -215,6 +215,30 @@ function HabitDetailPanel({
           </Text>
         </View>
 
+        {/* Strength Protocol — only for gym */}
+        {habit.id === 'gym' && (
+          <>
+            <Text style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: 28 }]}>
+              Strength Protocol
+            </Text>
+            <View style={styles.weekdaySection}>
+              <Text style={[styles.weekdayLabel, { color: colors.text }]}>
+                {profile.strengthProtocol === 'lplp'
+                  ? 'Legs / Pull / Legs / Push'
+                  : 'Not set'}
+              </Text>
+              <Pressable
+                onPress={() => updateProfile({ strengthProtocol: null })}
+                style={[styles.changeProtocolBtn, { borderColor: colors.border }]}
+              >
+                <Text style={[styles.changeProtocolText, { color: colors.accent }]}>
+                  Change Protocol
+                </Text>
+              </Pressable>
+            </View>
+          </>
+        )}
+
         {/* Speed Protocol — only for speed-sticks */}
         {habit.id === 'speed-sticks' && (
           <>

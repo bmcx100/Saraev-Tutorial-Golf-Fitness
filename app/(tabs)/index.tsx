@@ -39,6 +39,12 @@ export default function TodayScreen() {
         return;
       }
 
+      // Strength Training navigates to dedicated page instead of toggling
+      if (habitId === 'gym') {
+        router.push('/strength');
+        return;
+      }
+
       const { justCompleted, allDone } = logHabit(habitId);
 
       if (allDone) {

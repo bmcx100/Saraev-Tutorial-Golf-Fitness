@@ -27,6 +27,7 @@ export interface UserProfile {
   soundEnabled: boolean;
   schedule: ScheduleConfig;
   speedProtocol: 'superspeed-l1' | 'bmc' | null;
+  strengthProtocol: 'lplp' | 'bmc-heavy' | null;
 }
 
 const DEFAULT_PROFILE: UserProfile = {
@@ -38,6 +39,7 @@ const DEFAULT_PROFILE: UserProfile = {
   soundEnabled: true,
   schedule: DEFAULT_SCHEDULE,
   speedProtocol: null,
+  strengthProtocol: null,
 };
 
 interface UserContextType {

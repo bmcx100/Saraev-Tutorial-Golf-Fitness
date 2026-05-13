@@ -3,6 +3,7 @@ import type { HabitLog } from '@/contexts/habit-context';
 import type { Challenge } from '@/contexts/challenge-context';
 import type { UserProfile } from '@/contexts/user-context';
 import type { SpeedSession } from '@/constants/speed-protocols';
+import type { StrengthSession, WorkoutDay } from '@/constants/strength-protocols';
 
 // ── Date helpers ──────────────────────────────────────────────
 
@@ -113,6 +114,39 @@ export async function loadSpeedSessionRange(dates: string[]): Promise<SpeedSessi
     if (raw) sessions.push(JSON.parse(raw));
   }
   return sessions;
+}
+
+// ── Strength sessions ────────────────────────────────────────
+
+function strengthSessionKey(date: string): string {
+  return `strength-session-${date}`;
+}
+
+export async function loadStrengthSession(date: string): Promise<StrengthSession | null> {
+  const raw = await AsyncStorage.getItem(strengthSessionKey(date));
+  return raw ? JSON.parse(raw) : null;
+}
+
+export async function saveStrengthSession(session: StrengthSession): Promise<void> {
+  await AsyncStorage.setItem(strengthSessionKey(session.date), JSON.stringify(session));
+}
+
+export async function loadLastStrengthWorkoutDay(): Promise<WorkoutDay | null> {
+  const raw = await AsyncStorage.getItem('strength-last-workout-day');
+  return raw ? (JSON.parse(raw) as WorkoutDay) : null;
+}
+
+export async function saveLastStrengthWorkoutDay(day: WorkoutDay): Promise<void> {
+  await AsyncStorage.setItem('strength-last-workout-day', JSON.stringify(day));
+}
+
+export async function loadExerciseDefaults(): Promise<Record<string, { weight: number | null; reps: number }[]>> {
+  const raw = await AsyncStorage.getItem('strength-exercise-defaults');
+  return raw ? JSON.parse(raw) : {};
+}
+
+export async function saveExerciseDefaults(defaults: Record<string, { weight: number | null; reps: number }[]>): Promise<void> {
+  await AsyncStorage.setItem('strength-exercise-defaults', JSON.stringify(defaults));
 }
 
 // ── Old format detection ──────────────────────────────────────
