@@ -24,7 +24,7 @@ export default function OnboardingScreen() {
     });
   };
 
-  const categories = ['golf', 'workout'] as const;
+  const categories = ['golf', 'workout', 'lifestyle'] as const;
 
   const handleStart = async () => {
     if (selected.size === 0) return;
@@ -48,9 +48,9 @@ export default function OnboardingScreen() {
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
-          <Text style={[styles.title, { color: colors.text }]}>Choose Your{'\u00A0'}Sessions</Text>
+          <Text style={[styles.title, { color: colors.text }]}>What's Worth Tracking{'\u00A0'}to{'\u00A0'}You?</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            Select the sessions you want to track daily. You can change these anytime in&nbsp;Settings.
+            You can change these anytime in&nbsp;Settings.
           </Text>
         </View>
 
@@ -59,7 +59,7 @@ export default function OnboardingScreen() {
           return (
             <View key={cat} style={styles.section}>
               <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>
-                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                {cat === 'workout' ? 'Workouts' : cat === 'lifestyle' ? 'Lifestyle' : cat.charAt(0).toUpperCase() + cat.slice(1)}
               </Text>
               {habits.map((habit) => (
                 <HabitCard
@@ -86,11 +86,8 @@ export default function OnboardingScreen() {
           ]}
           disabled={selected.size === 0}
         >
-          <Text style={styles.startText}>Start Your First Challenge</Text>
+          <Text style={styles.startText}>Start Tracking</Text>
         </Pressable>
-        <Text style={[styles.footerNote, { color: colors.textSecondary }]}>
-          {selected.size} session{selected.size !== 1 ? 's' : ''} selected
-        </Text>
       </View>
     </SafeAreaView>
   );
@@ -214,8 +211,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 17,
     fontWeight: '700',
-  },
-  footerNote: {
-    fontSize: 13,
   },
 });

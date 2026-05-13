@@ -1,20 +1,19 @@
-import { ScrollView, View, Text, Pressable, Switch, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { ScrollView, View, Text, Pressable, Switch, Modal, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { HABIT_LIBRARY } from '@/constants/habits';
+import { HABIT_LIBRARY, CATEGORY_META, type Habit, type HabitCategory } from '@/constants/habits';
 import { useUser } from '@/contexts/user-context';
 import { type ScheduleConfig } from '@/contexts/user-context';
 import { useColors } from '@/hooks/use-colors';
 import { scheduleDaily } from '@/utils/notifications';
-import { formatDate } from '@/utils/storage';
-import { getCycleDayIndex } from '@/utils/schedule';
 import { WeekdayPicker } from '@/components/weekday-picker';
-import { ScheduleGrid } from '@/components/schedule-grid';
 
 export default function SettingsScreen() {
   const colors = useColors();
   const { profile, updateProfile } = useUser();
+  const [detailHabit, setDetailHabit] = useState<Habit | null>(null);
 
   const toggleHabit = (id: string) => {
     const ids = profile.activeHabitIds.includes(id)
@@ -37,85 +36,16 @@ export default function SettingsScreen() {
     updateProfile({ soundEnabled: val });
   };
 
-  // --- Schedule helpers ---
   const schedule = profile.schedule;
 
-  const updateSchedule = (updates: Partial<ScheduleConfig>) => {
-    updateProfile({ schedule: { ...schedule, ...updates } });
-  };
-
-  // Group active habits by category
-  const categories = new Map<string, typeof HABIT_LIBRARY>();
-  for (const habit of HABIT_LIBRARY) {
-    if (!profile.activeHabitIds.includes(habit.id)) continue;
-    const list = categories.get(habit.category) ?? [];
-    list.push(habit);
-    categories.set(habit.category, list);
-  }
-
-  // Categories eligible for rotation (2+ active habits)
-  const rotatableCategories = [...categories.entries()].filter(
-    ([, habits]) => habits.length >= 2,
-  );
-
-  const isInRotation = (category: string) =>
-    !!schedule.categoryRotations[category];
-
-  const toggleRotation = (category: string) => {
-    const next = { ...schedule.categoryRotations };
-    if (next[category]) {
-      delete next[category];
-    } else {
-      const habits = categories.get(category) ?? [];
-      next[category] = {
-        sequence: habits.map((h) => h.id),
-        startDate: formatDate(new Date()),
-      };
-    }
-    updateSchedule({ categoryRotations: next });
-  };
-
-  const updateCycleLength = (category: string, delta: number) => {
-    const rot = schedule.categoryRotations[category];
-    if (!rot) return;
-    const habits = categories.get(category) ?? [];
-    const maxLen = habits.length * 2;
-    const newLen = Math.max(2, Math.min(maxLen, rot.sequence.length + delta));
-    let seq = [...rot.sequence];
-    if (newLen > seq.length) {
-      // Extend with empty slots
-      while (seq.length < newLen) seq.push('');
-    } else {
-      seq = seq.slice(0, newLen);
-    }
-    updateSchedule({
-      categoryRotations: {
-        ...schedule.categoryRotations,
-        [category]: { ...rot, sequence: seq },
-      },
-    });
-  };
-
-  const updateSequence = (category: string, sequence: string[]) => {
-    const rot = schedule.categoryRotations[category];
-    if (!rot) return;
-    updateSchedule({
-      categoryRotations: {
-        ...schedule.categoryRotations,
-        [category]: { ...rot, sequence },
-      },
-    });
-  };
-
   const updateWeekdays = (habitId: string, days: number[]) => {
-    updateSchedule({
-      habitWeekdays: { ...schedule.habitWeekdays, [habitId]: days },
+    updateProfile({
+      schedule: {
+        ...schedule,
+        habitWeekdays: { ...schedule.habitWeekdays, [habitId]: days },
+      },
     });
   };
-
-  const rotatingCategories = new Set(Object.keys(schedule.categoryRotations));
-
-  const today = formatDate(new Date());
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -128,127 +58,46 @@ export default function SettingsScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {/* My Sessions */}
-        <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>My Sessions</Text>
-        {HABIT_LIBRARY.map((habit) => {
-          const isActive = profile.activeHabitIds.includes(habit.id);
-          const showWeekday =
-            isActive && !rotatingCategories.has(habit.category);
+        {/* Tracking */}
+        <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Tracking</Text>
+        {(['golf', 'workout', 'lifestyle'] as HabitCategory[]).map((cat) => {
+          const habits = HABIT_LIBRARY.filter((h) => h.category === cat);
+          if (habits.length === 0) return null;
+          const meta = CATEGORY_META[cat];
           return (
-            <View key={habit.id}>
-              <Pressable
-                onPress={() => toggleHabit(habit.id)}
-                style={[styles.row, { borderColor: colors.border }]}
-              >
-                <MaterialIcons name={habit.icon as any} size={22} color={colors.textSecondary} />
-                <Text style={[styles.rowLabel, { color: colors.text }]}>{habit.name}</Text>
-                <MaterialIcons
-                  name={isActive ? 'check-circle' : 'radio-button-unchecked'}
-                  size={22}
-                  color={isActive ? colors.accent : colors.border}
-                />
-              </Pressable>
-              {showWeekday && (
-                <View style={styles.weekdayRow}>
-                  <WeekdayPicker
-                    selectedDays={schedule.habitWeekdays[habit.id] ?? []}
-                    onChange={(days) => updateWeekdays(habit.id, days)}
-                  />
-                </View>
-              )}
+            <View key={cat} style={styles.categoryBlock}>
+              <Text style={[styles.categoryLabel, { color: colors.text }]}>{meta.label}</Text>
+              {habits.map((habit) => {
+                const isActive = profile.activeHabitIds.includes(habit.id);
+                return (
+                  <View key={habit.id}>
+                    <Pressable
+                      onPress={() => toggleHabit(habit.id)}
+                      style={[styles.row, { borderColor: colors.border }]}
+                    >
+                      <MaterialIcons name={habit.icon as any} size={22} color={colors.textSecondary} />
+                      <Text style={[styles.rowLabel, { color: colors.text }]}>{habit.name}</Text>
+                      <Pressable
+                        onPress={(e) => {
+                          e.stopPropagation();
+                          setDetailHabit(habit);
+                        }}
+                        hitSlop={8}
+                      >
+                        <MaterialIcons name="settings" size={20} color={colors.textSecondary} />
+                      </Pressable>
+                      <MaterialIcons
+                        name={isActive ? 'check-circle' : 'radio-button-unchecked'}
+                        size={22}
+                        color={isActive ? colors.accent : colors.border}
+                      />
+                    </Pressable>
+                  </View>
+                );
+              })}
             </View>
           );
         })}
-
-        {/* Schedule */}
-        {rotatableCategories.length > 0 && (
-          <>
-            <Text
-              style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: 28 }]}
-            >
-              Schedule
-            </Text>
-            {rotatableCategories.map(([category, habits]) => {
-              const rotating = isInRotation(category);
-              const rot = schedule.categoryRotations[category];
-              const categoryLabel =
-                category.charAt(0).toUpperCase() + category.slice(1);
-              return (
-                <View key={category} style={styles.categoryBlock}>
-                  <Pressable
-                    onPress={() => toggleRotation(category)}
-                    style={[styles.switchRow, { borderColor: colors.border }]}
-                  >
-                    <Text style={[styles.rowLabel, { color: colors.text }]}>
-                      {categoryLabel}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.modeLabel,
-                        { color: rotating ? colors.accent : colors.textSecondary },
-                      ]}
-                    >
-                      {rotating ? 'Rotation' : 'Daily'}
-                    </Text>
-                  </Pressable>
-
-                  {rotating && rot && (
-                    <View style={styles.rotationConfig}>
-                      {/* Cycle length stepper */}
-                      <View style={styles.stepperRow}>
-                        <Text style={[styles.stepperLabel, { color: colors.text }]}>
-                          Cycle length
-                        </Text>
-                        <View style={styles.stepper}>
-                          <Pressable
-                            onPress={() => updateCycleLength(category, -1)}
-                            style={[styles.stepperBtn, { borderColor: colors.border }]}
-                          >
-                            <MaterialIcons name="remove" size={18} color={colors.text} />
-                          </Pressable>
-                          <Text style={[styles.stepperValue, { color: colors.text }]}>
-                            {rot.sequence.length}
-                          </Text>
-                          <Pressable
-                            onPress={() => updateCycleLength(category, 1)}
-                            style={[styles.stepperBtn, { borderColor: colors.border }]}
-                          >
-                            <MaterialIcons name="add" size={18} color={colors.text} />
-                          </Pressable>
-                        </View>
-                      </View>
-
-                      {/* Start date */}
-                      <View style={[styles.switchRow, { borderColor: colors.border }]}>
-                        <Text style={[styles.rowLabel, { color: colors.text }]}>
-                          Start date
-                        </Text>
-                        <Text style={[styles.timeText, { color: colors.textSecondary }]}>
-                          {rot.startDate}
-                        </Text>
-                      </View>
-
-                      {/* Schedule grid */}
-                      <View style={styles.gridWrapper}>
-                        <ScheduleGrid
-                          habits={habits}
-                          cycleLength={rot.sequence.length}
-                          sequence={rot.sequence}
-                          onChange={(seq) => updateSequence(category, seq)}
-                          todayIndex={getCycleDayIndex(
-                            today,
-                            rot.startDate,
-                            rot.sequence.length,
-                          )}
-                        />
-                      </View>
-                    </View>
-                  )}
-                </View>
-              );
-            })}
-          </>
-        )}
 
         {/* Notifications */}
         <Text style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: 28 }]}>
@@ -288,6 +137,104 @@ export default function SettingsScreen() {
           />
         </View>
       </ScrollView>
+
+      {/* Habit Detail Modal */}
+      <Modal
+        visible={detailHabit !== null}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setDetailHabit(null)}
+      >
+        {detailHabit && (
+          <HabitDetailPanel
+            habit={detailHabit}
+            schedule={schedule}
+            onUpdateWeekdays={updateWeekdays}
+            onClose={() => setDetailHabit(null)}
+          />
+        )}
+      </Modal>
+    </SafeAreaView>
+  );
+}
+
+function HabitDetailPanel({
+  habit,
+  schedule,
+  onUpdateWeekdays,
+  onClose,
+}: {
+  habit: Habit;
+  schedule: ScheduleConfig;
+  onUpdateWeekdays: (habitId: string, days: number[]) => void;
+  onClose: () => void;
+}) {
+  const colors = useColors();
+  const { profile, updateProfile } = useUser();
+
+  const protocolLabel =
+    profile.speedProtocol === 'superspeed-l1'
+      ? 'Super Speed Sticks L1'
+      : profile.speedProtocol === 'bmc'
+        ? "BMC's Speedy Sticks of Quickness"
+        : 'Not set';
+
+  return (
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={styles.topBar}>
+        <View style={{ width: 24 }} />
+        <Text style={[styles.topTitle, { color: colors.text }]}>{habit.name}</Text>
+        <Pressable onPress={onClose} hitSlop={12}>
+          <MaterialIcons name="close" size={24} color={colors.text} />
+        </Pressable>
+      </View>
+
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        {/* Habit info */}
+        <View style={styles.detailHeader}>
+          <View style={[styles.detailIconWrap, { backgroundColor: habit.ringColor + '20' }]}>
+            <MaterialIcons name={habit.icon as any} size={32} color={habit.ringColor} />
+          </View>
+          <Text style={[styles.detailCategory, { color: colors.textSecondary }]}>
+            {CATEGORY_META[habit.category].label}
+          </Text>
+        </View>
+
+        {/* Schedule */}
+        <Text style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: 24 }]}>
+          Schedule
+        </Text>
+        <View style={styles.weekdaySection}>
+          <Text style={[styles.weekdayLabel, { color: colors.text }]}>Active days</Text>
+          <WeekdayPicker
+            selectedDays={schedule.habitWeekdays[habit.id] ?? []}
+            onChange={(days) => onUpdateWeekdays(habit.id, days)}
+          />
+          <Text style={[styles.weekdayHint, { color: colors.textSecondary }]}>
+            No days selected = every day
+          </Text>
+        </View>
+
+        {/* Speed Protocol — only for speed-sticks */}
+        {habit.id === 'speed-sticks' && (
+          <>
+            <Text style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: 28 }]}>
+              Speed Protocol
+            </Text>
+            <View style={styles.weekdaySection}>
+              <Text style={[styles.weekdayLabel, { color: colors.text }]}>{protocolLabel}</Text>
+              <Pressable
+                onPress={() => updateProfile({ speedProtocol: null })}
+                style={[styles.changeProtocolBtn, { borderColor: colors.border }]}
+              >
+                <Text style={[styles.changeProtocolText, { color: colors.accent }]}>
+                  Change Protocol
+                </Text>
+              </Pressable>
+            </View>
+          </>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -318,6 +265,12 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     marginBottom: 10,
   },
+  categoryLabel: {
+    fontSize: 15,
+    fontWeight: '700',
+    marginTop: 16,
+    marginBottom: 4,
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -340,50 +293,45 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  weekdayRow: {
-    paddingVertical: 10,
-    paddingLeft: 34,
-  },
-  modeLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
   categoryBlock: {
     marginBottom: 8,
   },
-  rotationConfig: {
-    paddingLeft: 8,
-    paddingTop: 4,
-  },
-  stepperRow: {
-    flexDirection: 'row',
+  detailHeader: {
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 12,
+    gap: 8,
+    paddingVertical: 16,
   },
-  stepperLabel: {
-    fontSize: 15,
-  },
-  stepper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  stepperBtn: {
-    width: 32,
-    height: 32,
+  detailIconWrap: {
+    width: 64,
+    height: 64,
     borderRadius: 16,
-    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  stepperValue: {
-    fontSize: 16,
-    fontWeight: '700',
-    minWidth: 24,
-    textAlign: 'center',
+  detailCategory: {
+    fontSize: 14,
+    fontWeight: '600',
   },
-  gridWrapper: {
-    paddingVertical: 12,
+  weekdaySection: {
+    paddingTop: 12,
+    gap: 10,
+  },
+  weekdayLabel: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  weekdayHint: {
+    fontSize: 13,
+  },
+  changeProtocolBtn: {
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingVertical: 10,
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  changeProtocolText: {
+    fontSize: 15,
+    fontWeight: '600',
   },
 });

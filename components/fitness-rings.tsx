@@ -7,17 +7,18 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { useColors } from '@/hooks/use-colors';
-import type { Habit } from '@/constants/habits';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-interface RingData {
-  habit: Habit;
+export interface CategoryRingData {
+  key: string;
+  label: string;
+  color: string;
   progress: number; // 0–1
 }
 
 interface FitnessRingsProps {
-  rings: RingData[];
+  rings: CategoryRingData[];
   size?: number;
 }
 
@@ -37,13 +38,13 @@ export function FitnessRings({ rings, size = 200 }: FitnessRingsProps) {
 
           return (
             <RingLayer
-              key={ring.habit.id}
+              key={ring.key}
               cx={center}
               cy={center}
               radius={radius}
               circumference={circumference}
               progress={ring.progress}
-              color={ring.habit.ringColor}
+              color={ring.color}
               trackColor={colors.ringBackground}
               strokeWidth={ringWidth}
             />
@@ -52,10 +53,10 @@ export function FitnessRings({ rings, size = 200 }: FitnessRingsProps) {
       </Svg>
       <View style={styles.legend}>
         {rings.map((ring) => (
-          <View key={ring.habit.id} style={styles.legendItem}>
-            <View style={[styles.legendDot, { backgroundColor: ring.habit.ringColor }]} />
+          <View key={ring.key} style={styles.legendItem}>
+            <View style={[styles.legendDot, { backgroundColor: ring.color }]} />
             <Text style={[styles.legendText, { color: colors.text }]} numberOfLines={1}>
-              {ring.habit.name}
+              {ring.label}
             </Text>
             <Text style={[styles.legendStatus, { color: colors.textSecondary }]}>
               {ring.progress >= 1 ? 'Done' : `${Math.round(ring.progress * 100)}%`}

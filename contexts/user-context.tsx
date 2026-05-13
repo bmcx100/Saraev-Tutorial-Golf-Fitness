@@ -26,6 +26,7 @@ export interface UserProfile {
   notificationsEnabled: boolean;
   soundEnabled: boolean;
   schedule: ScheduleConfig;
+  speedProtocol: 'superspeed-l1' | 'bmc' | null;
 }
 
 const DEFAULT_PROFILE: UserProfile = {
@@ -36,6 +37,7 @@ const DEFAULT_PROFILE: UserProfile = {
   notificationsEnabled: false,
   soundEnabled: true,
   schedule: DEFAULT_SCHEDULE,
+  speedProtocol: null,
 };
 
 interface UserContextType {

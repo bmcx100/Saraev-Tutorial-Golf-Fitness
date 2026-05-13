@@ -54,6 +54,7 @@ export async function migrateIfNeeded(): Promise<boolean> {
     notificationsEnabled: false,
     soundEnabled: true,
     schedule: DEFAULT_SCHEDULE,
+    speedProtocol: null,
   };
   await saveProfile(migratedProfile);
 

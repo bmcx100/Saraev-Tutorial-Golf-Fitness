@@ -8,7 +8,8 @@ import { useHabits } from '@/contexts/habit-context';
 import { useChallenges } from '@/contexts/challenge-context';
 import { useUser } from '@/contexts/user-context';
 import { useColors } from '@/hooks/use-colors';
-import { FitnessRings } from '@/components/fitness-rings';
+import { FitnessRings, type CategoryRingData } from '@/components/fitness-rings';
+import { CATEGORY_META, type HabitCategory } from '@/constants/habits';
 import { ChallengeCard } from '@/components/challenge-card';
 import { HabitRow } from '@/components/habit-row';
 import { Confetti } from '@/components/confetti';
@@ -25,13 +26,19 @@ export default function TodayScreen() {
 
   const today = new Date();
   const dateStr = today.toLocaleDateString('en-US', {
-    weekday: 'long',
+    weekday: 'short',
     month: 'long',
     day: 'numeric',
   });
 
   const handleLog = useCallback(
     (habitId: string) => {
+      // Speed Sticks navigates to dedicated page instead of toggling
+      if (habitId === 'speed-sticks') {
+        router.push('/speed');
+        return;
+      }
+
       const { justCompleted, allDone } = logHabit(habitId);
 
       if (allDone) {
@@ -56,18 +63,22 @@ export default function TodayScreen() {
     [logHabit, checkChallengeCompletion, profile.soundEnabled],
   );
 
-  // Prepare ring data
-  const ringData = todayHabits.map((habit) => {
-    const { count, target } = getHabitProgress(habit.id);
-    return {
-      habit,
-      progress: target > 0 ? count / target : 0,
-    };
-  });
+  // Prepare ring data — one ring per category
+  const categoryOrder: HabitCategory[] = ['golf', 'workout', 'lifestyle'];
+  const ringData: CategoryRingData[] = [];
+  for (const cat of categoryOrder) {
+    const habits = todayHabits.filter((h) => h.category === cat);
+    if (habits.length === 0) continue;
+    const completed = habits.filter((h) => getHabitProgress(h.id).complete).length;
+    const meta = CATEGORY_META[cat];
+    ringData.push({
+      key: cat,
+      label: meta.label,
+      color: meta.color,
+      progress: completed / habits.length,
+    });
+  }
 
-  const completedCount = todayHabits.filter(
-    (h) => getHabitProgress(h.id).complete,
-  ).length;
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -108,25 +119,33 @@ export default function TodayScreen() {
           </View>
         )}
 
-        {/* Habit Rows */}
-        <View style={styles.habitsSection}>
-          <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>
-            {completedCount}/{todayHabits.length} complete
-          </Text>
-          {todayHabits.map((habit) => {
-            const { count, target, complete } = getHabitProgress(habit.id);
-            return (
-              <HabitRow
-                key={habit.id}
-                habit={habit}
-                count={count}
-                target={target}
-                complete={complete}
-                onLog={() => handleLog(habit.id)}
-              />
-            );
-          })}
-        </View>
+        {/* Habit Rows — grouped by category */}
+        {categoryOrder.map((cat) => {
+          const habits = todayHabits.filter((h) => h.category === cat);
+          if (habits.length === 0) return null;
+          const catCompleted = habits.filter((h) => getHabitProgress(h.id).complete).length;
+          const meta = CATEGORY_META[cat];
+          return (
+            <View key={cat} style={styles.habitsSection}>
+              <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>
+                {meta.label} · {catCompleted}/{habits.length} complete
+              </Text>
+              {habits.map((habit) => {
+                const { count, target, complete } = getHabitProgress(habit.id);
+                return (
+                  <HabitRow
+                    key={habit.id}
+                    habit={habit}
+                    count={count}
+                    target={target}
+                    complete={complete}
+                    onLog={() => handleLog(habit.id)}
+                  />
+                );
+              })}
+            </View>
+          );
+        })}
 
         {todayHabits.length === 0 && (
           <View style={styles.emptyState}>

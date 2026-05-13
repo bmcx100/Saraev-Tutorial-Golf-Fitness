@@ -2,7 +2,7 @@ export interface Habit {
   id: string;
   name: string;
   icon: string;
-  category: 'golf' | 'workout';
+  category: 'golf' | 'workout' | 'lifestyle';
   trackingType: 'binary' | 'counter';
   targetCount: number;
   unit: string;
@@ -37,8 +37,8 @@ export const HABIT_LIBRARY: Habit[] = [
 
   // Fitness
   {
-    id: 'push',
-    name: 'Push',
+    id: 'gym',
+    name: 'Strength Training',
     icon: 'fitness-center',
     category: 'workout',
     trackingType: 'binary',
@@ -48,20 +48,9 @@ export const HABIT_LIBRARY: Habit[] = [
     ringColor: '#E63946',
   },
   {
-    id: 'pull',
-    name: 'Pull',
-    icon: 'fitness-center',
-    category: 'workout',
-    trackingType: 'binary',
-    targetCount: 1,
-    unit: 'session',
-    duration: '1 session',
-    ringColor: '#457B9D',
-  },
-  {
-    id: 'leg-day-1',
-    name: 'Leg Day One',
-    icon: 'directions-walk',
+    id: 'cardio',
+    name: 'Cardio',
+    icon: 'directions-run',
     category: 'workout',
     trackingType: 'binary',
     targetCount: 1,
@@ -70,17 +59,60 @@ export const HABIT_LIBRARY: Habit[] = [
     ringColor: '#F59E0B',
   },
   {
-    id: 'leg-day-2',
-    name: 'Leg Day Two',
-    icon: 'directions-walk',
+    id: 'core',
+    name: 'Core',
+    icon: 'self-improvement',
     category: 'workout',
     trackingType: 'binary',
     targetCount: 1,
     unit: 'session',
     duration: '1 session',
-    ringColor: '#7B2CBF',
+    ringColor: '#457B9D',
+  },
+
+  // Lifestyle
+  {
+    id: 'meals',
+    name: 'Meals',
+    icon: 'restaurant',
+    category: 'lifestyle',
+    trackingType: 'binary',
+    targetCount: 1,
+    unit: 'session',
+    duration: '1 session',
+    ringColor: '#2D9CDB',
+  },
+  {
+    id: 'h2o',
+    name: 'H2O',
+    icon: 'water-drop',
+    category: 'lifestyle',
+    trackingType: 'binary',
+    targetCount: 1,
+    unit: 'session',
+    duration: '1 session',
+    ringColor: '#56CCF2',
+  },
+  {
+    id: 'alcohol',
+    name: 'Alcohol',
+    icon: 'local-bar',
+    category: 'lifestyle',
+    trackingType: 'binary',
+    targetCount: 1,
+    unit: 'session',
+    duration: '1 session',
+    ringColor: '#9B51E0',
   },
 ];
 
+export type HabitCategory = Habit['category'];
+
+export const CATEGORY_META: Record<HabitCategory, { label: string; color: string }> = {
+  golf: { label: 'Golf', color: '#2D6A4F' },
+  workout: { label: 'Workouts', color: '#E63946' },
+  lifestyle: { label: 'Lifestyle', color: '#9B51E0' },
+};
+
 /** Default habit IDs for users migrating from the old format */
-export const LEGACY_HABIT_IDS = ['speed-sticks', 'driver', 'push', 'pull', 'leg-day-1', 'leg-day-2'];
+export const LEGACY_HABIT_IDS = ['speed-sticks', 'driver', 'gym', 'cardio'];

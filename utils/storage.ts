@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { HabitLog } from '@/contexts/habit-context';
 import type { Challenge } from '@/contexts/challenge-context';
 import type { UserProfile } from '@/contexts/user-context';
+import type { SpeedSession } from '@/constants/speed-protocols';
 
 // ── Date helpers ──────────────────────────────────────────────
 
@@ -88,6 +89,33 @@ export async function saveProfile(profile: UserProfile): Promise<void> {
 export function oldHabitsKey(date: string): string {
   return `habits-${date}`;
 }
+
+// ── Speed sessions ───────────────────────────────────────────
+
+function speedSessionKey(date: string): string {
+  return `speed-session-${date}`;
+}
+
+export async function loadSpeedSession(date: string): Promise<SpeedSession | null> {
+  const raw = await AsyncStorage.getItem(speedSessionKey(date));
+  return raw ? JSON.parse(raw) : null;
+}
+
+export async function saveSpeedSession(session: SpeedSession): Promise<void> {
+  await AsyncStorage.setItem(speedSessionKey(session.date), JSON.stringify(session));
+}
+
+export async function loadSpeedSessionRange(dates: string[]): Promise<SpeedSession[]> {
+  const keys = dates.map(speedSessionKey);
+  const pairs = await AsyncStorage.multiGet(keys);
+  const sessions: SpeedSession[] = [];
+  for (const [, raw] of pairs) {
+    if (raw) sessions.push(JSON.parse(raw));
+  }
+  return sessions;
+}
+
+// ── Old format detection ──────────────────────────────────────
 
 export async function hasOldData(): Promise<boolean> {
   const keys = await AsyncStorage.getAllKeys();

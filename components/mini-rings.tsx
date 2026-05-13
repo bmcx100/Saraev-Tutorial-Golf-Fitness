@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { useColors } from '@/hooks/use-colors';
-import type { Habit } from '@/constants/habits';
+import { CATEGORY_META, type Habit, type HabitCategory } from '@/constants/habits';
 import type { HabitLog } from '@/contexts/habit-context';
 
 interface DayRingData {
@@ -19,41 +19,50 @@ interface MiniRingsProps {
 
 const RING_SIZE = 40;
 const RING_WIDTH = 3;
-const MAX_VISIBLE_RINGS = 3;
+const CATEGORY_ORDER: HabitCategory[] = ['golf', 'workout', 'lifestyle'];
 
 export function MiniRings({ days, activeHabits }: MiniRingsProps) {
   const colors = useColors();
 
+  // Build category rings from active habits
+  const activeCategories = CATEGORY_ORDER.filter((cat) =>
+    activeHabits.some((h) => h.category === cat),
+  );
+
   return (
     <View style={styles.container}>
       {days.map((day) => {
+        const totalHabits = activeHabits.length;
         const completedCount = activeHabits.filter((h) => {
           const log = day.logs.find((l) => l.habitId === h.id);
           return log ? log.count >= h.targetCount : false;
         }).length;
 
-        // Sort habits by completion (least complete first for outer ring)
-        const sortedHabits = [...activeHabits]
-          .map((h) => {
+        const categoryRings = activeCategories.map((cat) => {
+          const habits = activeHabits.filter((h) => h.category === cat);
+          const completed = habits.filter((h) => {
             const log = day.logs.find((l) => l.habitId === h.id);
-            const count = log?.count ?? 0;
-            return { habit: h, progress: Math.min(count / h.targetCount, 1) };
-          })
-          .sort((a, b) => a.progress - b.progress)
-          .slice(0, MAX_VISIBLE_RINGS);
+            return log ? log.count >= h.targetCount : false;
+          }).length;
+          return {
+            key: cat,
+            color: CATEGORY_META[cat].color,
+            progress: habits.length > 0 ? completed / habits.length : 0,
+          };
+        });
 
         return (
           <View key={day.date} style={styles.dayColumn}>
             <Svg width={RING_SIZE} height={RING_SIZE}>
-              {sortedHabits.map((item, i) => {
+              {categoryRings.map((ring, i) => {
                 const center = RING_SIZE / 2;
                 const radius = center - RING_WIDTH / 2 - i * (RING_WIDTH + 2);
                 if (radius <= 0) return null;
                 const circumference = 2 * Math.PI * radius;
-                const offset = circumference * (1 - item.progress);
+                const offset = circumference * (1 - ring.progress);
 
                 return (
-                  <React.Fragment key={item.habit.id}>
+                  <React.Fragment key={ring.key}>
                     <Circle
                       cx={center}
                       cy={center}
@@ -66,7 +75,7 @@ export function MiniRings({ days, activeHabits }: MiniRingsProps) {
                       cx={center}
                       cy={center}
                       r={radius}
-                      stroke={item.habit.ringColor}
+                      stroke={ring.color}
                       strokeWidth={RING_WIDTH}
                       fill="none"
                       strokeLinecap="round"
@@ -89,7 +98,7 @@ export function MiniRings({ days, activeHabits }: MiniRingsProps) {
               {day.dayLabel}
             </Text>
             <Text style={[styles.countLabel, { color: colors.textSecondary }]}>
-              {completedCount}/{activeHabits.length}
+              {completedCount}/{totalHabits}
             </Text>
           </View>
         );
