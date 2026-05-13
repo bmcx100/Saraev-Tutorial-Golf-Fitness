@@ -46,5 +46,6 @@ app-example
 .playwright-mcp/
 .superpowers/
 
-# Screenshots from testing
-*.png
+# Screenshots from testing (root directory only)
+/settings-*.png
+/test*.png
