@@ -155,3 +155,30 @@ export async function hasOldData(): Promise<boolean> {
   const keys = await AsyncStorage.getAllKeys();
   return keys.some((k) => k.startsWith('habits-') && !k.startsWith('habit-logs-'));
 }
+
+// ── Dev tools ─────────────────────────────────────────────────
+
+export async function clearAllData(): Promise<void> {
+  await AsyncStorage.clear();
+}
+
+export async function generateStreakData(
+  activeHabitIds: string[],
+  days: number,
+  fromDate?: string,
+): Promise<number> {
+  const base = fromDate ? new Date(fromDate + 'T00:00:00') : new Date();
+  for (let i = 0; i < days; i++) {
+    const d = new Date(base);
+    d.setDate(d.getDate() - i);
+    const date = formatDate(d);
+    const logs: HabitLog[] = activeHabitIds.map((habitId) => ({
+      habitId,
+      date,
+      count: 1,
+      completedAt: new Date(d.getTime() + 12 * 60 * 60 * 1000).toISOString(),
+    }));
+    await saveLogs(date, logs);
+  }
+  return days;
+}

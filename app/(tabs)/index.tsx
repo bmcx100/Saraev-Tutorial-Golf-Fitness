@@ -18,14 +18,14 @@ import { playSound } from '@/constants/sounds';
 export default function TodayScreen() {
   const { todayHabits, logHabit, getHabitProgress } = useHabits();
   const { activeChallenge, challengeProgress, checkChallengeCompletion } = useChallenges();
-  const { profile } = useUser();
+  const { profile, devDateOverride } = useUser();
   const colors = useColors();
 
   const [confettiActive, setConfettiActive] = useState(false);
   const [confettiMessage, setConfettiMessage] = useState<string | undefined>();
 
-  const today = new Date();
-  const dateStr = today.toLocaleDateString('en-US', {
+  const displayDate = devDateOverride ? new Date(devDateOverride + 'T00:00:00') : new Date();
+  const dateStr = displayDate.toLocaleDateString('en-US', {
     weekday: 'short',
     month: 'long',
     day: 'numeric',
@@ -105,6 +105,15 @@ export default function TodayScreen() {
             <MaterialIcons name="settings" size={24} color={colors.textSecondary} />
           </Pressable>
         </View>
+
+        {devDateOverride && (
+          <View style={[styles.devBanner, { backgroundColor: '#F59E0B' + '20', borderColor: '#F59E0B' }]}>
+            <MaterialIcons name="build" size={14} color="#F59E0B" />
+            <Text style={[styles.devBannerText, { color: '#F59E0B' }]}>
+              Dev date override active
+            </Text>
+          </View>
+        )}
 
         {/* Fitness Rings */}
         {ringData.length > 0 && (
@@ -210,5 +219,19 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 15,
     textAlign: 'center',
+  },
+  devBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginBottom: 16,
+  },
+  devBannerText: {
+    fontSize: 13,
+    fontWeight: '600',
   },
 });

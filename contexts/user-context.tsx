@@ -47,6 +47,9 @@ interface UserContextType {
   updateProfile: (updates: Partial<UserProfile>) => void;
   isOnboardingComplete: boolean;
   isLoading: boolean;
+  devDateOverride: string | null;
+  setDevDateOverride: (d: string | null) => void;
+  resetProfile: () => void;
 }
 
 const UserContext = createContext<UserContextType>({
@@ -54,6 +57,9 @@ const UserContext = createContext<UserContextType>({
   updateProfile: () => {},
   isOnboardingComplete: false,
   isLoading: true,
+  devDateOverride: null,
+  setDevDateOverride: () => {},
+  resetProfile: () => {},
 });
 
 export const useUser = () => useContext(UserContext);
@@ -61,6 +67,7 @@ export const useUser = () => useContext(UserContext);
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<UserProfile>(DEFAULT_PROFILE);
   const [isLoading, setIsLoading] = useState(true);
+  const [devDateOverride, setDevDateOverride] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -81,6 +88,10 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     [],
   );
 
+  const resetProfile = useCallback(() => {
+    setProfile(DEFAULT_PROFILE);
+  }, []);
+
   return (
     <UserContext.Provider
       value={{
@@ -88,6 +99,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         updateProfile,
         isOnboardingComplete: profile.onboardingComplete,
         isLoading,
+        devDateOverride,
+        setDevDateOverride,
+        resetProfile,
       }}
     >
       {children}

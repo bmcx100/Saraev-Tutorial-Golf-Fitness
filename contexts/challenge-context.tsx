@@ -46,7 +46,7 @@ const ChallengeContext = createContext<ChallengeContextType>({
 export const useChallenges = () => useContext(ChallengeContext);
 
 export function ChallengeProvider({ children }: { children: React.ReactNode }) {
-  const { profile } = useUser();
+  const { profile, devDateOverride } = useUser();
   const { todayLogs } = useHabits();
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [challengeProgress, setChallengeProgress] = useState(0);
@@ -101,7 +101,7 @@ export function ChallengeProvider({ children }: { children: React.ReactNode }) {
   const checkChallengeCompletion = useCallback(() => {
     if (!activeChallenge) return;
 
-    const today = formatDate(new Date());
+    const today = devDateOverride ?? formatDate(new Date());
     const endDate = new Date(activeChallenge.startDate + 'T00:00:00');
     endDate.setDate(endDate.getDate() + activeChallenge.durationDays);
     const endDateStr = formatDate(endDate);
@@ -123,7 +123,7 @@ export function ChallengeProvider({ children }: { children: React.ReactNode }) {
         return next;
       });
     }
-  }, [activeChallenge, challengeProgress]);
+  }, [activeChallenge, challengeProgress, devDateOverride]);
 
   // Run completion check when progress changes
   useEffect(() => {

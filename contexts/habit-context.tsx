@@ -32,7 +32,7 @@ const HabitContext = createContext<HabitContextType>({
 export const useHabits = () => useContext(HabitContext);
 
 export function HabitProvider({ children }: { children: React.ReactNode }) {
-  const { profile } = useUser();
+  const { profile, devDateOverride } = useUser();
   const [todayLogs, setTodayLogs] = useState<HabitLog[]>([]);
   const [weekLogs, setWeekLogs] = useState<Map<string, HabitLog[]>>(new Map());
 
@@ -40,7 +40,7 @@ export function HabitProvider({ children }: { children: React.ReactNode }) {
     profile.activeHabitIds.includes(h.id),
   );
 
-  const today = formatDate(new Date());
+  const today = devDateOverride ?? formatDate(new Date());
 
   const todayScheduledIds = getScheduledHabitIds(
     today,
@@ -54,9 +54,10 @@ export function HabitProvider({ children }: { children: React.ReactNode }) {
   // Load today + past 7 days
   useEffect(() => {
     (async () => {
+      const baseDate = devDateOverride ? new Date(devDateOverride + 'T00:00:00') : new Date();
       const dates: string[] = [];
       for (let i = 6; i >= 0; i--) {
-        const d = new Date();
+        const d = new Date(baseDate);
         d.setDate(d.getDate() - i);
         dates.push(formatDate(d));
       }
@@ -64,7 +65,7 @@ export function HabitProvider({ children }: { children: React.ReactNode }) {
       setWeekLogs(allLogs);
       setTodayLogs(allLogs.get(today) ?? []);
     })();
-  }, [today, profile.activeHabitIds]);
+  }, [today, profile.activeHabitIds, devDateOverride]);
 
   const getHabitProgress = useCallback(
     (habitId: string) => {
