@@ -3,6 +3,7 @@ import { View, Text, TextInput, Pressable, ScrollView, Modal, StyleSheet } from 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useUser } from '@/contexts/user-context';
 import { useHabits } from '@/contexts/habit-context';
 import { useColors } from '@/hooks/use-colors';
@@ -20,6 +21,7 @@ import {
   WORKOUT_ROTATION,
   SETS_PER_EXERCISE,
   type WorkoutDay,
+  type ExerciseDef,
   type ExerciseLog,
   type ExerciseSet,
   type StrengthSession,
@@ -121,6 +123,185 @@ function ProtocolPicker({ onSelect }: { onSelect: (p: 'lplp') => void }) {
         </View>
       </View>
     </SafeAreaView>
+  );
+}
+
+// ── Exercise Card ────────────────────────────────────────────
+
+const COLLAPSED_HEIGHT = 52;
+
+function ExerciseCard({
+  exDef,
+  exLog,
+  onFieldChange,
+  onToggleSet,
+}: {
+  exDef: ExerciseDef;
+  exLog: ExerciseLog | undefined;
+  onFieldChange: (exId: string, setIdx: number, field: 'weight' | 'reps', value: number | null) => void;
+  onToggleSet: (exId: string, setIdx: number) => void;
+}) {
+  const colors = useColors();
+  const [expanded, setExpanded] = useState(false);
+  const expandedHeight = useSharedValue(0);
+  const heightAnim = useSharedValue(COLLAPSED_HEIGHT);
+  const crossfade = useSharedValue(0);
+
+  const toggle = () => {
+    const next = !expanded;
+    setExpanded(next);
+    if (expandedHeight.value > 0) {
+      heightAnim.value = withTiming(next ? expandedHeight.value : COLLAPSED_HEIGHT, {
+        duration: 300,
+      });
+    }
+    crossfade.value = withTiming(next ? 1 : 0, { duration: 300 });
+  };
+
+  const handleCheckNext = () => {
+    if (!exLog) return;
+    const nextIdx = exLog.sets.findIndex((s) => !s.completed);
+    if (nextIdx !== -1) onToggleSet(exDef.id, nextIdx);
+  };
+
+  const outerStyle = useAnimatedStyle(() => ({
+    height: heightAnim.value,
+  }));
+
+  const collapsedOpacity = useAnimatedStyle(() => ({
+    opacity: 1 - crossfade.value,
+  }));
+
+  const expandedOpacity = useAnimatedStyle(() => ({
+    opacity: crossfade.value,
+  }));
+
+  return (
+    <Animated.View style={[styles.exerciseCard, { borderColor: colors.border }, outerStyle]}>
+      {/* Expanded content — always rendered for height measurement */}
+      <Animated.View
+        style={expandedOpacity}
+        onLayout={(e) => {
+          const h = e.nativeEvent.layout.height;
+          if (h > 0) expandedHeight.value = h;
+        }}
+        pointerEvents={expanded ? 'auto' : 'none'}
+      >
+        <Pressable onPress={toggle} style={styles.expandedHeader}>
+          <Text style={[styles.exerciseName, { color: colors.text, marginBottom: 0 }]}>
+            {exDef.name}
+          </Text>
+          <MaterialIcons name="expand-less" size={24} color={colors.textSecondary} />
+        </Pressable>
+
+        <View style={{ paddingHorizontal: 8, paddingBottom: 8 }}>
+          <View style={styles.setHeaderRow}>
+            <Text style={[styles.setHeaderLabel, { color: colors.textSecondary, width: 32, textAlign: 'center' }]}>
+              Set
+            </Text>
+            <View style={styles.setColumnGroup}>
+              <Text style={[styles.setHeaderLabel, { color: colors.textSecondary }]}>
+                Weight
+              </Text>
+            </View>
+            <View style={styles.setColumnGroup}>
+              <Text style={[styles.setHeaderLabel, { color: colors.textSecondary }]}>
+                Reps
+              </Text>
+            </View>
+            <View style={{ width: 28 }} />
+          </View>
+
+          {exLog?.sets.map((set, si) => (
+            <View key={si} style={[styles.setRow, { borderColor: colors.border }]}>
+              <Text style={[styles.setNumber, { color: colors.textSecondary }]}>{si + 1}</Text>
+              <View style={styles.setColumnGroup}>
+                <View
+                  style={[
+                    styles.inputField,
+                    { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1 },
+                  ]}
+                >
+                  <TextInput
+                    style={[styles.textInput, { color: colors.text }]}
+                    value={set.weight !== null ? String(set.weight) : ''}
+                    onChangeText={(text) => {
+                      const num = text === '' ? null : parseInt(text, 10);
+                      if (text !== '' && isNaN(num!)) return;
+                      onFieldChange(exDef.id, si, 'weight', num);
+                    }}
+                    keyboardType="number-pad"
+                    placeholder="--"
+                    placeholderTextColor={colors.textSecondary}
+                    selectTextOnFocus
+                  />
+                </View>
+                <Text style={[styles.inputUnit, { color: colors.textSecondary }]}>lbs</Text>
+              </View>
+              <View style={styles.setColumnGroup}>
+                <View
+                  style={[
+                    styles.inputField,
+                    { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1 },
+                  ]}
+                >
+                  <TextInput
+                    style={[styles.textInput, { color: colors.text }]}
+                    value={String(set.reps)}
+                    onChangeText={(text) => {
+                      const num = text === '' ? 0 : parseInt(text, 10);
+                      if (isNaN(num)) return;
+                      onFieldChange(exDef.id, si, 'reps', num);
+                    }}
+                    keyboardType="number-pad"
+                    selectTextOnFocus
+                  />
+                </View>
+                <Text style={[styles.inputUnit, { color: colors.textSecondary }]}>reps</Text>
+              </View>
+              <Pressable onPress={() => onToggleSet(exDef.id, si)} hitSlop={8}>
+                <MaterialIcons
+                  name={set.completed ? 'check-circle' : 'radio-button-unchecked'}
+                  size={28}
+                  color={set.completed ? colors.accent : colors.border}
+                />
+              </Pressable>
+            </View>
+          ))}
+        </View>
+      </Animated.View>
+
+      {/* Collapsed overlay */}
+      <Animated.View
+        style={[{ position: 'absolute', top: 0, left: 0, right: 0 }, collapsedOpacity]}
+        pointerEvents={expanded ? 'none' : 'auto'}
+      >
+        <Pressable onPress={handleCheckNext} style={styles.collapsedRow}>
+          <Text
+            style={[styles.exerciseName, { color: colors.text, marginBottom: 0, flex: 1 }]}
+            numberOfLines={1}
+          >
+            {exDef.name}
+          </Text>
+          <Pressable onPress={toggle} hitSlop={8}>
+            <Text style={[styles.collapsedStats, { color: colors.textSecondary }]}>
+              {exLog?.sets[0]?.weight ?? '--'} lbs{' · '}
+              {exLog?.sets[0]?.reps ?? '--'} reps
+            </Text>
+          </Pressable>
+          <View style={styles.collapsedCheckboxRow}>
+            {exLog?.sets.map((set, si) => (
+              <MaterialIcons
+                key={si}
+                name={set.completed ? 'check-circle' : 'radio-button-unchecked'}
+                size={22}
+                color={set.completed ? colors.accent : colors.border}
+              />
+            ))}
+          </View>
+        </Pressable>
+      </Animated.View>
+    </Animated.View>
   );
 }
 
@@ -314,76 +495,13 @@ function WorkoutTracker() {
         {dayDef.exercises.map((exDef) => {
           const exLog = exercises.find((e) => e.exerciseId === exDef.id);
           return (
-            <View key={exDef.id} style={styles.exerciseBlock}>
-              <Text style={[styles.exerciseName, { color: colors.text }]}>{exDef.name}</Text>
-
-              {/* Set header */}
-              <View style={styles.setHeaderRow}>
-                <Text style={[styles.setHeaderLabel, { color: colors.textSecondary, width: 32 }]}>
-                  Set
-                </Text>
-                <Text style={[styles.setHeaderLabel, { color: colors.textSecondary, flex: 1, textAlign: 'center' }]}>
-                  Weight
-                </Text>
-                <Text style={[styles.setHeaderLabel, { color: colors.textSecondary, flex: 1, textAlign: 'center' }]}>
-                  Reps
-                </Text>
-                <View style={{ width: 36 }} />
-              </View>
-
-              {exLog?.sets.map((set, si) => (
-                  <View key={si} style={[styles.setRow, { borderColor: colors.border }]}>
-                    {/* Set number */}
-                    <Text style={[styles.setNumber, { color: colors.textSecondary }]}>{si + 1}</Text>
-
-                    {/* Weight field */}
-                    <View style={[styles.inputField, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1 }]}>
-                      <TextInput
-                        style={[styles.textInput, { color: colors.text }]}
-                        value={set.weight !== null ? String(set.weight) : ''}
-                        onChangeText={(text) => {
-                          const num = text === '' ? null : parseInt(text, 10);
-                          if (text !== '' && isNaN(num!)) return;
-                          setFieldValue(exDef.id, si, 'weight', num);
-                        }}
-                        keyboardType="number-pad"
-                        placeholder="--"
-                        placeholderTextColor={colors.textSecondary}
-                        selectTextOnFocus
-                      />
-                      <Text style={[styles.inputUnit, { color: colors.textSecondary }]}>lbs</Text>
-                    </View>
-
-                    {/* Reps field */}
-                    <View style={[styles.inputField, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1 }]}>
-                      <TextInput
-                        style={[styles.textInput, { color: colors.text }]}
-                        value={String(set.reps)}
-                        onChangeText={(text) => {
-                          const num = text === '' ? 0 : parseInt(text, 10);
-                          if (isNaN(num)) return;
-                          setFieldValue(exDef.id, si, 'reps', num);
-                        }}
-                        keyboardType="number-pad"
-                        selectTextOnFocus
-                      />
-                      <Text style={[styles.inputUnit, { color: colors.textSecondary }]}>reps</Text>
-                    </View>
-
-                    {/* Completion checkbox */}
-                    <Pressable
-                      onPress={() => toggleSetCompleted(exDef.id, si)}
-                      hitSlop={8}
-                    >
-                      <MaterialIcons
-                        name={set.completed ? 'check-circle' : 'radio-button-unchecked'}
-                        size={28}
-                        color={set.completed ? colors.accent : colors.border}
-                      />
-                    </Pressable>
-                  </View>
-                ))}
-            </View>
+            <ExerciseCard
+              key={exDef.id}
+              exDef={exDef}
+              exLog={exLog}
+              onFieldChange={setFieldValue}
+              onToggleSet={toggleSetCompleted}
+            />
           );
         })}
       </ScrollView>
@@ -543,6 +661,36 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     gap: 20,
   },
+  exerciseCard: {
+    borderWidth: 1,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  collapsedRow: {
+    height: 52,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+  },
+  collapsedStats: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  collapsedCheckboxRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginLeft: 12,
+  },
+  expandedHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+    paddingTop: 12,
+    paddingBottom: 4,
+  },
   exerciseBlock: {
     gap: 4,
   },
@@ -563,27 +711,32 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
+  setColumnGroup: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+  },
   setRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 6,
-    gap: 8,
   },
   setNumber: {
-    width: 24,
+    width: 32,
     fontSize: 15,
     fontWeight: '600',
     textAlign: 'center',
   },
   inputField: {
-    flex: 1,
+    width: 60,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
     paddingHorizontal: 8,
     paddingVertical: 8,
-    gap: 3,
     overflow: 'hidden',
   },
   inputValue: {
@@ -592,12 +745,12 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
   },
   textInput: {
-    flex: 1,
     fontSize: 18,
     fontWeight: '700',
     fontVariant: ['tabular-nums'],
     textAlign: 'center',
     padding: 0,
+    width: '100%',
   },
   inputUnit: {
     fontSize: 11,

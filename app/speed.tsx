@@ -198,7 +198,7 @@ function SpeedWizard({ protocol }: { protocol: string }) {
   const sessionRef = useRef(session);
   sessionRef.current = session;
   const [step, setStep] = useState(0);
-  const [activeField, setActiveField] = useState<FieldId | null>(null);
+  const [activeField, setActiveField] = useState<FieldId | null>(FIELDS_BY_STEP[0][0]);
   const [errors, setErrors] = useState<Set<string>>(new Set());
   const [loaded, setLoaded] = useState(false);
   const [showDiscard, setShowDiscard] = useState(false);
@@ -218,11 +218,13 @@ function SpeedWizard({ protocol }: { protocol: string }) {
   const handleDigit = useCallback(
     (d: string) => {
       if (!activeField) return;
+      let shouldAdvance = false;
       setSession((prev) => {
         const current = getFieldValue(prev, activeField);
         const currentStr = current !== null ? String(current) : '';
         if (currentStr.length >= 3) return prev; // max 3 digits
         const newStr = currentStr + d;
+        if (newStr.length === 3) shouldAdvance = true;
         return setFieldValue(prev, activeField, parseInt(newStr, 10));
       });
       setErrors((prev) => {
@@ -230,8 +232,14 @@ function SpeedWizard({ protocol }: { protocol: string }) {
         next.delete(activeField);
         return next;
       });
+      if (shouldAdvance) {
+        const idx = currentFields.indexOf(activeField);
+        if (idx < currentFields.length - 1) {
+          setActiveField(currentFields[idx + 1]);
+        }
+      }
     },
-    [activeField],
+    [activeField, currentFields],
   );
 
   const handleDelete = useCallback(() => {
