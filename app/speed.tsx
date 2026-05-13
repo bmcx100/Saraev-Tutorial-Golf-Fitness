@@ -14,6 +14,7 @@ import {
   type SpeedSession,
   type StickColor,
 } from '@/constants/speed-protocols';
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { SpeedNumpad } from '@/components/speed-numpad';
 import { SpeedInputField } from '@/components/speed-input-field';
 
@@ -88,6 +89,42 @@ function emptyFieldIds(session: SpeedSession): Set<string> {
     }
   }
   return set;
+}
+
+// ── Step Tab ─────────────────────────────────────────────────
+
+function StepTab({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) {
+  const colors = useColors();
+  const animStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: withTiming(active ? 1 : 0.92, { duration: 200 }) }],
+  }));
+
+  return (
+    <Pressable onPress={onPress}>
+      <Animated.View
+        style={[
+          styles.stepTab,
+          {
+            backgroundColor: active ? colors.accent : colors.surface,
+            borderColor: active ? colors.accent : colors.border,
+          },
+          animStyle,
+        ]}
+      >
+        <Text
+          style={[
+            styles.stepTabText,
+            {
+              color: active ? '#FFFFFF' : colors.textSecondary,
+              fontWeight: active ? '700' : '500',
+            },
+          ]}
+        >
+          {label}
+        </Text>
+      </Animated.View>
+    </Pressable>
+  );
 }
 
 // ── Protocol Picker ───────────────────────────────────────────
@@ -232,8 +269,9 @@ function SpeedWizard({ protocol }: { protocol: string }) {
   }, [step]);
 
   const handleNext = useCallback(() => {
-    setActiveField(null);
-    setStep(step + 1);
+    const nextStep = step + 1;
+    setStep(nextStep);
+    setActiveField(FIELDS_BY_STEP[nextStep][0]);
   }, [step]);
 
   const handleSubmit = useCallback(async () => {
@@ -264,35 +302,24 @@ function SpeedWizard({ protocol }: { protocol: string }) {
         <View style={{ width: 24 }} />
       </View>
 
-      {/* Step indicator */}
-      <View style={styles.stepIndicator}>
+      {/* Step tabs */}
+      <View style={styles.stepTabs}>
         {DRILL_STEPS.map((d, i) => (
-          <View key={d.key} style={styles.stepDot}>
-            <View
-              style={[
-                styles.dot,
-                {
-                  backgroundColor: i === step ? colors.accent : colors.border,
-                },
-              ]}
-            />
-            <Text
-              style={[
-                styles.stepLabel,
-                {
-                  color: i === step ? colors.text : colors.textSecondary,
-                  fontWeight: i === step ? '700' : '400',
-                },
-              ]}
-            >
-              {d.label}
-            </Text>
-          </View>
+          <StepTab
+            key={d.key}
+            label={d.label}
+            active={i === step}
+            onPress={() => {
+              setStep(i);
+              setActiveField(FIELDS_BY_STEP[i][0]);
+            }}
+          />
         ))}
       </View>
 
       {/* Form content */}
       <ScrollView
+        style={{ flex: 1 }}
         contentContainerStyle={styles.formContent}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
@@ -373,32 +400,22 @@ function SpeedWizard({ protocol }: { protocol: string }) {
         )}
       </ScrollView>
 
-      {/* Bottom action */}
-      <View style={[styles.bottomBar, { borderTopColor: colors.border }]}>
-        {isLastStep ? (
-          <Pressable
-            onPress={handleSubmit}
-            style={[styles.actionButton, { backgroundColor: colors.accent }]}
-          >
-            <Text style={styles.actionButtonText}>Submit</Text>
-          </Pressable>
-        ) : (
-          <Pressable
-            onPress={handleNext}
-            style={[styles.actionButton, { backgroundColor: colors.accent }]}
-          >
-            <Text style={styles.actionButtonText}>Next</Text>
-          </Pressable>
-        )}
-      </View>
-
-      {/* Numpad */}
+      {/* Numpad — always visible */}
       <SpeedNumpad
-        visible={activeField !== null}
         onDigit={handleDigit}
         onDelete={handleDelete}
         onTab={handleTab}
       />
+
+      {/* Bottom action */}
+      <View style={[styles.bottomBar, { borderTopColor: colors.border }]}>
+        <Pressable
+          onPress={isLastStep ? handleSubmit : handleNext}
+          style={[styles.actionButton, { backgroundColor: colors.accent }]}
+        >
+          <Text style={styles.actionButtonText}>{isLastStep ? 'Submit' : 'Next'}</Text>
+        </Pressable>
+      </View>
 
       {/* Discard confirmation */}
       <Modal visible={showDiscard} transparent animationType="fade">
@@ -509,27 +526,25 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   // Wizard
-  stepIndicator: {
+  stepTabs: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 24,
+    gap: 8,
+    paddingHorizontal: 20,
     paddingVertical: 8,
   },
-  stepDot: {
-    alignItems: 'center',
-    gap: 4,
+  stepTab: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 12,
+    borderWidth: 1,
   },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  stepLabel: {
-    fontSize: 12,
+  stepTabText: {
+    fontSize: 15,
   },
   formContent: {
     padding: 20,
-    paddingBottom: 100,
+    paddingBottom: 16,
     gap: 16,
   },
   drillInstruction: {

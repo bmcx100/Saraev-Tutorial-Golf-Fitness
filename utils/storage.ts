@@ -131,6 +131,16 @@ export async function saveStrengthSession(session: StrengthSession): Promise<voi
   await AsyncStorage.setItem(strengthSessionKey(session.date), JSON.stringify(session));
 }
 
+export async function loadStrengthSessionRange(dates: string[]): Promise<StrengthSession[]> {
+  const keys = dates.map(strengthSessionKey);
+  const pairs = await AsyncStorage.multiGet(keys);
+  const sessions: StrengthSession[] = [];
+  for (const [, raw] of pairs) {
+    if (raw) sessions.push(JSON.parse(raw));
+  }
+  return sessions;
+}
+
 export async function loadLastStrengthWorkoutDay(): Promise<WorkoutDay | null> {
   const raw = await AsyncStorage.getItem('strength-last-workout-day');
   return raw ? (JSON.parse(raw) as WorkoutDay) : null;

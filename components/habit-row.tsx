@@ -43,9 +43,6 @@ export function HabitRow({ habit, count, target, complete, onLog }: HabitRowProp
   }));
 
   const isCounter = habit.trackingType === 'counter';
-  const subtitle = isCounter
-    ? `${count} of ${target} ${habit.unit}`
-    : habit.duration;
 
   return (
     <Pressable
@@ -75,9 +72,11 @@ export function HabitRow({ habit, count, target, complete, onLog }: HabitRowProp
         >
           {habit.name}
         </Text>
-        <Text style={[styles.duration, { color: colors.textSecondary }]}>
-          {subtitle}
-        </Text>
+        {isCounter && (
+          <Text style={[styles.duration, { color: colors.textSecondary }]}>
+            {count} of {target} {habit.unit}
+          </Text>
+        )}
       </View>
       {isCounter && !complete && (
         <View style={[styles.countBadge, { backgroundColor: colors.tint + '20' }]}>
@@ -97,7 +96,8 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
     borderRadius: 12,
     borderWidth: 1,
     marginBottom: 10,

@@ -487,7 +487,6 @@ function WorkoutTracker() {
 
       {/* Numpad */}
       <SpeedNumpad
-        visible={activeField !== null}
         onDigit={handleDigit}
         onDelete={handleDelete}
         onTab={handleTab}

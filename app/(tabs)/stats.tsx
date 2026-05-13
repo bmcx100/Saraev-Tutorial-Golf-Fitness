@@ -1,11 +1,14 @@
 import { useMemo } from 'react';
-import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHabits } from '@/contexts/habit-context';
 import { useChallenges } from '@/contexts/challenge-context';
 import { useUser } from '@/contexts/user-context';
 import { useColors } from '@/hooks/use-colors';
+import { useTrainingHistory } from '@/hooks/use-training-history';
 import { MiniRings } from '@/components/mini-rings';
+import { SpeedTrendCard } from '@/components/speed-trend-card';
+import { StrengthSummaryCard } from '@/components/strength-summary-card';
 import { formatDate } from '@/utils/storage';
 import { getScheduledHabitIds } from '@/utils/schedule';
 
@@ -16,6 +19,18 @@ export default function StatsScreen() {
   const { completedChallenges } = useChallenges();
   const { profile } = useUser();
   const colors = useColors();
+  const {
+    strengthSessions,
+    loading: trainingLoading,
+    driverSpeeds,
+    latestDriverSpeed,
+    bestDriverSpeed,
+    strengthSessionCount,
+    latestStrengthDay,
+  } = useTrainingHistory();
+
+  const showSpeed = profile.speedProtocol != null;
+  const showStrength = profile.strengthProtocol != null;
 
   const today = formatDate(new Date());
 
@@ -118,6 +133,31 @@ export default function StatsScreen() {
           <View style={[styles.section, { backgroundColor: colors.surface }]}>
             <MiniRings days={weekDays} activeHabits={activeHabits} />
           </View>
+        )}
+
+        {/* Training Progress */}
+        {(showSpeed || showStrength) && trainingLoading && (
+          <ActivityIndicator
+            size="large"
+            color={colors.tint}
+            style={styles.loader}
+          />
+        )}
+        {showSpeed && !trainingLoading && (
+          <SpeedTrendCard
+            driverSpeeds={driverSpeeds}
+            latestDriverSpeed={latestDriverSpeed}
+            bestDriverSpeed={bestDriverSpeed}
+            colors={colors}
+          />
+        )}
+        {showStrength && !trainingLoading && (
+          <StrengthSummaryCard
+            strengthSessions={strengthSessions}
+            strengthSessionCount={strengthSessionCount}
+            latestStrengthDay={latestStrengthDay}
+            colors={colors}
+          />
         )}
 
         {/* Habit Breakdown */}
@@ -288,6 +328,9 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     marginTop: 4,
+  },
+  loader: {
+    marginVertical: 24,
   },
   emptyText: {
     fontSize: 15,

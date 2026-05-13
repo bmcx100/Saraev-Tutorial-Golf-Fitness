@@ -1,5 +1,4 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useColors } from '@/hooks/use-colors';
 
@@ -7,7 +6,6 @@ interface SpeedNumpadProps {
   onDigit: (d: string) => void;
   onDelete: () => void;
   onTab: () => void;
-  visible: boolean;
 }
 
 const KEYS = [
@@ -17,22 +15,15 @@ const KEYS = [
   ['tab', '0', 'del'],
 ];
 
-export function SpeedNumpad({ onDigit, onDelete, onTab, visible }: SpeedNumpadProps) {
+export function SpeedNumpad({ onDigit, onDelete, onTab }: SpeedNumpadProps) {
   const colors = useColors();
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: withTiming(visible ? 0 : 220, { duration: 200 }) }],
-    opacity: withTiming(visible ? 1 : 0, { duration: 150 }),
-  }));
-
   return (
-    <Animated.View
+    <View
       style={[
         styles.container,
         { backgroundColor: colors.surface, borderTopColor: colors.border },
-        animatedStyle,
       ]}
-      pointerEvents={visible ? 'auto' : 'none'}
     >
       {KEYS.map((row, ri) => (
         <View key={ri} style={styles.row}>
@@ -80,7 +71,7 @@ export function SpeedNumpad({ onDigit, onDelete, onTab, visible }: SpeedNumpadPr
           })}
         </View>
       ))}
-    </Animated.View>
+    </View>
   );
 }
 
