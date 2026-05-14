@@ -12,8 +12,8 @@ export const CHALLENGE_TEMPLATES: ChallengeTemplate[] = [
   {
     id: 'get-long',
     name: 'Get Long',
-    description: 'Build swing speed: 12 speed stick sessions this month.',
-    habitId: 'speed-sticks',
+    description: 'Build swing speed: 12 speed training sessions this month.',
+    habitId: 'speed-training',
     targetTotal: 12,
     durationDays: 30,
   },
@@ -37,8 +37,8 @@ export const CHALLENGE_TEMPLATES: ChallengeTemplate[] = [
   {
     id: 'speed-week',
     name: 'Speed Week',
-    description: 'Build swing speed with 5 speed stick sessions in a week.',
-    habitId: 'speed-sticks',
+    description: 'Build swing speed with 5 speed training sessions in a week.',
+    habitId: 'speed-training',
     targetTotal: 5,
     durationDays: 7,
   },

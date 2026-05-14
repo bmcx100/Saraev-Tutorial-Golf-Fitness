@@ -15,8 +15,8 @@ const ONBOARDING_CHALLENGES = [
     name: 'Get Long',
     icon: 'bolt' as const,
     color: '#2D6A4F',
-    description: 'Build swing speed: 12 speed stick sessions this\u00A0month',
-    requiredHabits: ['speed-sticks'],
+    description: 'Build swing speed: 12 speed training sessions this\u00A0month',
+    requiredHabits: ['speed-training'],
   },
   {
     id: 'get-strong',

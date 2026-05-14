@@ -13,8 +13,8 @@ export interface Habit {
 export const HABIT_LIBRARY: Habit[] = [
   // Golf
   {
-    id: 'speed-sticks',
-    name: 'Speed Sticks',
+    id: 'speed-training',
+    name: 'Speed Training',
     icon: 'bolt',
     category: 'golf',
     trackingType: 'binary',
@@ -115,4 +115,4 @@ export const CATEGORY_META: Record<HabitCategory, { label: string; color: string
 };
 
 /** Default habit IDs for users migrating from the old format */
-export const LEGACY_HABIT_IDS = ['speed-sticks', 'driver', 'gym', 'cardio'];
+export const LEGACY_HABIT_IDS = ['speed-training', 'driver', 'gym', 'cardio'];

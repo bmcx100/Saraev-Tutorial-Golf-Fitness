@@ -67,8 +67,8 @@ export default function TodayScreen() {
 
   const handleLog = useCallback(
     (habitId: string) => {
-      // Speed Sticks navigates to dedicated page instead of toggling
-      if (habitId === 'speed-sticks') {
+      // Speed Training navigates to dedicated page instead of toggling
+      if (habitId === 'speed-training') {
         router.push('/speed');
         return;
       }
