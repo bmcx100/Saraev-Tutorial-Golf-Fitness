@@ -237,7 +237,8 @@ function RecordCard({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
+    userSelect: 'none',
+  } as any,
   content: {
     padding: 20,
     paddingTop: 12,

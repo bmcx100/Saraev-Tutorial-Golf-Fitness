@@ -483,7 +483,8 @@ export default function SpeedScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
+    userSelect: 'none',
+  } as any,
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',

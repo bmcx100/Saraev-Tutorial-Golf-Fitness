@@ -103,6 +103,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
   const resetProfile = useCallback(() => {
     setProfile(DEFAULT_PROFILE);
+    saveProfile(DEFAULT_PROFILE);
   }, []);
 
   return (

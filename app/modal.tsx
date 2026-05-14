@@ -20,8 +20,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    userSelect: 'none',
     padding: 20,
-  },
+  } as any,
   link: {
     marginTop: 15,
     paddingVertical: 15,

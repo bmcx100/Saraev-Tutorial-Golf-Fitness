@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ScrollView, View, Text, Pressable, Switch, Alert, Modal, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, Pressable, Switch, Alert, Modal, Platform, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -256,62 +256,67 @@ export default function SettingsScreen() {
               </Text>
             </Pressable>
 
-            {/* Reset Today's Progress */}
-            <Pressable
-              onPress={() => {
-                Alert.alert(
-                  'Reset Today',
-                  'Clear all habit progress for today?',
-                  [
-                    { text: 'Cancel', style: 'cancel' },
-                    {
-                      text: 'Reset',
-                      style: 'destructive',
-                      onPress: async () => {
-                        const today = devDateOverride ?? formatDate(new Date());
-                        await saveLogs(today, []);
-                        Alert.alert('Done', 'Today\'s progress has been reset. Go back and return to refresh.');
-                      },
-                    },
-                  ],
-                );
-              }}
-              style={[styles.devButton, { borderColor: '#E63946' }]}
-            >
-              <MaterialIcons name="refresh" size={20} color="#E63946" />
-              <Text style={[styles.devButtonText, { color: '#E63946' }]}>
-                Reset Today&apos;s Progress
-              </Text>
-            </Pressable>
-
-            {/* Clear All Data */}
-            <Pressable
-              onPress={() => {
-                Alert.alert(
-                  'Clear All Data',
-                  'This will delete ALL app data and return to onboarding. Are you sure?',
-                  [
-                    { text: 'Cancel', style: 'cancel' },
-                    {
-                      text: 'Delete Everything',
-                      style: 'destructive',
-                      onPress: async () => {
-                        await clearAllData();
-                        resetProfile();
-                      },
-                    },
-                  ],
-                );
-              }}
-              style={[styles.devButton, { borderColor: '#E63946', marginBottom: 40 }]}
-            >
-              <MaterialIcons name="delete-forever" size={20} color="#E63946" />
-              <Text style={[styles.devButtonText, { color: '#E63946' }]}>
-                Clear All Data
-              </Text>
-            </Pressable>
           </>
         )}
+
+        {/* Reset Today's Progress */}
+        <Pressable
+          onPress={async () => {
+            const doReset = async () => {
+              const today = devDateOverride ?? formatDate(new Date());
+              await saveLogs(today, []);
+              if (Platform.OS === 'web') {
+                window.alert('Today\'s progress has been reset. Go back and return to refresh.');
+              } else {
+                Alert.alert('Done', 'Today\'s progress has been reset. Go back and return to refresh.');
+              }
+            };
+
+            if (Platform.OS === 'web') {
+              if (window.confirm('Clear all habit progress for today?')) {
+                await doReset();
+              }
+            } else {
+              Alert.alert('Reset Today', 'Clear all habit progress for today?', [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Reset', style: 'destructive', onPress: doReset },
+              ]);
+            }
+          }}
+          style={[styles.destructiveBtn, { borderColor: '#E63946', marginTop: 28 }]}
+        >
+          <MaterialIcons name="refresh" size={20} color="#E63946" />
+          <Text style={[styles.destructiveBtnText, { color: '#E63946' }]}>
+            Reset Today&apos;s Progress
+          </Text>
+        </Pressable>
+
+        {/* Clear All Data */}
+        <Pressable
+          onPress={async () => {
+            const doClear = async () => {
+              await clearAllData();
+              resetProfile();
+            };
+
+            if (Platform.OS === 'web') {
+              if (window.confirm('This will delete ALL app data and return to onboarding. Are you sure?')) {
+                await doClear();
+              }
+            } else {
+              Alert.alert('Clear All Data', 'This will delete ALL app data and return to onboarding. Are you sure?', [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Delete Everything', style: 'destructive', onPress: doClear },
+              ]);
+            }
+          }}
+          style={[styles.destructiveBtn, { borderColor: '#E63946', marginBottom: 40 }]}
+        >
+          <MaterialIcons name="delete-forever" size={20} color="#E63946" />
+          <Text style={[styles.destructiveBtnText, { color: '#E63946' }]}>
+            Clear All Data
+          </Text>
+        </Pressable>
       </ScrollView>
 
       {/* Habit Detail Modal */}
@@ -334,7 +339,6 @@ export default function SettingsScreen() {
   );
 }
 
-const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const PERIODS: HabitGoalConfig['period'][] = ['daily', 'weekly', 'monthly'];
 
 function HabitDetailPanel({
@@ -357,9 +361,9 @@ function HabitDetailPanel({
   const [mode, setMode] = useState<'weekdays' | 'goal'>(currentMode);
   const [goalCount, setGoalCount] = useState(currentGoal.count);
   const [goalPeriod, setGoalPeriod] = useState<HabitGoalConfig['period']>(currentGoal.period);
+  const [showProtocolPicker, setShowProtocolPicker] = useState(false);
 
   const previewDays = getGoalWeekdays({ count: goalCount, period: goalPeriod });
-  const previewText = previewDays.map((d) => DAY_LABELS[d]).join(', ');
 
   const saveMode = (
     newMode: 'weekdays' | 'goal',
@@ -539,10 +543,14 @@ function HabitDetailPanel({
               ))}
             </View>
 
-            {/* Preview */}
+            {/* Active days */}
             <Text style={[styles.weekdayHint, { color: colors.textSecondary, marginTop: 12 }]}>
-              Shows on {previewText}
+              Active days
             </Text>
+            <WeekdayPicker
+              selectedDays={schedule.habitWeekdays[habit.id] ?? previewDays}
+              onChange={handleWeekdayChange}
+            />
             <Text style={[styles.weekdayHint, { color: colors.textSecondary, marginTop: 4 }]}>
               We&apos;ll track your pace and cheer you&nbsp;on
             </Text>
@@ -582,7 +590,7 @@ function HabitDetailPanel({
             <View style={styles.weekdaySection}>
               <Text style={[styles.weekdayLabel, { color: colors.text }]}>{protocolLabel}</Text>
               <Pressable
-                onPress={() => updateProfile({ speedProtocol: null })}
+                onPress={() => setShowProtocolPicker(true)}
                 style={[styles.changeProtocolBtn, { borderColor: colors.border }]}
               >
                 <Text style={[styles.changeProtocolText, { color: colors.accent }]}>
@@ -593,6 +601,66 @@ function HabitDetailPanel({
           </>
         )}
       </ScrollView>
+
+      {/* Speed Protocol Picker Modal */}
+      <Modal
+        visible={showProtocolPicker}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setShowProtocolPicker(false)}
+      >
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+          <View style={styles.topBar}>
+            <Pressable onPress={() => setShowProtocolPicker(false)} hitSlop={12}>
+              <MaterialIcons name="close" size={24} color={colors.text} />
+            </Pressable>
+            <Text style={[styles.topTitle, { color: colors.text }]}>Choose Protocol</Text>
+            <View style={{ width: 24 }} />
+          </View>
+
+          <View style={{ padding: 20, gap: 16 }}>
+            <Pressable
+              onPress={() => {
+                updateProfile({ speedProtocol: 'superspeed-l1' });
+                setShowProtocolPicker(false);
+              }}
+              style={[styles.protocolCard, { backgroundColor: colors.surface, borderColor: colors.accent }]}
+            >
+              <MaterialIcons name="bolt" size={28} color={colors.accent} />
+              <View style={styles.protocolCardText}>
+                <Text style={[styles.protocolCardName, { color: colors.text }]}>
+                  Super Speed Sticks L1
+                </Text>
+                <Text style={[styles.protocolCardDesc, { color: colors.textSecondary }]}>
+                  3 weighted sticks, progressive overload
+                </Text>
+              </View>
+              {profile.speedProtocol === 'superspeed-l1' && (
+                <MaterialIcons name="check-circle" size={24} color={colors.accent} />
+              )}
+            </Pressable>
+
+            <View
+              style={[styles.protocolCard, { backgroundColor: colors.surface, borderColor: colors.border, opacity: 0.5 }]}
+            >
+              <MaterialIcons name="speed" size={28} color={colors.textSecondary} />
+              <View style={styles.protocolCardText}>
+                <Text style={[styles.protocolCardName, { color: colors.text }]}>
+                  BMC&apos;s Speedy Sticks{'\u00A0'}of{'\u00A0'}Quickness
+                </Text>
+                <Text style={[styles.protocolCardDesc, { color: colors.textSecondary }]}>
+                  Alternative protocol
+                </Text>
+              </View>
+              <View style={[styles.comingSoonBadge, { backgroundColor: colors.border }]}>
+                <Text style={[styles.comingSoonText, { color: colors.textSecondary }]}>
+                  Coming Soon
+                </Text>
+              </View>
+            </View>
+          </View>
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -600,7 +668,8 @@ function HabitDetailPanel({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
+    userSelect: 'none',
+  } as any,
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -772,6 +841,48 @@ const styles = StyleSheet.create({
   },
   pillText: {
     fontSize: 14,
+    fontWeight: '600',
+  },
+  protocolCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 14,
+    borderWidth: 1,
+    gap: 12,
+  },
+  protocolCardText: {
+    flex: 1,
+    gap: 2,
+  },
+  protocolCardName: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  protocolCardDesc: {
+    fontSize: 13,
+  },
+  comingSoonBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  comingSoonText: {
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  destructiveBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 14,
+    borderWidth: 1,
+    borderRadius: 12,
+    marginTop: 12,
+  },
+  destructiveBtnText: {
+    fontSize: 16,
     fontWeight: '600',
   },
 });
