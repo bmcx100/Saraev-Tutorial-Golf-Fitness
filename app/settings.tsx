@@ -19,8 +19,13 @@ export default function SettingsScreen() {
   const { profile, updateProfile, devDateOverride, setDevDateOverride, resetProfile } = useUser();
   const [detailHabit, setDetailHabit] = useState<Habit | null>(null);
   const [confettiActive, setConfettiActive] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const { todayHabits, logHabit } = useHabits();
   const { activeChallenge } = useChallenges();
+
+  const toggleSection = (key: string) => {
+    setExpandedSection((prev) => (prev === key ? null : key));
+  };
 
   const toggleHabit = (id: string) => {
     const ids = profile.activeHabitIds.includes(id)
@@ -60,263 +65,288 @@ export default function SettingsScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+          Expand a topic to edit&nbsp;settings
+        </Text>
+
         {/* Tracking */}
-        <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Tracking</Text>
-        {(['golf', 'workout', 'lifestyle'] as HabitCategory[]).map((cat) => {
-          const habits = HABIT_LIBRARY.filter((h) => h.category === cat);
-          if (habits.length === 0) return null;
-          const meta = CATEGORY_META[cat];
-          return (
-            <View key={cat} style={styles.categoryBlock}>
-              <Text style={[styles.categoryLabel, { color: colors.text }]}>{meta.label}</Text>
-              {habits.map((habit) => {
-                const isActive = profile.activeHabitIds.includes(habit.id);
+        <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          <Pressable onPress={() => toggleSection('tracking')} style={styles.cardHeader}>
+            <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Tracking</Text>
+            <MaterialIcons name="tune" size={18} color={colors.textSecondary} />
+          </Pressable>
+          {expandedSection === 'tracking' && (
+            <View style={styles.cardBody}>
+              {(['golf', 'workout', 'lifestyle'] as HabitCategory[]).map((cat) => {
+                const habits = HABIT_LIBRARY.filter((h) => h.category === cat);
+                if (habits.length === 0) return null;
+                const meta = CATEGORY_META[cat];
                 return (
-                  <View key={habit.id}>
-                    <Pressable
-                      onPress={() => toggleHabit(habit.id)}
-                      style={[styles.row, { borderColor: colors.border }]}
-                    >
-                      <MaterialIcons name={habit.icon as any} size={22} color={colors.textSecondary} />
-                      <Text style={[styles.rowLabel, { color: colors.text }]}>{habit.name}</Text>
-                      <Pressable
-                        onPress={(e) => {
-                          e.stopPropagation();
-                          setDetailHabit(habit);
-                        }}
-                        hitSlop={8}
-                      >
-                        <MaterialIcons name="settings" size={20} color={colors.textSecondary} />
-                      </Pressable>
-                      <MaterialIcons
-                        name={isActive ? 'check-circle' : 'radio-button-unchecked'}
-                        size={22}
-                        color={isActive ? colors.accent : colors.border}
-                      />
-                    </Pressable>
+                  <View key={cat} style={styles.categoryBlock}>
+                    <Text style={[styles.categoryLabel, { color: colors.text }]}>{meta.label}</Text>
+                    {habits.map((habit) => {
+                      const isActive = profile.activeHabitIds.includes(habit.id);
+                      return (
+                        <View key={habit.id}>
+                          <Pressable
+                            onPress={() => toggleHabit(habit.id)}
+                            style={[styles.row, { borderColor: colors.border }]}
+                          >
+                            <MaterialIcons name={habit.icon as any} size={22} color={colors.textSecondary} />
+                            <Text style={[styles.rowLabel, { color: colors.text }]}>{habit.name}</Text>
+                            <Pressable
+                              onPress={(e) => {
+                                e.stopPropagation();
+                                setDetailHabit(habit);
+                              }}
+                              hitSlop={8}
+                            >
+                              <MaterialIcons name="settings" size={20} color={colors.textSecondary} />
+                            </Pressable>
+                            <MaterialIcons
+                              name={isActive ? 'check-circle' : 'radio-button-unchecked'}
+                              size={22}
+                              color={isActive ? colors.accent : colors.border}
+                            />
+                          </Pressable>
+                        </View>
+                      );
+                    })}
                   </View>
                 );
               })}
             </View>
-          );
-        })}
+          )}
+        </View>
 
         {/* Notifications */}
-        <Text style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: 28 }]}>
-          Notifications
-        </Text>
-        <View style={[styles.switchRow, { borderColor: colors.border }]}>
-          <Text style={[styles.rowLabel, { color: colors.text }]}>Enable notifications</Text>
-          <Switch
-            value={profile.notificationsEnabled}
-            onValueChange={toggleNotifications}
-            trackColor={{ true: colors.accent, false: colors.border }}
-          />
-        </View>
-        <View style={[styles.switchRow, { borderColor: colors.border }]}>
-          <Text style={[styles.rowLabel, { color: colors.text }]}>Morning reminder</Text>
-          <Text style={[styles.timeText, { color: colors.textSecondary }]}>
-            {profile.notificationMorning}
-          </Text>
-        </View>
-        <View style={[styles.switchRow, { borderColor: colors.border }]}>
-          <Text style={[styles.rowLabel, { color: colors.text }]}>Evening check-in</Text>
-          <Text style={[styles.timeText, { color: colors.textSecondary }]}>
-            {profile.notificationEvening}
-          </Text>
+        <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          <Pressable onPress={() => toggleSection('notifications')} style={styles.cardHeader}>
+            <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Notifications</Text>
+            <MaterialIcons name="tune" size={18} color={colors.textSecondary} />
+          </Pressable>
+          {expandedSection === 'notifications' && (
+            <View style={styles.cardBody}>
+              <View style={[styles.switchRow, { borderColor: colors.border }]}>
+                <Text style={[styles.rowLabel, { color: colors.text }]}>Enable notifications</Text>
+                <Switch
+                  value={profile.notificationsEnabled}
+                  onValueChange={toggleNotifications}
+                  trackColor={{ true: colors.accent, false: colors.border }}
+                />
+              </View>
+              <View style={[styles.switchRow, { borderColor: colors.border }]}>
+                <Text style={[styles.rowLabel, { color: colors.text }]}>Morning reminder</Text>
+                <Text style={[styles.timeText, { color: colors.textSecondary }]}>
+                  {profile.notificationMorning}
+                </Text>
+              </View>
+              <View style={[styles.switchRow, { borderColor: colors.border }]}>
+                <Text style={[styles.rowLabel, { color: colors.text }]}>Evening check-in</Text>
+                <Text style={[styles.timeText, { color: colors.textSecondary }]}>
+                  {profile.notificationEvening}
+                </Text>
+              </View>
+            </View>
+          )}
         </View>
 
         {/* Preferences */}
-        <Text style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: 28 }]}>
-          Preferences
-        </Text>
-        <View style={[styles.switchRow, { borderColor: colors.border }]}>
-          <Text style={[styles.rowLabel, { color: colors.text }]}>Sound effects</Text>
-          <Switch
-            value={profile.soundEnabled}
-            onValueChange={toggleSound}
-            trackColor={{ true: colors.accent, false: colors.border }}
-          />
+        <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          <Pressable onPress={() => toggleSection('preferences')} style={styles.cardHeader}>
+            <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Preferences</Text>
+            <MaterialIcons name="tune" size={18} color={colors.textSecondary} />
+          </Pressable>
+          {expandedSection === 'preferences' && (
+            <View style={styles.cardBody}>
+              <View style={[styles.switchRow, { borderColor: colors.border }]}>
+                <Text style={[styles.rowLabel, { color: colors.text }]}>Sound effects</Text>
+                <Switch
+                  value={profile.soundEnabled}
+                  onValueChange={toggleSound}
+                  trackColor={{ true: colors.accent, false: colors.border }}
+                />
+              </View>
+            </View>
+          )}
         </View>
 
         {/* Dev Tools — only in development */}
         {__DEV__ && (
-          <>
-            <Text style={[styles.sectionTitle, { color: '#F59E0B', marginTop: 28 }]}>
-              Dev Tools
-            </Text>
-
-            {/* Test Confetti */}
-            <Pressable
-              onPress={() => setConfettiActive(true)}
-              style={[styles.devButton, { borderColor: colors.border }]}
-            >
-              <MaterialIcons name="celebration" size={20} color={colors.text} />
-              <Text style={[styles.devButtonText, { color: colors.text }]}>
-                Test Confetti
-              </Text>
+          <View style={[styles.card, { backgroundColor: colors.surface, borderColor: '#F59E0B40' }]}>
+            <Pressable onPress={() => toggleSection('devtools')} style={styles.cardHeader}>
+              <Text style={[styles.sectionTitle, { color: '#F59E0B' }]}>Dev Tools</Text>
+              <MaterialIcons name="tune" size={18} color="#F59E0B" />
             </Pressable>
-
-            {/* Complete All Today's Habits */}
-            <Pressable
-              onPress={() => {
-                todayHabits.forEach((h) => logHabit(h.id));
-              }}
-              style={[styles.devButton, { borderColor: colors.border }]}
-            >
-              <MaterialIcons name="done-all" size={20} color={colors.text} />
-              <Text style={[styles.devButtonText, { color: colors.text }]}>
-                Complete All Today&apos;s Habits
-              </Text>
-            </Pressable>
-
-            {/* Force Complete Challenge */}
-            {activeChallenge && (
-              <Pressable
-                onPress={() => {
-                  // Force-complete by updating challenge status directly is complex;
-                  // for dev tools, we just call the challenge check after maxing progress
-                  Alert.alert('Note', 'Navigate to the challenge and complete manually, or generate streak data to trigger completion.');
-                }}
-                style={[styles.devButton, { borderColor: colors.border }]}
-              >
-                <MaterialIcons name="emoji-events" size={20} color={colors.text} />
-                <Text style={[styles.devButtonText, { color: colors.text }]}>
-                  Force Complete Challenge
-                </Text>
-              </Pressable>
-            )}
-
-            {/* Date Override */}
-            <View style={[styles.devDateRow, { borderColor: colors.border }]}>
-              <Pressable
-                onPress={() => {
-                  const current = devDateOverride
-                    ? new Date(devDateOverride + 'T00:00:00')
-                    : new Date();
-                  current.setDate(current.getDate() - 1);
-                  setDevDateOverride(formatDate(current));
-                }}
-                style={[styles.devDateBtn, { backgroundColor: colors.accent + '20' }]}
-              >
-                <Text style={[styles.devDateBtnText, { color: colors.accent }]}>- Day</Text>
-              </Pressable>
-
-              <Text style={[styles.devDateText, { color: colors.text }]}>
-                {devDateOverride ?? 'Today'}
-              </Text>
-
-              <Pressable
-                onPress={() => {
-                  const current = devDateOverride
-                    ? new Date(devDateOverride + 'T00:00:00')
-                    : new Date();
-                  current.setDate(current.getDate() + 1);
-                  setDevDateOverride(formatDate(current));
-                }}
-                style={[styles.devDateBtn, { backgroundColor: colors.accent + '20' }]}
-              >
-                <Text style={[styles.devDateBtnText, { color: colors.accent }]}>+ Day</Text>
-              </Pressable>
-
-              {devDateOverride && (
+            {expandedSection === 'devtools' && (
+              <View style={styles.cardBody}>
                 <Pressable
-                  onPress={() => setDevDateOverride(null)}
-                  style={[styles.devDateBtn, { backgroundColor: '#E63946' + '20' }]}
+                  onPress={() => setConfettiActive(true)}
+                  style={[styles.devButton, { borderColor: colors.border }]}
                 >
-                  <Text style={[styles.devDateBtnText, { color: '#E63946' }]}>Reset</Text>
+                  <MaterialIcons name="celebration" size={20} color={colors.text} />
+                  <Text style={[styles.devButtonText, { color: colors.text }]}>
+                    Test Confetti
+                  </Text>
                 </Pressable>
-              )}
-            </View>
 
-            {/* Generate Streak Data */}
-            <Pressable
-              onPress={async () => {
-                const days = await generateStreakData(profile.activeHabitIds, 7, devDateOverride ?? undefined);
-                Alert.alert('Done', `Generated ${days} days of streak data.`);
-              }}
-              style={[styles.devButton, { borderColor: colors.border }]}
-            >
-              <MaterialIcons name="trending-up" size={20} color={colors.text} />
-              <Text style={[styles.devButtonText, { color: colors.text }]}>
-                Generate 7-Day Streak
-              </Text>
-            </Pressable>
+                <Pressable
+                  onPress={() => {
+                    todayHabits.forEach((h) => logHabit(h.id));
+                  }}
+                  style={[styles.devButton, { borderColor: colors.border }]}
+                >
+                  <MaterialIcons name="done-all" size={20} color={colors.text} />
+                  <Text style={[styles.devButtonText, { color: colors.text }]}>
+                    Complete All Today&apos;s Habits
+                  </Text>
+                </Pressable>
 
-            <Pressable
-              onPress={async () => {
-                const days = await generateStreakData(profile.activeHabitIds, 30, devDateOverride ?? undefined);
-                Alert.alert('Done', `Generated ${days} days of streak data.`);
-              }}
-              style={[styles.devButton, { borderColor: colors.border }]}
-            >
-              <MaterialIcons name="trending-up" size={20} color={colors.text} />
-              <Text style={[styles.devButtonText, { color: colors.text }]}>
-                Generate 30-Day Streak
-              </Text>
-            </Pressable>
+                {activeChallenge && (
+                  <Pressable
+                    onPress={() => {
+                      Alert.alert('Note', 'Navigate to the challenge and complete manually, or generate streak data to trigger completion.');
+                    }}
+                    style={[styles.devButton, { borderColor: colors.border }]}
+                  >
+                    <MaterialIcons name="emoji-events" size={20} color={colors.text} />
+                    <Text style={[styles.devButtonText, { color: colors.text }]}>
+                      Force Complete Challenge
+                    </Text>
+                  </Pressable>
+                )}
 
-          </>
+                <View style={[styles.devDateRow, { borderColor: colors.border }]}>
+                  <Pressable
+                    onPress={() => {
+                      const current = devDateOverride
+                        ? new Date(devDateOverride + 'T00:00:00')
+                        : new Date();
+                      current.setDate(current.getDate() - 1);
+                      setDevDateOverride(formatDate(current));
+                    }}
+                    style={[styles.devDateBtn, { backgroundColor: colors.accent + '20' }]}
+                  >
+                    <Text style={[styles.devDateBtnText, { color: colors.accent }]}>- Day</Text>
+                  </Pressable>
+
+                  <Text style={[styles.devDateText, { color: colors.text }]}>
+                    {devDateOverride ?? 'Today'}
+                  </Text>
+
+                  <Pressable
+                    onPress={() => {
+                      const current = devDateOverride
+                        ? new Date(devDateOverride + 'T00:00:00')
+                        : new Date();
+                      current.setDate(current.getDate() + 1);
+                      setDevDateOverride(formatDate(current));
+                    }}
+                    style={[styles.devDateBtn, { backgroundColor: colors.accent + '20' }]}
+                  >
+                    <Text style={[styles.devDateBtnText, { color: colors.accent }]}>+ Day</Text>
+                  </Pressable>
+
+                  {devDateOverride && (
+                    <Pressable
+                      onPress={() => setDevDateOverride(null)}
+                      style={[styles.devDateBtn, { backgroundColor: '#E63946' + '20' }]}
+                    >
+                      <Text style={[styles.devDateBtnText, { color: '#E63946' }]}>Reset</Text>
+                    </Pressable>
+                  )}
+                </View>
+
+                <Pressable
+                  onPress={async () => {
+                    const days = await generateStreakData(profile.activeHabitIds, 7, devDateOverride ?? undefined);
+                    Alert.alert('Done', `Generated ${days} days of streak data.`);
+                  }}
+                  style={[styles.devButton, { borderColor: colors.border }]}
+                >
+                  <MaterialIcons name="trending-up" size={20} color={colors.text} />
+                  <Text style={[styles.devButtonText, { color: colors.text }]}>
+                    Generate 7-Day Streak
+                  </Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={async () => {
+                    const days = await generateStreakData(profile.activeHabitIds, 30, devDateOverride ?? undefined);
+                    Alert.alert('Done', `Generated ${days} days of streak data.`);
+                  }}
+                  style={[styles.devButton, { borderColor: colors.border }]}
+                >
+                  <MaterialIcons name="trending-up" size={20} color={colors.text} />
+                  <Text style={[styles.devButtonText, { color: colors.text }]}>
+                    Generate 30-Day Streak
+                  </Text>
+                </Pressable>
+
+                <Text style={[styles.sectionTitle, { color: '#F59E0B', marginTop: 20, marginBottom: 10 }]}>
+                  Data
+                </Text>
+
+                <Pressable
+                  onPress={async () => {
+                    const doReset = async () => {
+                      const today = devDateOverride ?? formatDate(new Date());
+                      await saveLogs(today, []);
+                      if (Platform.OS === 'web') {
+                        window.alert('Today\'s progress has been reset. Go back and return to refresh.');
+                      } else {
+                        Alert.alert('Done', 'Today\'s progress has been reset. Go back and return to refresh.');
+                      }
+                    };
+
+                    if (Platform.OS === 'web') {
+                      if (window.confirm('Clear all habit progress for today?')) {
+                        await doReset();
+                      }
+                    } else {
+                      Alert.alert('Reset Today', 'Clear all habit progress for today?', [
+                        { text: 'Cancel', style: 'cancel' },
+                        { text: 'Reset', style: 'destructive', onPress: doReset },
+                      ]);
+                    }
+                  }}
+                  style={[styles.destructiveBtn, { borderColor: '#E63946' }]}
+                >
+                  <MaterialIcons name="refresh" size={20} color="#E63946" />
+                  <Text style={[styles.destructiveBtnText, { color: '#E63946' }]}>
+                    Reset Today&apos;s Progress
+                  </Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={async () => {
+                    const doClear = async () => {
+                      await clearAllData();
+                      resetProfile();
+                    };
+
+                    if (Platform.OS === 'web') {
+                      if (window.confirm('This will delete ALL app data and return to onboarding. Are you sure?')) {
+                        await doClear();
+                      }
+                    } else {
+                      Alert.alert('Clear All Data', 'This will delete ALL app data and return to onboarding. Are you sure?', [
+                        { text: 'Cancel', style: 'cancel' },
+                        { text: 'Delete Everything', style: 'destructive', onPress: doClear },
+                      ]);
+                    }
+                  }}
+                  style={[styles.destructiveBtn, { borderColor: '#E63946' }]}
+                >
+                  <MaterialIcons name="delete-forever" size={20} color="#E63946" />
+                  <Text style={[styles.destructiveBtnText, { color: '#E63946' }]}>
+                    Clear All Data
+                  </Text>
+                </Pressable>
+              </View>
+            )}
+          </View>
         )}
-
-        {/* Reset Today's Progress */}
-        <Pressable
-          onPress={async () => {
-            const doReset = async () => {
-              const today = devDateOverride ?? formatDate(new Date());
-              await saveLogs(today, []);
-              if (Platform.OS === 'web') {
-                window.alert('Today\'s progress has been reset. Go back and return to refresh.');
-              } else {
-                Alert.alert('Done', 'Today\'s progress has been reset. Go back and return to refresh.');
-              }
-            };
-
-            if (Platform.OS === 'web') {
-              if (window.confirm('Clear all habit progress for today?')) {
-                await doReset();
-              }
-            } else {
-              Alert.alert('Reset Today', 'Clear all habit progress for today?', [
-                { text: 'Cancel', style: 'cancel' },
-                { text: 'Reset', style: 'destructive', onPress: doReset },
-              ]);
-            }
-          }}
-          style={[styles.destructiveBtn, { borderColor: '#E63946', marginTop: 28 }]}
-        >
-          <MaterialIcons name="refresh" size={20} color="#E63946" />
-          <Text style={[styles.destructiveBtnText, { color: '#E63946' }]}>
-            Reset Today&apos;s Progress
-          </Text>
-        </Pressable>
-
-        {/* Clear All Data */}
-        <Pressable
-          onPress={async () => {
-            const doClear = async () => {
-              await clearAllData();
-              resetProfile();
-            };
-
-            if (Platform.OS === 'web') {
-              if (window.confirm('This will delete ALL app data and return to onboarding. Are you sure?')) {
-                await doClear();
-              }
-            } else {
-              Alert.alert('Clear All Data', 'This will delete ALL app data and return to onboarding. Are you sure?', [
-                { text: 'Cancel', style: 'cancel' },
-                { text: 'Delete Everything', style: 'destructive', onPress: doClear },
-              ]);
-            }
-          }}
-          style={[styles.destructiveBtn, { borderColor: '#E63946', marginBottom: 40 }]}
-        >
-          <MaterialIcons name="delete-forever" size={20} color="#E63946" />
-          <Text style={[styles.destructiveBtnText, { color: '#E63946' }]}>
-            Clear All Data
-          </Text>
-        </Pressable>
       </ScrollView>
 
       {/* Habit Detail Modal */}
@@ -684,13 +714,34 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
     paddingBottom: 40,
+    gap: 12,
+  },
+  subtitle: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  card: {
+    borderRadius: 14,
+    borderWidth: 1,
+    overflow: 'hidden',
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+  },
+  cardBody: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
   },
   sectionTitle: {
     fontSize: 13,
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    marginBottom: 10,
   },
   categoryLabel: {
     fontSize: 15,
