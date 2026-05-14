@@ -72,6 +72,10 @@ Dual light/dark mode with golf-green palette (`#2D6A4F` primary, `#52B788` accen
 - **`constants/strength-protocols.ts`** — `WorkoutDay` type (legs1/pull/legs2/push), `WORKOUT_DAYS` with exercise definitions, `ExerciseSet`/`ExerciseLog`/`StrengthSession` interfaces
 - **`constants/challenges.ts`** — `ChallengeTemplate` interface, predefined challenge templates
 
+## File Organization
+
+**Never store screenshots or images (png, jpg, svg, etc.) in the project root directory.** All images belong in `public/images/` with subfolders by category. Screenshots taken during testing or development must not be committed to the repo at all — delete them after use.
+
 ## Key Conventions
 
 - **Stale closure prevention:** Speed and strength screens use `useRef` for session state in callbacks to avoid stale closures with `useCallback`
