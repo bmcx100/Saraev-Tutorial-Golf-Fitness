@@ -165,6 +165,143 @@ export async function saveExerciseDefaults(defaults: Record<string, { weight: nu
   await AsyncStorage.setItem('strength-exercise-defaults', JSON.stringify(defaults));
 }
 
+// ── Speed / Strength aggregate stats ────────────────────────
+
+export interface SpeedStats {
+  driverPR: { mph: number; date: string } | null;
+  previousDriverPR: { mph: number; date: string } | null;
+  lastSessionDate: string | null;
+}
+
+export interface StrengthStats {
+  exercisePRs: Record<string, { weight: number; reps: number; date: string }>;
+  streak: { days: number; lastSessionDate: string };
+  bestStreak: number;
+  lastPR: { exerciseId: string; exerciseName: string; weight: number; date: string } | null;
+}
+
+const SPEED_STATS_KEY = 'speed-stats';
+const STRENGTH_STATS_KEY = 'strength-stats';
+
+export async function loadSpeedStats(): Promise<SpeedStats | null> {
+  const raw = await AsyncStorage.getItem(SPEED_STATS_KEY);
+  return raw ? JSON.parse(raw) : null;
+}
+
+export async function saveSpeedStats(stats: SpeedStats): Promise<void> {
+  await AsyncStorage.setItem(SPEED_STATS_KEY, JSON.stringify(stats));
+}
+
+export async function loadStrengthStats(): Promise<StrengthStats | null> {
+  const raw = await AsyncStorage.getItem(STRENGTH_STATS_KEY);
+  return raw ? JSON.parse(raw) : null;
+}
+
+export async function saveStrengthStats(stats: StrengthStats): Promise<void> {
+  await AsyncStorage.setItem(STRENGTH_STATS_KEY, JSON.stringify(stats));
+}
+
+export async function rebuildStatsAggregates(): Promise<void> {
+  const allKeys = await AsyncStorage.getAllKeys();
+
+  // ── Rebuild Speed Stats ──
+  const speedKeys = allKeys.filter((k) => k.startsWith('speed-session-'));
+  const speedPairs = await AsyncStorage.multiGet(speedKeys);
+  const speedSessions: SpeedSession[] = [];
+  for (const [, raw] of speedPairs) {
+    if (raw) speedSessions.push(JSON.parse(raw));
+  }
+  speedSessions.sort((a, b) => a.date.localeCompare(b.date));
+
+  let speedStats: SpeedStats = { driverPR: null, previousDriverPR: null, lastSessionDate: null };
+  for (const session of speedSessions) {
+    if (session.maxOut.driver != null) {
+      if (!speedStats.driverPR || session.maxOut.driver > speedStats.driverPR.mph) {
+        speedStats.previousDriverPR = speedStats.driverPR;
+        speedStats.driverPR = { mph: session.maxOut.driver, date: session.date };
+      }
+    }
+    speedStats.lastSessionDate = session.date;
+  }
+  await saveSpeedStats(speedStats);
+
+  // ── Rebuild Strength Stats ──
+  const strengthKeys = allKeys.filter((k) => k.startsWith('strength-session-'));
+  const strengthPairs = await AsyncStorage.multiGet(strengthKeys);
+  const strengthSessions: StrengthSession[] = [];
+  for (const [, raw] of strengthPairs) {
+    if (raw) strengthSessions.push(JSON.parse(raw));
+  }
+  strengthSessions.sort((a, b) => a.date.localeCompare(b.date));
+
+  // Import WORKOUT_DAYS inline to find exercise names
+  const { WORKOUT_DAYS } = require('@/constants/strength-protocols');
+
+  let strengthStats: StrengthStats = {
+    exercisePRs: {},
+    streak: { days: 0, lastSessionDate: '' },
+    bestStreak: 0,
+    lastPR: null,
+  };
+
+  for (const session of strengthSessions) {
+    // Streak calculation
+    if (strengthStats.streak.lastSessionDate) {
+      const lastDate = new Date(strengthStats.streak.lastSessionDate + 'T00:00:00');
+      const thisDate = new Date(session.date + 'T00:00:00');
+      const gap = Math.round((thisDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+      if (gap === 0) {
+        // same day, no change
+      } else if (gap <= 2) {
+        strengthStats.streak.days += gap;
+      } else {
+        strengthStats.streak.days = 1;
+      }
+    } else {
+      strengthStats.streak.days = 1;
+    }
+    strengthStats.streak.lastSessionDate = session.date;
+    if (strengthStats.streak.days > strengthStats.bestStreak) {
+      strengthStats.bestStreak = strengthStats.streak.days;
+    }
+
+    // Exercise PRs
+    for (const exLog of session.exercises) {
+      let maxWeight = 0;
+      let maxReps = 0;
+      for (const set of exLog.sets) {
+        if (set.completed && set.weight != null && set.weight > maxWeight) {
+          maxWeight = set.weight;
+          maxReps = set.reps;
+        }
+      }
+      if (maxWeight > 0) {
+        const existing = strengthStats.exercisePRs[exLog.exerciseId];
+        if (!existing || maxWeight > existing.weight) {
+          strengthStats.exercisePRs[exLog.exerciseId] = {
+            weight: maxWeight,
+            reps: maxReps,
+            date: session.date,
+          };
+          // Find exercise name
+          let exerciseName = exLog.exerciseId;
+          for (const day of WORKOUT_DAYS) {
+            const ex = day.exercises.find((e: any) => e.id === exLog.exerciseId);
+            if (ex) { exerciseName = ex.name; break; }
+          }
+          strengthStats.lastPR = {
+            exerciseId: exLog.exerciseId,
+            exerciseName,
+            weight: maxWeight,
+            date: session.date,
+          };
+        }
+      }
+    }
+  }
+  await saveStrengthStats(strengthStats);
+}
+
 // ── Pace toast dedup ─────────────────────────────────────────
 
 export async function loadPaceToastShown(date: string): Promise<boolean> {

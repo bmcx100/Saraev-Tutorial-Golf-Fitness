@@ -65,6 +65,8 @@ export const WORKOUT_DAYS: WorkoutDayDef[] = [
   },
 ];
 
+export const STREAK_MILESTONES: number[] = [7, 14, 21, 30, 60, 90];
+
 export const SETS_PER_EXERCISE = 3;
 
 export interface ExerciseSet {

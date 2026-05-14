@@ -15,7 +15,10 @@ import {
   saveLastStrengthWorkoutDay,
   loadExerciseDefaults,
   saveExerciseDefaults,
+  loadStrengthStats,
+  saveStrengthStats,
 } from '@/utils/storage';
+import type { StrengthStats } from '@/utils/storage';
 import {
   WORKOUT_DAYS,
   WORKOUT_ROTATION,
@@ -431,6 +434,65 @@ function WorkoutTracker() {
       saveLastStrengthWorkoutDay(selectedDay),
       saveExerciseDefaults(newDefaults),
     ]);
+
+    // Update strength aggregate stats
+    const stats: StrengthStats = (await loadStrengthStats()) ?? {
+      exercisePRs: {},
+      streak: { days: 0, lastSessionDate: '' },
+      bestStreak: 0,
+      lastPR: null,
+    };
+
+    // Streak calculation
+    if (stats.streak.lastSessionDate) {
+      const lastDate = new Date(stats.streak.lastSessionDate + 'T00:00:00');
+      const thisDate = new Date(today + 'T00:00:00');
+      const gap = Math.round((thisDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+      if (gap === 0) {
+        // same day re-submit, no change
+      } else if (gap <= 2) {
+        stats.streak.days += gap;
+      } else {
+        stats.streak.days = 1;
+      }
+    } else {
+      stats.streak.days = 1;
+    }
+    stats.streak.lastSessionDate = today;
+    if (stats.streak.days > stats.bestStreak) {
+      stats.bestStreak = stats.streak.days;
+    }
+
+    // Exercise PRs
+    const dayDef = WORKOUT_DAYS.find((d) => d.key === selectedDay)!;
+    for (const exLog of current) {
+      let maxWeight = 0;
+      let maxReps = 0;
+      for (const set of exLog.sets) {
+        if (set.completed && set.weight != null && set.weight > maxWeight) {
+          maxWeight = set.weight;
+          maxReps = set.reps;
+        }
+      }
+      if (maxWeight > 0) {
+        const existing = stats.exercisePRs[exLog.exerciseId];
+        if (!existing || maxWeight > existing.weight) {
+          stats.exercisePRs[exLog.exerciseId] = {
+            weight: maxWeight,
+            reps: maxReps,
+            date: today,
+          };
+          const exDef = dayDef.exercises.find((e) => e.id === exLog.exerciseId);
+          stats.lastPR = {
+            exerciseId: exLog.exerciseId,
+            exerciseName: exDef?.name ?? exLog.exerciseId,
+            weight: maxWeight,
+            date: today,
+          };
+        }
+      }
+    }
+    await saveStrengthStats(stats);
 
     logHabit('gym');
     router.replace('/(tabs)');

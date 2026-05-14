@@ -8,7 +8,7 @@ import { useUser, type ScheduleConfig, type HabitGoalConfig } from '@/contexts/u
 import { useColors } from '@/hooks/use-colors';
 import { useHabits } from '@/contexts/habit-context';
 import { useChallenges } from '@/contexts/challenge-context';
-import { clearAllData, generateStreakData, saveLogs, formatDate } from '@/utils/storage';
+import { clearAllData, generateStreakData, saveLogs, formatDate, rebuildStatsAggregates } from '@/utils/storage';
 import { scheduleDaily } from '@/utils/notifications';
 import { WeekdayPicker } from '@/components/weekday-picker';
 import { Confetti } from '@/components/confetti';
@@ -280,6 +280,23 @@ export default function SettingsScreen() {
                   <MaterialIcons name="trending-up" size={20} color={colors.text} />
                   <Text style={[styles.devButtonText, { color: colors.text }]}>
                     Generate 30-Day Streak
+                  </Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={async () => {
+                    await rebuildStatsAggregates();
+                    if (Platform.OS === 'web') {
+                      window.alert('Stats aggregates rebuilt from all session data.');
+                    } else {
+                      Alert.alert('Done', 'Stats aggregates rebuilt from all session data.');
+                    }
+                  }}
+                  style={[styles.devButton, { borderColor: colors.border }]}
+                >
+                  <MaterialIcons name="analytics" size={20} color={colors.text} />
+                  <Text style={[styles.devButtonText, { color: colors.text }]}>
+                    Rebuild Stats
                   </Text>
                 </Pressable>
 
@@ -611,8 +628,8 @@ function HabitDetailPanel({
           </>
         )}
 
-        {/* Speed Protocol — only for speed-sticks */}
-        {habit.id === 'speed-sticks' && (
+        {/* Speed Protocol — only for speed training */}
+        {habit.id === 'speed-training' && (
           <>
             <Text style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: 28 }]}>
               Speed Protocol

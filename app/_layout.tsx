@@ -50,6 +50,8 @@ export default function RootLayout() {
               <Stack.Screen name="settings" options={{ headerShown: false, presentation: 'card' }} />
               <Stack.Screen name="speed" options={{ headerShown: false, presentation: 'card' }} />
               <Stack.Screen name="strength" options={{ headerShown: false, presentation: 'card' }} />
+              <Stack.Screen name="stats-speed" options={{ headerShown: false, presentation: 'card' }} />
+              <Stack.Screen name="stats-strength" options={{ headerShown: false, presentation: 'card' }} />
               <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
             </Stack>
             <StatusBar style="auto" />

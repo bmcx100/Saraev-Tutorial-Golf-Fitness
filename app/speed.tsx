@@ -6,7 +6,8 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useUser } from '@/contexts/user-context';
 import { useHabits } from '@/contexts/habit-context';
 import { useColors } from '@/hooks/use-colors';
-import { formatDate, loadSpeedSession, saveSpeedSession } from '@/utils/storage';
+import { formatDate, loadSpeedSession, saveSpeedSession, loadSpeedStats, saveSpeedStats } from '@/utils/storage';
+import type { SpeedStats } from '@/utils/storage';
 import {
   STICK_COLORS,
   DRILL_STEPS,
@@ -291,9 +292,25 @@ function SpeedWizard({ protocol }: { protocol: string }) {
     }
     const final: SpeedSession = { ...current, completedAt: new Date().toISOString() };
     await saveSpeedSession(final);
-    logHabit('speed-sticks');
+
+    // Update speed aggregate stats
+    const stats: SpeedStats = (await loadSpeedStats()) ?? {
+      driverPR: null,
+      previousDriverPR: null,
+      lastSessionDate: null,
+    };
+    if (final.maxOut.driver != null) {
+      if (!stats.driverPR || final.maxOut.driver > stats.driverPR.mph) {
+        stats.previousDriverPR = stats.driverPR;
+        stats.driverPR = { mph: final.maxOut.driver, date: today };
+      }
+    }
+    stats.lastSessionDate = today;
+    await saveSpeedStats(stats);
+
+    logHabit('speed-training');
     router.back();
-  }, [logHabit]);
+  }, [logHabit, today]);
 
   const isLastStep = step === 2;
 

@@ -32,6 +32,8 @@ export const DRILL_STEPS: { key: DrillType; label: string; instruction: string }
   { key: 'maxOut', label: 'Max Out', instruction: 'Swing 3\u00D7, log your best' },
 ];
 
+export const DRIVER_MILESTONES: number[] = [90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140];
+
 export function emptySession(date: string, protocol: string): SpeedSession {
   return {
     date,

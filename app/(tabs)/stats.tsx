@@ -5,10 +5,10 @@ import { useHabits } from '@/contexts/habit-context';
 import { useChallenges } from '@/contexts/challenge-context';
 import { useUser } from '@/contexts/user-context';
 import { useColors } from '@/hooks/use-colors';
-import { useTrainingHistory } from '@/hooks/use-training-history';
+import { useStatsAggregates } from '@/hooks/use-stats-aggregates';
 import { MiniRings } from '@/components/mini-rings';
-import { SpeedTrendCard } from '@/components/speed-trend-card';
-import { StrengthSummaryCard } from '@/components/strength-summary-card';
+import { SpeedHookCard } from '@/components/speed-hook-card';
+import { StrengthHookCard } from '@/components/strength-hook-card';
 import { formatDate } from '@/utils/storage';
 import { getScheduledHabitIds } from '@/utils/schedule';
 
@@ -20,14 +20,12 @@ export default function StatsScreen() {
   const { profile } = useUser();
   const colors = useColors();
   const {
-    strengthSessions,
+    speedStats,
+    strengthStats,
+    speedCardMode,
+    strengthCardMode,
     loading: trainingLoading,
-    driverSpeeds,
-    latestDriverSpeed,
-    bestDriverSpeed,
-    strengthSessionCount,
-    latestStrengthDay,
-  } = useTrainingHistory();
+  } = useStatsAggregates();
 
   const showSpeed = profile.speedProtocol != null;
   const showStrength = profile.strengthProtocol != null;
@@ -144,18 +142,16 @@ export default function StatsScreen() {
           />
         )}
         {showSpeed && !trainingLoading && (
-          <SpeedTrendCard
-            driverSpeeds={driverSpeeds}
-            latestDriverSpeed={latestDriverSpeed}
-            bestDriverSpeed={bestDriverSpeed}
+          <SpeedHookCard
+            speedStats={speedStats}
+            speedCardMode={speedCardMode}
             colors={colors}
           />
         )}
         {showStrength && !trainingLoading && (
-          <StrengthSummaryCard
-            strengthSessions={strengthSessions}
-            strengthSessionCount={strengthSessionCount}
-            latestStrengthDay={latestStrengthDay}
+          <StrengthHookCard
+            strengthStats={strengthStats}
+            strengthCardMode={strengthCardMode}
             colors={colors}
           />
         )}
