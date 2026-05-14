@@ -13,6 +13,8 @@ import { scheduleDaily } from '@/utils/notifications';
 import { WeekdayPicker } from '@/components/weekday-picker';
 import { Confetti } from '@/components/confetti';
 import { getGoalWeekdays } from '@/utils/schedule';
+import { useAuth } from '@/contexts/auth-context';
+import { supabase } from '@/lib/supabase';
 
 export default function SettingsScreen() {
   const colors = useColors();
@@ -22,6 +24,7 @@ export default function SettingsScreen() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const { todayHabits, logHabit } = useHabits();
   const { activeChallenge } = useChallenges();
+  const { user } = useAuth();
 
   const toggleSection = (key: string) => {
     setExpandedSection((prev) => (prev === key ? null : key));
@@ -167,6 +170,30 @@ export default function SettingsScreen() {
                   trackColor={{ true: colors.accent, false: colors.border }}
                 />
               </View>
+            </View>
+          )}
+        </View>
+
+        {/* Account */}
+        <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          <Pressable onPress={() => toggleSection('account')} style={styles.cardHeader}>
+            <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Account</Text>
+            <MaterialIcons name="tune" size={18} color={colors.textSecondary} />
+          </Pressable>
+          {expandedSection === 'account' && (
+            <View style={styles.cardBody}>
+              <Text style={[styles.rowLabel, { color: colors.text, paddingVertical: 8 }]}>
+                {user?.email ?? 'Not signed in'}
+              </Text>
+              <Pressable
+                onPress={() => supabase.auth.signOut()}
+                style={[styles.destructiveBtn, { borderColor: '#E63946' }]}
+              >
+                <MaterialIcons name="logout" size={20} color="#E63946" />
+                <Text style={[styles.destructiveBtnText, { color: '#E63946' }]}>
+                  Sign Out
+                </Text>
+              </Pressable>
             </View>
           )}
         </View>
