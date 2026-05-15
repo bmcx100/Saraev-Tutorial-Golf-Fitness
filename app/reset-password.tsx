@@ -10,29 +10,52 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import Svg, { Rect, Path } from 'react-native-svg';
 import { useRouter } from 'expo-router';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useColors } from '@/hooks/use-colors';
+import { AuthHero } from '@/components/auth/auth-hero';
 import { useAuth } from '@/contexts/auth-context';
 import { supabase } from '@/lib/supabase';
+import {
+  greenDeep,
+  forest,
+  citron,
+  paper,
+  rule,
+  clay,
+  ink,
+  sub,
+  FontFamily,
+  shadows,
+} from '@/constants/design-tokens';
+
+function LockIcon({ color = sub }: { color?: string }) {
+  return (
+    <Svg width={14} height={14} viewBox="0 0 24 24" fill="none">
+      <Rect x={5} y={11} width={14} height={10} rx={2} stroke={color} strokeWidth={1.8} />
+      <Path d="M8 11V8a4 4 0 0 1 8 0v3" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+    </Svg>
+  );
+}
 
 export default function ResetPasswordScreen() {
-  const colors = useColors();
   const router = useRouter();
   const { clearPasswordRecovery } = useAuth();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [newPasswordVisible, setNewPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [newFocused, setNewFocused] = useState(false);
+  const [confirmFocused, setConfirmFocused] = useState(false);
 
   const handleSubmit = async () => {
     setError('');
     setMessage('');
 
     if (newPassword.length < 8) {
-      setError('Password must be at least 8 characters');
+      setError('Password must be at least 8\u00A0characters');
       return;
     }
 
@@ -61,7 +84,7 @@ export default function ResetPasswordScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.flex}
@@ -70,158 +93,263 @@ export default function ResetPasswordScreen() {
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
+          bounces={false}
         >
-          {/* Logo / App name */}
-          <View style={styles.logoArea}>
-            <View style={[styles.logoCircle, { backgroundColor: colors.tint }]}>
-              <MaterialIcons name="sports-golf" size={40} color="#fff" />
-            </View>
-            <Text style={[styles.appName, { color: colors.text }]}>
-              Golf Fitness
-            </Text>
-            <Text style={[styles.appTagline, { color: colors.textSecondary }]}>
-              Set your new&nbsp;password
-            </Text>
-          </View>
+          {/* Forest hero band */}
+          <AuthHero
+            eyebrow="Reset password"
+            headline="New Password."
+            subtitle="Choose a new password for your\u00A0account."
+          />
 
           {/* Form card */}
-          <View style={[styles.formCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-            <Text style={[styles.formTitle, { color: colors.text }]}>
-              Reset Password
-            </Text>
+          <View style={styles.formCard}>
+            <View style={styles.cardHeader}>
+              <Text style={styles.cardTitle}>Reset password</Text>
+              <Text style={styles.cardMeta} accessibilityElementsHidden>
+                SECURE
+              </Text>
+            </View>
 
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  backgroundColor: colors.surface,
-                  borderColor: colors.border,
-                  color: colors.text,
-                },
-              ]}
-              placeholder="New Password"
-              placeholderTextColor={colors.textSecondary}
-              value={newPassword}
-              onChangeText={setNewPassword}
-              secureTextEntry
-              textContentType="newPassword"
-            />
+            {/* New password */}
+            <View style={styles.fieldGroup}>
+              <Text
+                style={[styles.fieldLabel, newFocused && styles.fieldLabelFocused]}
+                nativeID="new-password-label"
+              >
+                NEW PASSWORD
+              </Text>
+              <View
+                style={[
+                  styles.fieldInput,
+                  newFocused && styles.fieldInputFocused,
+                ]}
+              >
+                <LockIcon color={newFocused || newPassword ? ink : sub} />
+                <TextInput
+                  style={[styles.fieldText, { flex: 1 }]}
+                  placeholder="At least 8 characters"
+                  placeholderTextColor="#9aa39c"
+                  value={newPassword}
+                  onChangeText={setNewPassword}
+                  secureTextEntry={!newPasswordVisible}
+                  textContentType="newPassword"
+                  returnKeyType="next"
+                  onFocus={() => setNewFocused(true)}
+                  onBlur={() => setNewFocused(false)}
+                  accessibilityLabelledBy="new-password-label"
+                />
+                <Pressable
+                  onPress={() => setNewPasswordVisible(!newPasswordVisible)}
+                  hitSlop={8}
+                  style={styles.showHideButton}
+                >
+                  <Text style={styles.showHideText}>
+                    {newPasswordVisible ? 'HIDE' : 'SHOW'}
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
 
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  backgroundColor: colors.surface,
-                  borderColor: colors.border,
-                  color: colors.text,
-                },
-              ]}
-              placeholder="Confirm Password"
-              placeholderTextColor={colors.textSecondary}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry
-              textContentType="newPassword"
-            />
+            {/* Confirm password */}
+            <View style={styles.fieldGroup}>
+              <Text
+                style={[styles.fieldLabel, confirmFocused && styles.fieldLabelFocused]}
+                nativeID="confirm-password-label"
+              >
+                CONFIRM PASSWORD
+              </Text>
+              <View
+                style={[
+                  styles.fieldInput,
+                  confirmFocused && styles.fieldInputFocused,
+                ]}
+              >
+                <LockIcon color={confirmFocused || confirmPassword ? ink : sub} />
+                <TextInput
+                  style={[styles.fieldText, { flex: 1 }]}
+                  placeholder="Re-enter your password"
+                  placeholderTextColor="#9aa39c"
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  secureTextEntry={!confirmPasswordVisible}
+                  textContentType="newPassword"
+                  returnKeyType="go"
+                  onSubmitEditing={handleSubmit}
+                  onFocus={() => setConfirmFocused(true)}
+                  onBlur={() => setConfirmFocused(false)}
+                  accessibilityLabelledBy="confirm-password-label"
+                />
+                <Pressable
+                  onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+                  hitSlop={8}
+                  style={styles.showHideButton}
+                >
+                  <Text style={styles.showHideText}>
+                    {confirmPasswordVisible ? 'HIDE' : 'SHOW'}
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
 
+            {/* Error / success messages */}
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+            {message ? <Text style={styles.messageText}>{message}</Text> : null}
+
+            {/* Primary CTA */}
             <Pressable
               onPress={handleSubmit}
               disabled={loading}
-              style={[styles.submitButton, { backgroundColor: colors.tint }]}
+              style={({ pressed }) => [
+                styles.ctaButton,
+                pressed && styles.ctaButtonPressed,
+              ]}
+              accessibilityRole="button"
+              accessibilityState={{ busy: loading }}
             >
               {loading ? (
-                <ActivityIndicator color="#fff" />
+                <ActivityIndicator color={greenDeep} />
               ) : (
-                <Text style={styles.submitButtonText}>Update Password</Text>
+                <>
+                  <Text style={styles.ctaText}>Update password</Text>
+                  <Text style={styles.ctaArrow}>{'\u2192'}</Text>
+                </>
               )}
             </Pressable>
-
-            {error ? (
-              <Text style={styles.errorText}>{error}</Text>
-            ) : null}
-
-            {message ? (
-              <Text style={[styles.messageText, { color: colors.accent }]}>
-                {message}
-              </Text>
-            ) : null}
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: paper,
   },
   flex: {
     flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
-    padding: 20,
   },
-  logoArea: {
-    alignItems: 'center',
-    marginBottom: 32,
-    gap: 8,
-  },
-  logoCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
-  },
-  appName: {
-    fontSize: 28,
-    fontWeight: '700',
-  },
-  appTagline: {
-    fontSize: 16,
-  },
+
+  /* ── Form card ── */
   formCard: {
-    borderRadius: 14,
+    marginTop: -50,
+    marginHorizontal: 18,
+    backgroundColor: '#ffffff',
     borderWidth: 1,
-    padding: 24,
-    gap: 16,
+    borderColor: rule,
+    borderRadius: 24,
+    paddingVertical: 22,
+    paddingHorizontal: 20,
+    gap: 12,
+    ...shadows.formCard,
   },
-  formTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: 4,
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
   },
-  input: {
-    borderWidth: 1,
-    borderRadius: 14,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 16,
+  cardTitle: {
+    fontFamily: FontFamily.outfitExtraBold,
+    fontSize: 19,
+    letterSpacing: 19 * -0.02,
+    color: greenDeep,
   },
-  submitButton: {
-    borderRadius: 14,
-    paddingVertical: 16,
+  cardMeta: {
+    fontFamily: FontFamily.monoBold,
+    fontSize: 10,
+    letterSpacing: 10 * 0.2,
+    color: sub,
+  },
+
+  /* ── Fields ── */
+  fieldGroup: {
+    gap: 6,
+  },
+  fieldLabel: {
+    fontFamily: FontFamily.monoBold,
+    fontSize: 9.5,
+    letterSpacing: 9.5 * 0.22,
+    textTransform: 'uppercase',
+    color: sub,
+  },
+  fieldLabelFocused: {
+    color: forest,
+  },
+  fieldInput: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 4,
+    gap: 10,
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: rule,
+    borderRadius: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
   },
-  submitButtonText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: '700',
+  fieldInputFocused: {
+    borderColor: forest,
+    borderWidth: 1.5,
   },
+  fieldText: {
+    flex: 1,
+    fontFamily: FontFamily.outfitMedium,
+    fontSize: 15,
+    letterSpacing: 15 * -0.005,
+    color: ink,
+    padding: 0,
+  },
+  showHideButton: {
+    paddingVertical: 4,
+    paddingHorizontal: 2,
+  },
+  showHideText: {
+    fontFamily: FontFamily.monoBold,
+    fontSize: 10,
+    letterSpacing: 10 * 0.15,
+    color: forest,
+  },
+
+  /* ── Messages ── */
   errorText: {
-    color: '#E63946',
-    fontSize: 14,
-    textAlign: 'center',
+    fontFamily: FontFamily.outfitSemiBold,
+    fontSize: 13,
+    color: clay,
   },
   messageText: {
+    fontFamily: FontFamily.outfitSemiBold,
+    fontSize: 13,
+    color: forest,
+  },
+
+  /* ── Primary CTA ── */
+  ctaButton: {
+    backgroundColor: citron,
+    borderRadius: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    ...shadows.cta,
+  },
+  ctaButtonPressed: {
+    transform: [{ scale: 0.96 }],
+    opacity: 0.92,
+  },
+  ctaText: {
+    fontFamily: FontFamily.outfitExtraBold,
+    fontSize: 15,
+    letterSpacing: 15 * -0.005,
+    color: greenDeep,
+  },
+  ctaArrow: {
+    fontFamily: FontFamily.monoBold,
     fontSize: 14,
-    textAlign: 'center',
+    color: greenDeep,
   },
 });

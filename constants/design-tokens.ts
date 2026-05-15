@@ -18,9 +18,10 @@ export const Y5 = '#cfde50';
 
 // Neutrals
 export const ink = '#0e2118';
-export const sub = '#5d6e64';
+export const sub = '#6b756f';
 export const cream = '#fbf6e6';
 export const paper = '#f7f4ea';
+export const rule = '#e2dcc0';
 
 // Named aliases
 export const forest = G3;
@@ -153,6 +154,13 @@ export const shadows: Record<string, ShadowStyle> = Platform.select({
       shadowRadius: 30,
       elevation: 8,
     },
+    formCard: {
+      shadowColor: '#11371f',
+      shadowOffset: { width: 0, height: 22 },
+      shadowOpacity: 0.18,
+      shadowRadius: 40,
+      elevation: 8,
+    },
   },
   default: {
     row: {
@@ -195,6 +203,13 @@ export const shadows: Record<string, ShadowStyle> = Platform.select({
       shadowOffset: { width: 0, height: 14 },
       shadowOpacity: 0.30,
       shadowRadius: 30,
+      elevation: 8,
+    },
+    formCard: {
+      shadowColor: '#11371f',
+      shadowOffset: { width: 0, height: 22 },
+      shadowOpacity: 0.18,
+      shadowRadius: 40,
       elevation: 8,
     },
   },
