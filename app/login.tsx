@@ -16,6 +16,8 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useColors } from '@/hooks/use-colors';
 import { supabase } from '@/lib/supabase';
 import { createSessionFromUrl, redirectTo } from '@/contexts/auth-context';
+import { GoogleAuth } from '@/components/google-auth';
+import { AppleAuth } from '@/components/apple-auth';
 
 type AuthMode = 'sign-in' | 'sign-up' | 'magic-link';
 
@@ -194,6 +196,17 @@ export default function LoginScreen() {
               </Text>
             ) : null}
 
+            {/* Social login divider */}
+            <View style={styles.dividerRow}>
+              <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+              <Text style={[styles.dividerText, { color: colors.textSecondary }]}>or</Text>
+              <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+            </View>
+
+            {/* Social login buttons */}
+            <GoogleAuth onError={setError} />
+            <AppleAuth onError={setError} />
+
             {/* Mode switch links */}
             <View style={styles.linksArea}>
               {mode === 'sign-in' && (
@@ -303,6 +316,20 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: 14,
     textAlign: 'center',
+  },
+  dividerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginVertical: 4,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+  },
+  dividerText: {
+    fontSize: 14,
+    fontWeight: '500',
   },
   linksArea: {
     alignItems: 'center',
