@@ -8,6 +8,7 @@ export interface Habit {
   unit: string;
   duration: string;
   ringColor: string;
+  durationMinutes?: number;
 }
 
 export const HABIT_LIBRARY: Habit[] = [
@@ -22,6 +23,7 @@ export const HABIT_LIBRARY: Habit[] = [
     unit: 'session',
     duration: '1 session',
     ringColor: '#2D6A4F',
+    durationMinutes: 12,
   },
   {
     id: 'driver',
@@ -33,6 +35,7 @@ export const HABIT_LIBRARY: Habit[] = [
     unit: 'session',
     duration: '1 session',
     ringColor: '#52B788',
+    durationMinutes: 15,
   },
 
   // Fitness
@@ -46,6 +49,7 @@ export const HABIT_LIBRARY: Habit[] = [
     unit: 'session',
     duration: '1 session',
     ringColor: '#E63946',
+    durationMinutes: 22,
   },
   {
     id: 'cardio',
@@ -57,6 +61,7 @@ export const HABIT_LIBRARY: Habit[] = [
     unit: 'session',
     duration: '1 session',
     ringColor: '#F59E0B',
+    durationMinutes: 20,
   },
   {
     id: 'core',
@@ -68,6 +73,7 @@ export const HABIT_LIBRARY: Habit[] = [
     unit: 'session',
     duration: '1 session',
     ringColor: '#457B9D',
+    durationMinutes: 10,
   },
 
   // Lifestyle
@@ -81,6 +87,7 @@ export const HABIT_LIBRARY: Habit[] = [
     unit: 'session',
     duration: '1 session',
     ringColor: '#2D9CDB',
+    durationMinutes: 5,
   },
   {
     id: 'h2o',
@@ -92,6 +99,7 @@ export const HABIT_LIBRARY: Habit[] = [
     unit: 'session',
     duration: '1 session',
     ringColor: '#56CCF2',
+    durationMinutes: 2,
   },
   {
     id: 'alcohol',
@@ -103,6 +111,7 @@ export const HABIT_LIBRARY: Habit[] = [
     unit: 'session',
     duration: '1 session',
     ringColor: '#9B51E0',
+    durationMinutes: 2,
   },
 ];
 

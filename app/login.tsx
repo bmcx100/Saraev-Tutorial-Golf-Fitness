@@ -60,15 +60,16 @@ export default function LoginScreen() {
   const handleSignUp = async () => {
     clearState();
     setLoading(true);
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
     });
     if (signUpError) {
       setError(signUpError.message);
-    } else {
+    } else if (!data.session) {
       setMessage('Check your email to confirm your account');
     }
+    // If session exists, onAuthStateChange handles the redirect
     setLoading(false);
   };
 
