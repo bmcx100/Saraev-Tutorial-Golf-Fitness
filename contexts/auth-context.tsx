@@ -10,6 +10,19 @@ WebBrowser.maybeCompleteAuthSession();
 
 export const redirectTo = makeRedirectUri();
 
+// Register before React mounts to catch PASSWORD_RECOVERY during Supabase
+// client initialization. The client processes recovery tokens from the URL
+// hash (web) or deep link (native) during its async init, which completes
+// before AuthProvider's useEffect registers its own listener.
+let _pendingRecovery = false;
+const { data: { subscription: _earlyRecoverySub } } = supabase.auth.onAuthStateChange(
+  (event) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      _pendingRecovery = true;
+    }
+  },
+);
+
 export async function createSessionFromUrl(url: string) {
   const { params, errorCode } = QueryParams.getQueryParams(url);
 
@@ -57,6 +70,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const clearPasswordRecovery = () => setIsPasswordRecovery(false);
 
   useEffect(() => {
+    // Pick up any PASSWORD_RECOVERY event that fired before mount
+    if (_pendingRecovery) {
+      setIsPasswordRecovery(true);
+      _pendingRecovery = false;
+    }
+    _earlyRecoverySub.unsubscribe();
+
     // Check for existing session on mount
     supabase.auth.getSession().then(({ data: { session: existingSession } }) => {
       setSession(existingSession);
