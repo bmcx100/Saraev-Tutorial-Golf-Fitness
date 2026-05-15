@@ -312,7 +312,7 @@ export default function SettingsScreen() {
 
                 <Pressable
                   onPress={async () => {
-                    await rebuildStatsAggregates();
+                    await rebuildStatsAggregates(user?.id);
                     if (Platform.OS === 'web') {
                       window.alert('Stats aggregates rebuilt from all session data.');
                     } else {

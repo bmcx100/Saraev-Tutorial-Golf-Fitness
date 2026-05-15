@@ -2,54 +2,57 @@
  * Supabase database types for training schema (Spec 017).
  *
  * Column naming: snake_case (Postgres convention).
- * The sync layer (Spec 018) handles camelCase ↔ snake_case mapping.
+ * The sync layer (Spec 018) handles camelCase <-> snake_case mapping.
+ *
+ * Uses type aliases (not interfaces) to match Supabase's generated
+ * output and ensure correct conditional-type resolution in the client.
  */
 
 // ── JSONB shapes ─────────────────────────────────────────────
 
-export interface DrillSpeeds {
+export type DrillSpeeds = {
   dom: number | null;
   nonDom: number | null;
-}
+};
 
-export interface DrillColorMap {
+export type DrillColorMap = {
   green: DrillSpeeds;
   blue: DrillSpeeds;
   red: DrillSpeeds;
-}
+};
 
-export interface ExerciseSetJson {
+export type ExerciseSetJson = {
   weight: number | null;
   reps: number;
   completed: boolean;
-}
+};
 
-export interface ExerciseLogJson {
+export type ExerciseLogJson = {
   exerciseId: string;
   sets: ExerciseSetJson[];
-}
+};
 
-export interface ExercisePrJson {
+export type ExercisePrJson = {
   weight: number;
   reps: number;
   date: string;
-}
+};
 
-export interface LastPrJson {
+export type LastPrJson = {
   exerciseId: string;
   exerciseName: string;
   weight: number;
   date: string;
-}
+};
 
-export interface ExerciseDefaultSetJson {
+export type ExerciseDefaultSetJson = {
   weight: number | null;
   reps: number;
-}
+};
 
 // ── speed_sessions ───────────────────────────────────────────
 
-export interface SpeedSessionRow {
+export type SpeedSessionRow = {
   id: string;
   user_id: string;
   session_date: string;
@@ -60,9 +63,9 @@ export interface SpeedSessionRow {
   max_out_driver: number | null;
   completed_at: string;
   created_at: string;
-}
+};
 
-export interface SpeedSessionInsert {
+export type SpeedSessionInsert = {
   id?: string;
   user_id: string;
   session_date: string;
@@ -73,9 +76,9 @@ export interface SpeedSessionInsert {
   max_out_driver?: number | null;
   completed_at: string;
   created_at?: string;
-}
+};
 
-export interface SpeedSessionUpdate {
+export type SpeedSessionUpdate = {
   id?: string;
   user_id?: string;
   session_date?: string;
@@ -86,11 +89,11 @@ export interface SpeedSessionUpdate {
   max_out_driver?: number | null;
   completed_at?: string;
   created_at?: string;
-}
+};
 
 // ── strength_sessions ────────────────────────────────────────
 
-export interface StrengthSessionRow {
+export type StrengthSessionRow = {
   id: string;
   user_id: string;
   session_date: string;
@@ -99,9 +102,9 @@ export interface StrengthSessionRow {
   exercises: ExerciseLogJson[];
   completed_at: string;
   created_at: string;
-}
+};
 
-export interface StrengthSessionInsert {
+export type StrengthSessionInsert = {
   id?: string;
   user_id: string;
   session_date: string;
@@ -110,9 +113,9 @@ export interface StrengthSessionInsert {
   exercises: ExerciseLogJson[];
   completed_at: string;
   created_at?: string;
-}
+};
 
-export interface StrengthSessionUpdate {
+export type StrengthSessionUpdate = {
   id?: string;
   user_id?: string;
   session_date?: string;
@@ -121,11 +124,11 @@ export interface StrengthSessionUpdate {
   exercises?: ExerciseLogJson[];
   completed_at?: string;
   created_at?: string;
-}
+};
 
 // ── speed_stats ──────────────────────────────────────────────
 
-export interface SpeedStatsRow {
+export type SpeedStatsRow = {
   user_id: string;
   driver_pr_mph: number | null;
   driver_pr_date: string | null;
@@ -133,9 +136,9 @@ export interface SpeedStatsRow {
   previous_driver_pr_date: string | null;
   last_session_date: string | null;
   updated_at: string;
-}
+};
 
-export interface SpeedStatsInsert {
+export type SpeedStatsInsert = {
   user_id: string;
   driver_pr_mph?: number | null;
   driver_pr_date?: string | null;
@@ -143,9 +146,9 @@ export interface SpeedStatsInsert {
   previous_driver_pr_date?: string | null;
   last_session_date?: string | null;
   updated_at?: string;
-}
+};
 
-export interface SpeedStatsUpdate {
+export type SpeedStatsUpdate = {
   user_id?: string;
   driver_pr_mph?: number | null;
   driver_pr_date?: string | null;
@@ -153,11 +156,11 @@ export interface SpeedStatsUpdate {
   previous_driver_pr_date?: string | null;
   last_session_date?: string | null;
   updated_at?: string;
-}
+};
 
 // ── strength_stats ───────────────────────────────────────────
 
-export interface StrengthStatsRow {
+export type StrengthStatsRow = {
   user_id: string;
   exercise_prs: Record<string, ExercisePrJson>;
   streak_days: number;
@@ -165,9 +168,9 @@ export interface StrengthStatsRow {
   best_streak: number;
   last_pr: LastPrJson | null;
   updated_at: string;
-}
+};
 
-export interface StrengthStatsInsert {
+export type StrengthStatsInsert = {
   user_id: string;
   exercise_prs?: Record<string, ExercisePrJson>;
   streak_days?: number;
@@ -175,9 +178,9 @@ export interface StrengthStatsInsert {
   best_streak?: number;
   last_pr?: LastPrJson | null;
   updated_at?: string;
-}
+};
 
-export interface StrengthStatsUpdate {
+export type StrengthStatsUpdate = {
   user_id?: string;
   exercise_prs?: Record<string, ExercisePrJson>;
   streak_days?: number;
@@ -185,83 +188,101 @@ export interface StrengthStatsUpdate {
   best_streak?: number;
   last_pr?: LastPrJson | null;
   updated_at?: string;
-}
+};
 
 // ── exercise_defaults ────────────────────────────────────────
 
-export interface ExerciseDefaultsRow {
+export type ExerciseDefaultsRow = {
   user_id: string;
   defaults: Record<string, ExerciseDefaultSetJson[]>;
   updated_at: string;
-}
+};
 
-export interface ExerciseDefaultsInsert {
+export type ExerciseDefaultsInsert = {
   user_id: string;
   defaults?: Record<string, ExerciseDefaultSetJson[]>;
   updated_at?: string;
-}
+};
 
-export interface ExerciseDefaultsUpdate {
+export type ExerciseDefaultsUpdate = {
   user_id?: string;
   defaults?: Record<string, ExerciseDefaultSetJson[]>;
   updated_at?: string;
-}
+};
 
 // ── training_state ───────────────────────────────────────────
 
-export interface TrainingStateRow {
+export type TrainingStateRow = {
   user_id: string;
   last_workout_day: string | null;
   updated_at: string;
-}
+};
 
-export interface TrainingStateInsert {
+export type TrainingStateInsert = {
   user_id: string;
   last_workout_day?: string | null;
   updated_at?: string;
-}
+};
 
-export interface TrainingStateUpdate {
+export type TrainingStateUpdate = {
   user_id?: string;
   last_workout_day?: string | null;
   updated_at?: string;
-}
+};
 
 // ── Database type ────────────────────────────────────────────
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       speed_sessions: {
         Row: SpeedSessionRow;
         Insert: SpeedSessionInsert;
         Update: SpeedSessionUpdate;
+        Relationships: [];
       };
       strength_sessions: {
         Row: StrengthSessionRow;
         Insert: StrengthSessionInsert;
         Update: StrengthSessionUpdate;
+        Relationships: [];
       };
       speed_stats: {
         Row: SpeedStatsRow;
         Insert: SpeedStatsInsert;
         Update: SpeedStatsUpdate;
+        Relationships: [];
       };
       strength_stats: {
         Row: StrengthStatsRow;
         Insert: StrengthStatsInsert;
         Update: StrengthStatsUpdate;
+        Relationships: [];
       };
       exercise_defaults: {
         Row: ExerciseDefaultsRow;
         Insert: ExerciseDefaultsInsert;
         Update: ExerciseDefaultsUpdate;
+        Relationships: [];
       };
       training_state: {
         Row: TrainingStateRow;
         Insert: TrainingStateInsert;
         Update: TrainingStateUpdate;
+        Relationships: [];
       };
     };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      [_ in never]: never;
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
   };
-}
+};

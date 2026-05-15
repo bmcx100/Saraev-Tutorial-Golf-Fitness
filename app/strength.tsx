@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useUser } from '@/contexts/user-context';
+import { useAuth } from '@/contexts/auth-context';
 import { useHabits } from '@/contexts/habit-context';
 import { useColors } from '@/hooks/use-colors';
 import {
@@ -313,6 +314,7 @@ function ExerciseCard({
 function WorkoutTracker() {
   const colors = useColors();
   const { logHabit } = useHabits();
+  const { user } = useAuth();
   const today = formatDate(new Date());
 
   const [selectedDay, setSelectedDay] = useState<WorkoutDay>('legs1');
@@ -430,9 +432,9 @@ function WorkoutTracker() {
     }
 
     await Promise.all([
-      saveStrengthSession(session),
-      saveLastStrengthWorkoutDay(selectedDay),
-      saveExerciseDefaults(newDefaults),
+      saveStrengthSession(session, user?.id),
+      saveLastStrengthWorkoutDay(selectedDay, user?.id),
+      saveExerciseDefaults(newDefaults, user?.id),
     ]);
 
     // Update strength aggregate stats
@@ -492,11 +494,11 @@ function WorkoutTracker() {
         }
       }
     }
-    await saveStrengthStats(stats);
+    await saveStrengthStats(stats, user?.id);
 
     logHabit('gym');
     router.replace('/(tabs)');
-  }, [today, selectedDay, defaults, logHabit]);
+  }, [today, selectedDay, defaults, logHabit, user?.id]);
 
   const dayDef = WORKOUT_DAYS.find((d) => d.key === selectedDay)!;
   const canSubmit = allSetsCompleted(exercises);

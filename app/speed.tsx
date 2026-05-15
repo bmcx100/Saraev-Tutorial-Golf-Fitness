@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUser } from '@/contexts/user-context';
+import { useAuth } from '@/contexts/auth-context';
 import { useHabits } from '@/contexts/habit-context';
 import {
   formatDate,
@@ -205,6 +206,7 @@ function ProtocolPicker({ onSelect }: { onSelect: (p: 'superspeed-l1') => void }
 
 function SpeedWizard({ protocol }: { protocol: string }) {
   const { logHabit } = useHabits();
+  const { user } = useAuth();
   const today = formatDate(new Date());
 
   const [session, setSession] = useState<SpeedSession>(() => emptySession(today, protocol));
@@ -313,7 +315,7 @@ function SpeedWizard({ protocol }: { protocol: string }) {
     }
     setSubmitting(true);
     const final: SpeedSession = { ...current, completedAt: new Date().toISOString() };
-    await saveSpeedSession(final);
+    await saveSpeedSession(final, user?.id);
 
     // Update speed aggregate stats
     const stats: SpeedStats = (await loadSpeedStats()) ?? {
@@ -328,11 +330,11 @@ function SpeedWizard({ protocol }: { protocol: string }) {
       }
     }
     stats.lastSessionDate = today;
-    await saveSpeedStats(stats);
+    await saveSpeedStats(stats, user?.id);
 
     logHabit('speed-training');
     router.back();
-  }, [logHabit, today]);
+  }, [logHabit, today, user?.id]);
 
   // CTA helpers
   const focusedValue = activeField ? getFieldValue(session, activeField) : null;

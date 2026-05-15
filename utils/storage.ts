@@ -4,6 +4,14 @@ import type { Challenge } from '@/contexts/challenge-context';
 import type { UserProfile } from '@/contexts/user-context';
 import type { SpeedSession } from '@/constants/speed-protocols';
 import type { StrengthSession, WorkoutDay } from '@/constants/strength-protocols';
+import {
+  syncSpeedSession,
+  syncStrengthSession,
+  syncSpeedStats,
+  syncStrengthStats,
+  syncExerciseDefaults,
+  syncTrainingState,
+} from '@/lib/supabase-sync';
 
 // ── Date helpers ──────────────────────────────────────────────
 
@@ -108,8 +116,11 @@ export async function loadSpeedSession(date: string): Promise<SpeedSession | nul
   return raw ? JSON.parse(raw) : null;
 }
 
-export async function saveSpeedSession(session: SpeedSession): Promise<void> {
+export async function saveSpeedSession(session: SpeedSession, userId?: string): Promise<void> {
   await AsyncStorage.setItem(speedSessionKey(session.date), JSON.stringify(session));
+  if (userId) {
+    try { await syncSpeedSession(userId, session); } catch (e) { console.warn('Sync failed:', e); }
+  }
 }
 
 export async function loadSpeedSessionRange(dates: string[]): Promise<SpeedSession[]> {
@@ -133,8 +144,11 @@ export async function loadStrengthSession(date: string): Promise<StrengthSession
   return raw ? JSON.parse(raw) : null;
 }
 
-export async function saveStrengthSession(session: StrengthSession): Promise<void> {
+export async function saveStrengthSession(session: StrengthSession, userId?: string): Promise<void> {
   await AsyncStorage.setItem(strengthSessionKey(session.date), JSON.stringify(session));
+  if (userId) {
+    try { await syncStrengthSession(userId, session); } catch (e) { console.warn('Sync failed:', e); }
+  }
 }
 
 export async function loadStrengthSessionRange(dates: string[]): Promise<StrengthSession[]> {
@@ -152,8 +166,11 @@ export async function loadLastStrengthWorkoutDay(): Promise<WorkoutDay | null> {
   return raw ? (JSON.parse(raw) as WorkoutDay) : null;
 }
 
-export async function saveLastStrengthWorkoutDay(day: WorkoutDay): Promise<void> {
+export async function saveLastStrengthWorkoutDay(day: WorkoutDay, userId?: string): Promise<void> {
   await AsyncStorage.setItem('strength-last-workout-day', JSON.stringify(day));
+  if (userId) {
+    try { await syncTrainingState(userId, day); } catch (e) { console.warn('Sync failed:', e); }
+  }
 }
 
 export async function loadExerciseDefaults(): Promise<Record<string, { weight: number | null; reps: number }[]>> {
@@ -161,8 +178,11 @@ export async function loadExerciseDefaults(): Promise<Record<string, { weight: n
   return raw ? JSON.parse(raw) : {};
 }
 
-export async function saveExerciseDefaults(defaults: Record<string, { weight: number | null; reps: number }[]>): Promise<void> {
+export async function saveExerciseDefaults(defaults: Record<string, { weight: number | null; reps: number }[]>, userId?: string): Promise<void> {
   await AsyncStorage.setItem('strength-exercise-defaults', JSON.stringify(defaults));
+  if (userId) {
+    try { await syncExerciseDefaults(userId, defaults); } catch (e) { console.warn('Sync failed:', e); }
+  }
 }
 
 // ── Speed / Strength aggregate stats ────────────────────────
@@ -188,8 +208,11 @@ export async function loadSpeedStats(): Promise<SpeedStats | null> {
   return raw ? JSON.parse(raw) : null;
 }
 
-export async function saveSpeedStats(stats: SpeedStats): Promise<void> {
+export async function saveSpeedStats(stats: SpeedStats, userId?: string): Promise<void> {
   await AsyncStorage.setItem(SPEED_STATS_KEY, JSON.stringify(stats));
+  if (userId) {
+    try { await syncSpeedStats(userId, stats); } catch (e) { console.warn('Sync failed:', e); }
+  }
 }
 
 export async function loadStrengthStats(): Promise<StrengthStats | null> {
@@ -197,11 +220,14 @@ export async function loadStrengthStats(): Promise<StrengthStats | null> {
   return raw ? JSON.parse(raw) : null;
 }
 
-export async function saveStrengthStats(stats: StrengthStats): Promise<void> {
+export async function saveStrengthStats(stats: StrengthStats, userId?: string): Promise<void> {
   await AsyncStorage.setItem(STRENGTH_STATS_KEY, JSON.stringify(stats));
+  if (userId) {
+    try { await syncStrengthStats(userId, stats); } catch (e) { console.warn('Sync failed:', e); }
+  }
 }
 
-export async function rebuildStatsAggregates(): Promise<void> {
+export async function rebuildStatsAggregates(userId?: string): Promise<void> {
   const allKeys = await AsyncStorage.getAllKeys();
 
   // ── Rebuild Speed Stats ──
@@ -223,7 +249,7 @@ export async function rebuildStatsAggregates(): Promise<void> {
     }
     speedStats.lastSessionDate = session.date;
   }
-  await saveSpeedStats(speedStats);
+  await saveSpeedStats(speedStats, userId);
 
   // ── Rebuild Strength Stats ──
   const strengthKeys = allKeys.filter((k) => k.startsWith('strength-session-'));
@@ -299,7 +325,7 @@ export async function rebuildStatsAggregates(): Promise<void> {
       }
     }
   }
-  await saveStrengthStats(strengthStats);
+  await saveStrengthStats(strengthStats, userId);
 }
 
 // ── Pace toast dedup ─────────────────────────────────────────

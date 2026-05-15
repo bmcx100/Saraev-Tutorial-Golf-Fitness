@@ -1,9 +1,10 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import { makeRedirectUri } from 'expo-auth-session';
 import * as QueryParams from 'expo-auth-session/build/QueryParams';
 import * as WebBrowser from 'expo-web-browser';
 import { supabase } from '@/lib/supabase';
 import type { Session, User } from '@supabase/supabase-js';
+import { initialSync, hasSyncCompleted, setSyncCompleted, clearSyncFlag } from '@/lib/supabase-initial-sync';
 
 // Must be called at module level for OAuth redirect handling
 WebBrowser.maybeCompleteAuthSession();
@@ -66,8 +67,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
+  const syncingRef = useRef(false);
 
   const clearPasswordRecovery = () => setIsPasswordRecovery(false);
+
+  const triggerInitialSync = async (userId: string) => {
+    if (syncingRef.current) return;
+    syncingRef.current = true;
+    try {
+      const done = await hasSyncCompleted(userId);
+      if (!done) {
+        await initialSync(userId);
+        await setSyncCompleted(userId);
+      }
+    } catch (e) {
+      console.warn('Initial sync failed:', e);
+    } finally {
+      syncingRef.current = false;
+    }
+  };
 
   useEffect(() => {
     // Pick up any PASSWORD_RECOVERY event that fired before mount
@@ -81,6 +99,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.getSession().then(({ data: { session: existingSession } }) => {
       setSession(existingSession);
       setIsLoading(false);
+      if (existingSession?.user) {
+        triggerInitialSync(existingSession.user.id);
+      }
     });
 
     // Listen for auth state changes
@@ -89,6 +110,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(newSession);
         if (event === 'PASSWORD_RECOVERY') {
           setIsPasswordRecovery(true);
+        }
+        if (event === 'SIGNED_IN' && newSession?.user) {
+          triggerInitialSync(newSession.user.id);
+        }
+        if (event === 'SIGNED_OUT') {
+          // Clear sync flag for the user that just signed out
+          const userId = session?.user?.id;
+          if (userId) {
+            clearSyncFlag(userId).catch(() => {});
+          }
         }
       },
     );
