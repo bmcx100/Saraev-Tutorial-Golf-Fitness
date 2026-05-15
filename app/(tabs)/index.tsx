@@ -12,7 +12,10 @@ import { Confetti } from '@/components/confetti';
 import { PaceToast } from '@/components/pace-toast';
 import { playSound } from '@/constants/sounds';
 import { usePace } from '@/hooks/use-pace';
+import { useQueueOrder } from '@/hooks/use-queue-order';
+import { recomputeIfStale } from '@/utils/queue-order';
 import { loadPaceToastShown, savePaceToastShown, formatDate } from '@/utils/storage';
+import type { HeroVariant } from '@/components/today/up-next-hero';
 
 import {
   G10, ink, sub, forest, cream,
@@ -139,18 +142,20 @@ export default function TodayScreen() {
       }
 
       checkChallengeCompletion();
+
+      // Trigger background recompute of queue order if stale
+      const categoryMap: Record<string, HabitCategory> = {};
+      for (const h of todayHabits) categoryMap[h.id] = h.category;
+      recomputeIfStale(
+        todayHabits.map((h) => h.id),
+        categoryMap,
+      ).catch(() => {});
     },
-    [logHabit, checkChallengeCompletion, profile.soundEnabled],
+    [logHabit, checkChallengeCompletion, profile.soundEnabled, todayHabits],
   );
 
-  // Order habits: golf → workout → lifestyle
-  const orderedHabits = useMemo(() => {
-    const result: Habit[] = [];
-    for (const cat of CATEGORY_ORDER) {
-      result.push(...todayHabits.filter((h) => h.category === cat));
-    }
-    return result;
-  }, [todayHabits]);
+  // Order habits by learned queue order, completed at bottom
+  const orderedHabits = useQueueOrder(todayHabits, getHabitProgress);
 
   // Ring data — per-category progress
   const ringPcts = useMemo((): [number, number, number] => {
@@ -174,6 +179,14 @@ export default function TodayScreen() {
   const upNextIndex = upNextHabit
     ? orderedHabits.indexOf(upNextHabit)
     : -1;
+
+  // Compute hero variant from habit ID
+  const heroVariant: HeroVariant = useMemo(() => {
+    if (!upNextHabit) return 'default';
+    if (upNextHabit.id === 'speed-training') return 'speed';
+    if (upNextHabit.id === 'gym') return 'strength';
+    return 'default';
+  }, [upNextHabit]);
 
   // Challenge day number
   const challengeDayNumber = useMemo(() => {
@@ -294,6 +307,7 @@ export default function TodayScreen() {
           <View style={styles.section}>
             <UpNextHero
               habit={upNextHabit}
+              variant={heroVariant}
               subtitle={heroSubtitle(
                 upNextHabit,
                 challengeMatchesHabit(upNextHabit.id) ? activeChallenge?.name : undefined,

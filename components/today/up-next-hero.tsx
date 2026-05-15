@@ -1,13 +1,15 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, ImageBackground, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path } from 'react-native-svg';
 import {
-  forest, greenDeep, citron, cream, G8,
+  forest, greenDeep, citron, cream, G8, G3, G2,
   FontFamily, shadows,
 } from '@/constants/design-tokens';
-import { BoltIcon, FlagFillIcon, PlayIcon } from '@/components/ui/design-icons';
+import { BoltIcon, DumbbellIcon, FlagFillIcon, PlayIcon } from '@/components/ui/design-icons';
 import { TopoBackground } from './topo-background';
 import type { Habit } from '@/constants/habits';
+
+export type HeroVariant = 'speed' | 'strength' | 'default';
 
 interface UpNextHeroProps {
   habit: Habit;
@@ -16,6 +18,8 @@ interface UpNextHeroProps {
   /** Which item in the queue (1-based) */
   queuePosition: number;
   queueTotal: number;
+  /** 'speed' | 'strength' | 'default' */
+  variant?: HeroVariant;
   /** Active challenge name, if any */
   challengeName?: string;
   /** Session N out of totalSessions */
@@ -26,20 +30,167 @@ interface UpNextHeroProps {
   onStartPress: () => void;
 }
 
-/**
- * Forest gradient hero card for the "Up Next" habit.
- */
-export function UpNextHero({
+const barbellImage = require('@/assets/images/buildstrong-barbell.png');
+
+function BallTracerSvg() {
+  return (
+    <Svg
+      style={styles.ballTracer}
+      width={360}
+      height={200}
+      viewBox="0 0 200 100"
+      preserveAspectRatio="none"
+    >
+      <Path
+        d="M 4 86 Q 90 0, 196 14"
+        fill="none"
+        stroke={G8}
+        strokeWidth={6}
+        strokeLinecap="round"
+        opacity={0.18}
+      />
+      <Path
+        d="M 4 86 Q 90 0, 196 14"
+        fill="none"
+        stroke={G8}
+        strokeWidth={2.2}
+        strokeLinecap="round"
+        opacity={0.95}
+      />
+      <Path
+        d="M 4 91 Q 93 3, 196 26"
+        fill="none"
+        stroke={G8}
+        strokeWidth={1.3}
+        strokeLinecap="round"
+        opacity={0.62}
+        strokeDasharray="3 7"
+      />
+      <Path
+        d="M 4 90 Q 100 -2, 196 21"
+        fill="none"
+        stroke={G8}
+        strokeWidth={1.2}
+        strokeLinecap="round"
+        opacity={0.55}
+        strokeDasharray="2 5"
+      />
+    </Svg>
+  );
+}
+
+function HeroContent({
   habit,
   subtitle,
   queuePosition,
   queueTotal,
+  variant = 'default',
   challengeName,
   challengeSessionCurrent,
   challengeSessionTotal,
   challengeDaysLeft,
   onStartPress,
 }: UpNextHeroProps) {
+  const PillIcon = variant === 'strength' ? DumbbellIcon : BoltIcon;
+
+  return (
+    <>
+      {/* Top row: UP NEXT pill + position counter */}
+      <View style={styles.topRow}>
+        <View style={styles.upNextPill}>
+          <PillIcon size={11} color={greenDeep} />
+          <Text style={styles.upNextText}>
+            UP NEXT · {habit.durationMinutes ?? 12} MIN
+          </Text>
+        </View>
+        <Text style={styles.positionText}>
+          {queuePosition} of {queueTotal}
+        </Text>
+      </View>
+
+      {/* Title */}
+      <Text style={styles.title}>{habit.name}.</Text>
+      <Text style={styles.subtitle}>{subtitle}</Text>
+
+      {/* Challenge progress strip (if challenge active) */}
+      {challengeName && challengeSessionTotal && (
+        <View style={styles.progressStrip}>
+          <FlagFillIcon size={14} color={citron} />
+          <View style={styles.progressInfo}>
+            <Text style={styles.progressLabel}>
+              {challengeName} · session {challengeSessionCurrent ?? 0} / {challengeSessionTotal}
+            </Text>
+            <View style={styles.progressBarRow}>
+              {Array.from({ length: challengeSessionTotal }).map((_, i) => (
+                <View
+                  key={i}
+                  style={[
+                    styles.progressSegment,
+                    i < (challengeSessionCurrent ?? 0) && styles.progressSegmentFilled,
+                  ]}
+                />
+              ))}
+            </View>
+          </View>
+          {challengeDaysLeft != null && (
+            <Text style={styles.daysLeft}>{challengeDaysLeft}d</Text>
+          )}
+        </View>
+      )}
+
+      {/* CTA */}
+      <Pressable style={styles.cta} onPress={onStartPress}>
+        <PlayIcon size={14} color={greenDeep} />
+        <Text style={styles.ctaText}>Start now</Text>
+      </Pressable>
+    </>
+  );
+}
+
+/**
+ * Themed hero card for the "Up Next" habit.
+ * - speed / default: forest gradient + ball tracer + topo
+ * - strength: barbell photo + forest tint overlays
+ */
+export function UpNextHero(props: UpNextHeroProps) {
+  const { variant = 'default' } = props;
+
+  if (variant === 'strength') {
+    return (
+      <View style={styles.outer}>
+        <ImageBackground
+          source={barbellImage}
+          resizeMode="cover"
+          style={styles.photoBackground}
+          imageStyle={styles.photoImage}
+        >
+          {/* Vertical forest tint overlay */}
+          <LinearGradient
+            colors={[
+              'rgba(10,24,18,0.78)',
+              'rgba(17,55,31,0.62)',
+              'rgba(17,55,31,0.48)',
+              'rgba(17,55,31,0.72)',
+            ]}
+            locations={[0, 0.4, 0.7, 1]}
+            style={StyleSheet.absoluteFill}
+          />
+          {/* Diagonal green wash */}
+          <LinearGradient
+            colors={[`${G3}33`, `${G2}54`]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={StyleSheet.absoluteFill}
+          />
+          <View style={styles.gradient}>
+            <HeroContent {...props} />
+          </View>
+        </ImageBackground>
+      </View>
+    );
+  }
+
+  // speed / default: forest gradient + ball tracer + topo
   return (
     <View style={styles.outer}>
       <LinearGradient
@@ -48,101 +199,9 @@ export function UpNextHero({
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
       >
-        {/* Inner topo lines */}
         <TopoBackground tint={citron} opacity={0.18} viewBoxHeight={280} />
-
-        {/* Ball-tracer arc */}
-        <Svg
-          style={styles.ballTracer}
-          width={360}
-          height={200}
-          viewBox="0 0 200 100"
-          preserveAspectRatio="none"
-        >
-          <Path
-            d="M 4 86 Q 90 0, 196 14"
-            fill="none"
-            stroke={G8}
-            strokeWidth={6}
-            strokeLinecap="round"
-            opacity={0.18}
-          />
-          <Path
-            d="M 4 86 Q 90 0, 196 14"
-            fill="none"
-            stroke={G8}
-            strokeWidth={2.2}
-            strokeLinecap="round"
-            opacity={0.95}
-          />
-          <Path
-            d="M 4 91 Q 93 3, 196 26"
-            fill="none"
-            stroke={G8}
-            strokeWidth={1.3}
-            strokeLinecap="round"
-            opacity={0.62}
-            strokeDasharray="3 7"
-          />
-          <Path
-            d="M 4 90 Q 100 -2, 196 21"
-            fill="none"
-            stroke={G8}
-            strokeWidth={1.2}
-            strokeLinecap="round"
-            opacity={0.55}
-            strokeDasharray="2 5"
-          />
-        </Svg>
-
-        {/* Top row: UP NEXT pill + position counter */}
-        <View style={styles.topRow}>
-          <View style={styles.upNextPill}>
-            <BoltIcon size={11} color={greenDeep} />
-            <Text style={styles.upNextText}>
-              UP NEXT · {habit.durationMinutes ?? 12} MIN
-            </Text>
-          </View>
-          <Text style={styles.positionText}>
-            {queuePosition} of {queueTotal}
-          </Text>
-        </View>
-
-        {/* Title */}
-        <Text style={styles.title}>{habit.name}.</Text>
-        <Text style={styles.subtitle}>{subtitle}</Text>
-
-        {/* Challenge progress strip (if challenge active) */}
-        {challengeName && challengeSessionTotal && (
-          <View style={styles.progressStrip}>
-            <FlagFillIcon size={14} color={citron} />
-            <View style={styles.progressInfo}>
-              <Text style={styles.progressLabel}>
-                {challengeName} · session {challengeSessionCurrent ?? 0} / {challengeSessionTotal}
-              </Text>
-              <View style={styles.progressBarRow}>
-                {Array.from({ length: challengeSessionTotal }).map((_, i) => (
-                  <View
-                    key={i}
-                    style={[
-                      styles.progressSegment,
-                      i < (challengeSessionCurrent ?? 0) && styles.progressSegmentFilled,
-                    ]}
-                  />
-                ))}
-              </View>
-            </View>
-            {challengeDaysLeft != null && (
-              <Text style={styles.daysLeft}>{challengeDaysLeft}d</Text>
-            )}
-          </View>
-        )}
-
-        {/* CTA */}
-        <Pressable style={styles.cta} onPress={onStartPress}>
-          <PlayIcon size={14} color={greenDeep} />
-          <Text style={styles.ctaText}>Start now</Text>
-        </Pressable>
+        <BallTracerSvg />
+        <HeroContent {...props} />
       </LinearGradient>
     </View>
   );
@@ -160,6 +219,13 @@ const styles = StyleSheet.create({
     paddingBottom: 22,
     position: 'relative',
   },
+  photoBackground: {
+    overflow: 'hidden',
+  },
+  photoImage: {
+    width: '100%',
+    height: '100%',
+  } as any,
   ballTracer: {
     position: 'absolute',
     top: -16,
