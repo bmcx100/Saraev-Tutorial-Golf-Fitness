@@ -250,27 +250,9 @@ export function BuildStrongHero(props: BuildStrongHeroProps) {
             <Text style={s.captionText}>{captionText}</Text>
           </Animated.View>
 
-          {/* 2. Title row */}
-          <Animated.View style={[s.titleRow, stagger1]}>
+          {/* 2. Title */}
+          <Animated.View style={stagger1}>
             <Text style={s.title} numberOfLines={1} adjustsFontSizeToFit>Build Strong.</Text>
-            <Pressable
-              style={s.streakBlock}
-              onPress={onStreakTap}
-              hitSlop={8}
-              accessibilityLabel={`${streakDays} day streak`}
-            >
-              <Text style={s.streakNumber}>
-                {streakDays}
-                <Text style={s.streakUnit}>d</Text>
-              </Text>
-              <Text
-                style={s.streakLabel}
-                accessibilityElementsHidden
-                importantForAccessibility="no"
-              >
-                STREAK
-              </Text>
-            </Pressable>
           </Animated.View>
 
           {/* 3. Stat tiles */}
@@ -416,50 +398,17 @@ const s = StyleSheet.create({
     ...TEXT_SHADOW_LEGIBILITY,
   },
 
-  // 2. Title row
-  titleRow: {
-    marginTop: 12,
-    flexDirection: 'row' as const,
-    justifyContent: 'space-between' as const,
-    alignItems: 'flex-end' as const,
-    gap: 14,
-  },
+  // 2. Title
   title: {
-    flex: 1,
+    marginTop: 12,
     fontSize: 44,
     fontFamily: FontFamily.outfitExtraBold,
     letterSpacing: -1.54,
-    lineHeight: 42,
+    lineHeight: 52,
     color: cream,
     textShadowColor: 'rgba(0,0,0,0.45)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 10,
-  },
-  streakBlock: {
-    alignItems: 'flex-end' as const,
-    minWidth: 44,
-    minHeight: 44,
-    justifyContent: 'flex-end' as const,
-  },
-  streakNumber: {
-    fontSize: 44,
-    fontFamily: FontFamily.outfitExtraBold,
-    letterSpacing: -1.54,
-    lineHeight: 42,
-    color: citron,
-    textShadowColor: 'rgba(207,222,80,0.4)',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 18,
-  },
-  streakUnit: {
-    fontSize: 24,
-  },
-  streakLabel: {
-    marginTop: 3,
-    fontSize: 13,
-    fontFamily: FontFamily.monoBold,
-    letterSpacing: 2.08,
-    color: 'rgba(251,246,230,0.65)',
   },
 
   // 3. Stat tiles
