@@ -1,0 +1,2584 @@
+[
+  {
+    "date": "2026-03-18",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 100,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 108,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 99,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 106,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 89,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 123,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 102,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 114,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 95,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 104,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 90,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 115,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 109,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-23",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 121,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 102,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 100,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 113,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 94,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 126,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 104,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 115,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 102,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 95,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 123,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 117,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-25",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 118,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 99,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 99,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 108,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 94,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 121,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 98,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 116,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 96,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 110,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 87,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 120,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 113,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-28",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 126,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 108,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 117,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 102,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 113,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 99,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 120,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 106,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 118,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 101,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 110,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 94,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 122,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 116,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-30",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 125,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 114,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 121,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 105,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 113,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 101,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 120,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 107,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 113,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 102,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 109,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 97,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 127,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 117,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-01",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 125,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 110,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 121,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 107,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 111,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 103,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 124,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 120,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 105,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 116,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 100,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 128,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 123,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-04",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 123,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 104,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 116,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 101,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 110,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 95,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 125,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 107,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 120,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 101,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 113,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 100,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 134,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 117,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-06",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 118,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 107,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 95,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 105,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 95,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 118,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 104,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 113,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 97,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 107,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 97,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 123,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 109,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-08",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 116,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 97,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 111,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 94,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 105,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 88,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 116,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 96,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 107,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 91,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 100,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 88,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 116,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-14",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 116,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 99,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 110,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 99,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 109,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 92,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 103,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 94,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 104,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 85,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 120,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-16",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 119,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 104,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 110,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 98,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 106,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 97,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 116,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 103,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 102,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 95,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 104,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 95,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 123,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 117,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-20",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 125,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 120,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 103,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 115,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 96,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 125,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 107,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 121,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 106,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 116,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 99,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 131,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 120,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-22",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 128,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 108,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 118,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 114,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 102,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 129,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 110,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 120,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 104,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 116,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 106,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 130,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 120,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-24",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 116,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 98,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 114,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 96,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 110,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 97,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 117,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 98,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 99,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 105,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 92,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 121,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-05-02",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": []
+  },
+  {
+    "date": "2026-05-04",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 118,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 101,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 115,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 103,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 106,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 95,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 115,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 102,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 110,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 100,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 104,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 91,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 125,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 113,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-05-06",
+    "protocol": "Protocol 1",
+    "notes": null,
+    "entries": [
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 123,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 108,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 118,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 105,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 112,
+        "notes": null
+      },
+      {
+        "drill": "Normal Swings",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 101,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 123,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 115,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 119,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Blue (Medium)",
+        "stickColor": "blue",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 114,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 117,
+        "notes": null
+      },
+      {
+        "drill": "Step Drill",
+        "stick": "Red (Heavy)",
+        "stickColor": "red",
+        "side": "non_dominant",
+        "isDriver": false,
+        "isKeyMetric": false,
+        "swingCount": 3,
+        "fastestSpeed": 104,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": "Green (Light)",
+        "stickColor": "green",
+        "side": "dominant",
+        "isDriver": false,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 130,
+        "notes": null
+      },
+      {
+        "drill": "Max Out",
+        "stick": null,
+        "stickColor": null,
+        "side": "dominant",
+        "isDriver": true,
+        "isKeyMetric": true,
+        "swingCount": 3,
+        "fastestSpeed": 120,
+        "notes": null
+      }
+    ]
+  }
+]

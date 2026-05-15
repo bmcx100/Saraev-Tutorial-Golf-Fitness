@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Subpar · Onboarding redesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  html, body { margin: 0; padding: 0; background: #ece8e0; height: 100%; }
+  body { font-family: 'Outfit', system-ui, sans-serif; }
+  *::-webkit-scrollbar { width: 0; height: 0; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="icons.jsx"></script>
+<script type="text/babel" src="onboarding-screens.jsx"></script>
+
+<script type="text/babel">
+const PHONE_W = 390, PHONE_H = 844;
+
+function Phone({ children }) {
+  return (
+    <IOSDevice width={PHONE_W} height={PHONE_H}>
+      <div style={{ height: '100%', overflow: 'hidden' }}>{children}</div>
+    </IOSDevice>
+  );
+}
+
+function App() {
+  return (
+    <DesignCanvas
+      title="Subpar · Onboarding redesign"
+      subtitle="Three steps · default + active states. Rebuilt in the v3b language: Outfit + JBMono, forest + citron, the concentric ring brand mark, mono eyebrows, terminal-period display titles, page dots, citron CTA pill.">
+
+      {/* Step 01 — Welcome (single state, no selection) */}
+      <DCSection id="welcome" title="01 · Welcome — How Subpar Works"
+        subtitle="Brand mark hero, four numbered step cards. Period of each headline picks up the citron accent — same lockup as the home screen.">
+        <DCArtboard id="welcome-default" label="01 · How it works · default"
+          width={PHONE_W + 40} height={PHONE_H + 40}>
+          <FrameWrap><Phone><OnbWelcome/></Phone></FrameWrap>
+        </DCArtboard>
+      </DCSection>
+
+      {/* Step 02 — Build Plan: default, partial selection, all selected */}
+      <DCSection id="plan" title="02 · Build your game plan"
+        subtitle="Sectioned selectable list (Golf · Workouts · Lifestyle). Selected rows: cream-tinted bg, forest 1.5px border, forest radio fill with citron check. CTA is disabled (muted parchment) until anything is picked.">
+        <DCArtboard id="plan-default" label="02a · No selection · CTA disabled"
+          width={PHONE_W + 40} height={PHONE_H + 40}>
+          <FrameWrap><Phone><OnbPlan selectedIds={[]}/></Phone></FrameWrap>
+        </DCArtboard>
+        <DCArtboard id="plan-partial" label="02b · 2 selected · CTA enabled"
+          width={PHONE_W + 40} height={PHONE_H + 40}>
+          <FrameWrap>
+            <Phone>
+              <OnbPlan selectedIds={['speed', 'strength']}/>
+            </Phone>
+          </FrameWrap>
+        </DCArtboard>
+        <DCArtboard id="plan-all" label="02c · Most selected · section counters update"
+          width={PHONE_W + 40} height={PHONE_H + 40}>
+          <FrameWrap>
+            <Phone>
+              <OnbPlan selectedIds={['speed','driver','strength','cardio','meals']}/>
+            </Phone>
+          </FrameWrap>
+        </DCArtboard>
+      </DCSection>
+
+      {/* Step 03 — Challenge: default and selected */}
+      <DCSection id="challenge" title="03 · Take a challenge"
+        subtitle="Two challenge cards — Get Long (forest + citron) and Get Strong (clay + orange). Unselected dims & desaturates the other card so the choice feels deliberate. Locked CTA until one is picked.">
+        <DCArtboard id="challenge-default" label="03a · No selection · CTA locked"
+          width={PHONE_W + 40} height={PHONE_H + 40}>
+          <FrameWrap><Phone><OnbChallenge selectedId={null}/></Phone></FrameWrap>
+        </DCArtboard>
+        <DCArtboard id="challenge-getlong" label="03b · Get Long picked"
+          width={PHONE_W + 40} height={PHONE_H + 40}>
+          <FrameWrap><Phone><OnbChallenge selectedId="getlong"/></Phone></FrameWrap>
+        </DCArtboard>
+        <DCArtboard id="challenge-getstrong" label="03c · Get Strong picked"
+          width={PHONE_W + 40} height={PHONE_H + 40}>
+          <FrameWrap><Phone><OnbChallenge selectedId="getstrong"/></Phone></FrameWrap>
+        </DCArtboard>
+      </DCSection>
+
+      {/* Notes */}
+      <DCSection id="notes" title="Notes"
+        subtitle="Design decisions on the redesign.">
+        <DCArtboard id="notes" label="Decisions" width={1180} height={360}>
+          <Notes/>
+        </DCArtboard>
+      </DCSection>
+
+    </DesignCanvas>
+  );
+}
+
+function FrameWrap({ children }) {
+  return (
+    <div style={{ width: '100%', height: '100%',
+      display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      {children}
+    </div>
+  );
+}
+
+function Notes() {
+  const ink = '#10241a', sub = '#6b756f', rule = '#e2dcc0', paper = '#f7f4ea';
+  const items = [
+    {
+      eyebrow: 'INHERITED FROM v3b',
+      title: 'Same language, more rhythm.',
+      body: 'Outfit display with the citron terminal period · JBMono eyebrows · concentric ring brand mark · forest + citron + cream + paper. Selected state always pulls cream into the row + 1.5px forest border, never a heavy shadow.',
+    },
+    {
+      eyebrow: 'STATE PATTERN',
+      title: 'Disabled CTA + page counter.',
+      body: 'Each screen has top counter "STEP 01/03" and bottom page dots — the dots are decorative, the counter is mono for parity with the rest of the system. CTA is muted parchment + no arrow when the page has unmet requirements.',
+    },
+    {
+      eyebrow: 'CHALLENGE SCREEN',
+      title: 'Cards mirror the live product.',
+      body: 'Get Long / Get Strong use the same forest gradient + topo line stack as the home screen hero card, so the onboarding selection visually matches what the user will see post-onboarding. Picking one dims & desaturates the other.',
+    },
+  ];
+  return (
+    <div style={{ width: '100%', height: '100%', background: paper, color: ink,
+      fontFamily: '"Outfit", system-ui, sans-serif',
+      padding: '28px 28px', boxSizing: 'border-box',
+      display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div>
+        <div style={{ fontSize: 10.5, fontWeight: 800, letterSpacing: '0.22em',
+          textTransform: 'uppercase', color: sub }}>Notes</div>
+        <div style={{ marginTop: 4, fontSize: 24, fontWeight: 800, letterSpacing: '-0.025em' }}>
+          Onboarding flow · 3 steps · 7 states
+        </div>
+        <div style={{ marginTop: 4, fontSize: 13, color: sub, fontWeight: 500 }}>
+          Three core screens, shown in default and active variants so engineering can wire selection state cleanly. Skip is intentionally a mono link top-right; never the primary path.
+        </div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+        {items.map(it => (
+          <div key={it.title} style={{ background: '#fff', border: `1px solid ${rule}`,
+            borderRadius: 14, padding: '14px 16px' }}>
+            <div style={{ fontFamily: '"JetBrains Mono", monospace',
+              fontSize: 10, fontWeight: 700, color: sub, letterSpacing: '0.18em' }}>
+              {it.eyebrow}
+            </div>
+            <div style={{ marginTop: 6, fontSize: 15, fontWeight: 800, color: ink,
+              letterSpacing: '-0.015em' }}>{it.title}</div>
+            <div style={{ marginTop: 6, fontSize: 12.5, color: sub, fontWeight: 500,
+              lineHeight: 1.55 }}>{it.body}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

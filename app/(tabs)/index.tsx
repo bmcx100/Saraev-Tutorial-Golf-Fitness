@@ -13,9 +13,11 @@ import { PaceToast } from '@/components/pace-toast';
 import { playSound } from '@/constants/sounds';
 import { usePace } from '@/hooks/use-pace';
 import { useQueueOrder } from '@/hooks/use-queue-order';
+import { useStrengthHeroStats } from '@/hooks/use-strength-hero-stats';
 import { recomputeIfStale } from '@/utils/queue-order';
 import { loadPaceToastShown, savePaceToastShown, formatDate } from '@/utils/storage';
 import type { HeroVariant } from '@/components/today/up-next-hero';
+import { BuildStrongHero } from '@/components/today/build-strong-hero';
 
 import {
   G10, ink, sub, forest, cream,
@@ -188,6 +190,9 @@ export default function TodayScreen() {
     return 'default';
   }, [upNextHabit]);
 
+  // Strength hero stats (only loads when gym is up next)
+  const strengthData = useStrengthHeroStats(heroVariant === 'strength');
+
   // Challenge day number
   const challengeDayNumber = useMemo(() => {
     if (!activeChallenge) return 0;
@@ -302,8 +307,52 @@ export default function TodayScreen() {
           </View>
         )}
 
-        {/* Up Next Hero */}
-        {upNextHabit && (
+        {/* Up Next Hero — XL Build Strong variant when challenge + gym is up next */}
+        {upNextHabit && heroVariant === 'strength' && activeChallenge && (
+          <View style={styles.section}>
+            <BuildStrongHero
+              day={challengeDayNumber || 1}
+              totalDays={activeChallenge.durationDays}
+              session={challengeProgress ?? 0}
+              totalSessions={activeChallenge.targetTotal}
+              weeks={Math.ceil(activeChallenge.durationDays / 7)}
+              streakDays={strengthData?.streak ?? 0}
+              topLift={strengthData?.topLift ? { value: strengthData.topLift, unit: 'lb' } : null}
+              volumePerWeek={
+                strengthData?.volumeWeek != null
+                  ? {
+                      value: strengthData.volumeWeek,
+                      display: strengthData.volumeWeek >= 1000
+                        ? `${(strengthData.volumeWeek / 1000).toFixed(1)}k`
+                        : String(Math.round(strengthData.volumeWeek)),
+                      unit: 'lb',
+                    }
+                  : null
+              }
+              weekDelta={
+                strengthData?.volumeDelta != null
+                  ? {
+                      value: Math.abs(strengthData.volumeDelta),
+                      unit: 'lb',
+                      direction:
+                        strengthData.volumeDelta > 0
+                          ? 'up'
+                          : strengthData.volumeDelta < 0
+                            ? 'down'
+                            : 'flat',
+                    }
+                  : null
+              }
+              daysLeft={challengeDaysLeft}
+              status="on-track"
+              nextSessionNumber={(challengeProgress ?? 0) + 1}
+              onPrimary={() => handleLog('gym')}
+              onPlan={() => router.push('/stats-strength')}
+              onTap={() => router.push('/stats-strength')}
+            />
+          </View>
+        )}
+        {upNextHabit && !(heroVariant === 'strength' && activeChallenge) && (
           <View style={styles.section}>
             <UpNextHero
               habit={upNextHabit}
@@ -326,6 +375,10 @@ export default function TodayScreen() {
               challengeDaysLeft={
                 challengeMatchesHabit(upNextHabit.id) ? challengeDaysLeft : undefined
               }
+              challengeDayNumber={
+                challengeMatchesHabit(upNextHabit.id) ? challengeDayNumber : undefined
+              }
+              strengthData={strengthData ?? undefined}
               onStartPress={() => handleLog(upNextHabit.id)}
             />
           </View>

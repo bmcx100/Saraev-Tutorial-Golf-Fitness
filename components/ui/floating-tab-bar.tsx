@@ -2,9 +2,11 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
   useAnimatedStyle,
+  useSharedValue,
   withTiming,
   Easing,
 } from 'react-native-reanimated';
+import { useEffect } from 'react';
 import * as Haptics from 'expo-haptics';
 import { forest, citron, FontFamily, shadows } from '@/constants/design-tokens';
 import { CheckCircleIcon, FlagIcon, BarsIcon } from '@/components/ui/design-icons';
@@ -18,9 +20,11 @@ const TABS = [
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
+const TIMING = { duration: 220, easing: Easing.out(Easing.ease) };
+
 /**
  * Custom floating dark tab bar per the v3b design system.
- * Forest background, citron active pill, icon-only inactive tabs.
+ * Forest background, citron active pill, labels always visible.
  */
 export function FloatingTabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
@@ -28,9 +32,7 @@ export function FloatingTabBar({ state, navigation }: BottomTabBarProps) {
   return (
     <View style={[styles.wrapper, { paddingBottom: Math.max(insets.bottom, 24) }]}>
       <View style={styles.bar}>
-        {TABS.map((tab, i) => {
-          // The tab layout may have hidden routes (e.g. explore with href: null)
-          // so we need to match by route name
+        {TABS.map((tab) => {
           const routeIndex = state.routes.findIndex((r) => r.name === tab.key);
           const isActive = state.index === routeIndex;
           const { Icon } = tab;
@@ -65,29 +67,36 @@ interface TabItemProps {
 }
 
 function TabItem({ label, Icon, isActive, onPress }: TabItemProps) {
-  const animatedStyle = useAnimatedStyle(() => ({
-    flex: withTiming(isActive ? 1.4 : 1, {
-      duration: 220,
-      easing: Easing.out(Easing.ease),
-    }),
-    backgroundColor: withTiming(
-      isActive ? citron : 'transparent',
-      { duration: 220, easing: Easing.out(Easing.ease) },
-    ),
+  const active = useSharedValue(isActive ? 1 : 0);
+
+  useEffect(() => {
+    active.value = withTiming(isActive ? 1 : 0, TIMING);
+  }, [isActive]);
+
+  const pillStyle = useAnimatedStyle(() => ({
+    flex: 1 + active.value * 0.4,
+    backgroundColor:
+      active.value > 0.5 ? citron : 'transparent',
   }));
 
   return (
     <AnimatedPressable
-      style={[styles.tab, animatedStyle]}
+      style={[styles.tab, pillStyle]}
       onPress={onPress}
     >
       <Icon
         size={18}
-        color={isActive ? forest : 'rgba(251,246,230,0.65)'}
+        color={isActive ? forest : 'rgba(251,246,230,0.85)'}
       />
-      {isActive && (
-        <Text style={styles.tabLabel}>{label}</Text>
-      )}
+      <Text
+        style={[
+          styles.tabLabel,
+          isActive ? styles.tabLabelActive : styles.tabLabelInactive,
+        ]}
+        numberOfLines={1}
+      >
+        {label}
+      </Text>
     </AnimatedPressable>
   );
 }
@@ -113,15 +122,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    gap: 6,
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderRadius: 24,
     minHeight: 44,
   },
   tabLabel: {
-    fontSize: 13,
-    fontFamily: FontFamily.outfitExtraBold,
+    fontSize: 12,
+    fontFamily: FontFamily.outfitBold,
+  },
+  tabLabelActive: {
     color: forest,
+    fontFamily: FontFamily.outfitExtraBold,
+    fontSize: 13,
+  },
+  tabLabelInactive: {
+    color: 'rgba(251,246,230,0.65)',
   },
 });

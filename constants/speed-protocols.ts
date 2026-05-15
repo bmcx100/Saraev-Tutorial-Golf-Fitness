@@ -20,10 +20,12 @@ export interface SpeedSession {
   completedAt: string; // ISO timestamp
 }
 
+import { stickColors } from '@/constants/design-tokens';
+
 export const STICK_COLORS: { key: StickColor; label: string; color: string }[] = [
-  { key: 'green', label: 'Green', color: '#22C55E' },
-  { key: 'blue', label: 'Blue', color: '#3B82F6' },
-  { key: 'red', label: 'Red', color: '#EF4444' },
+  { key: 'green', label: 'Green', color: stickColors.green },
+  { key: 'blue', label: 'Blue', color: stickColors.blue },
+  { key: 'red', label: 'Red', color: stickColors.red },
 ];
 
 export const DRILL_STEPS: { key: DrillType; label: string; instruction: string }[] = [

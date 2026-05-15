@@ -2,11 +2,16 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { View, Text, Pressable, ScrollView, Modal, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUser } from '@/contexts/user-context';
 import { useHabits } from '@/contexts/habit-context';
-import { useColors } from '@/hooks/use-colors';
-import { formatDate, loadSpeedSession, saveSpeedSession, loadSpeedStats, saveSpeedStats } from '@/utils/storage';
+import {
+  formatDate,
+  loadSpeedSession,
+  saveSpeedSession,
+  loadSpeedStats,
+  saveSpeedStats,
+} from '@/utils/storage';
 import type { SpeedStats } from '@/utils/storage';
 import {
   STICK_COLORS,
@@ -15,9 +20,22 @@ import {
   type SpeedSession,
   type StickColor,
 } from '@/constants/speed-protocols';
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
-import { SpeedNumpad } from '@/components/speed-numpad';
-import { SpeedInputField } from '@/components/speed-input-field';
+import {
+  paper,
+  ink,
+  forest,
+  greenDeep,
+  citron,
+  rule,
+  FontFamily,
+} from '@/constants/design-tokens';
+
+import { ForestHero } from '@/components/speed/forest-hero';
+import { SectionHeading } from '@/components/speed/section-heading';
+import { StickPillar } from '@/components/speed/stick-pillar';
+import { DriverPillar } from '@/components/speed/driver-pillar';
+import { Keypad } from '@/components/speed/keypad';
+import { CTABar } from '@/components/speed/cta-bar';
 
 // ── Field ordering for tab navigation ─────────────────────────
 
@@ -50,7 +68,11 @@ function getFieldValue(session: SpeedSession, fieldId: FieldId): number | null {
   return session[drill][stick][side];
 }
 
-function setFieldValue(session: SpeedSession, fieldId: FieldId, value: number | null): SpeedSession {
+function setFieldValue(
+  session: SpeedSession,
+  fieldId: FieldId,
+  value: number | null,
+): SpeedSession {
   const next = JSON.parse(JSON.stringify(session)) as SpeedSession;
   const parts = fieldId.split('.');
   if (parts[0] === 'maxOut') {
@@ -92,95 +114,86 @@ function emptyFieldIds(session: SpeedSession): Set<string> {
   return set;
 }
 
-// ── Step Tab ─────────────────────────────────────────────────
-
-function StepTab({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) {
-  const colors = useColors();
-  const animStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: withTiming(active ? 1 : 0.92, { duration: 200 }) }],
-  }));
-
-  return (
-    <Pressable onPress={onPress}>
-      <Animated.View
-        style={[
-          styles.stepTab,
-          {
-            backgroundColor: active ? colors.accent : colors.surface,
-            borderColor: active ? colors.accent : colors.border,
-          },
-          animStyle,
-        ]}
-      >
-        <Text
-          style={[
-            styles.stepTabText,
-            {
-              color: active ? '#FFFFFF' : colors.textSecondary,
-              fontWeight: active ? '700' : '500',
-            },
-          ]}
-        >
-          {label}
-        </Text>
-      </Animated.View>
-    </Pressable>
-  );
+function countFilledInStep(session: SpeedSession, step: number): number {
+  let count = 0;
+  for (const f of FIELDS_BY_STEP[step]) {
+    if (getFieldValue(session, f) !== null) count++;
+  }
+  return count;
 }
+
+// ── Section heading config per drill ──────────────────────────
+
+const DRILL_CONFIG = [
+  {
+    eyebrow: 'DRILL \u00B7 1 OF 3',
+    title: 'Normal Stance.',
+    helper: '3 sticks \u00B7 swing 3\u00D7 \u00B7 best wins',
+    progressCaption: 'SWINGS',
+    totalFields: 6,
+  },
+  {
+    eyebrow: 'DRILL \u00B7 2 OF 3',
+    title: 'Step Drill.',
+    helper: '3 sticks \u00B7 swing 3\u00D7 \u00B7 best wins',
+    progressCaption: 'SWINGS',
+    totalFields: 6,
+  },
+  {
+    eyebrow: 'DRILL \u00B7 3 OF 3',
+    title: 'Max Out.',
+    helper: 'Green stick + driver \u00B7 swing 3\u00D7 max \u00B7 best wins',
+    progressCaption: 'READINGS',
+    totalFields: 2,
+  },
+];
 
 // ── Protocol Picker ───────────────────────────────────────────
 
 function ProtocolPicker({ onSelect }: { onSelect: (p: 'superspeed-l1') => void }) {
-  const colors = useColors();
-
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={styles.topBar}>
+    <SafeAreaView style={[styles.container, { backgroundColor: paper }]}>
+      <View style={styles.pickerTopBar}>
         <Pressable onPress={() => router.back()} hitSlop={12}>
-          <MaterialIcons name="arrow-back" size={24} color={colors.text} />
+          <Text style={styles.pickerBackText}>{'\u2190'}</Text>
         </Pressable>
-        <Text style={[styles.topTitle, { color: colors.text }]}>Speed Training</Text>
+        <Text style={styles.pickerTopTitle}>Speed Training</Text>
         <View style={{ width: 24 }} />
       </View>
 
       <View style={styles.pickerContent}>
-        <Text style={[styles.pickerTitle, { color: colors.text }]}>
-          Choose Your Protocol
-        </Text>
+        <Text style={styles.pickerTitle}>Choose Your Protocol</Text>
 
         <Pressable
           onPress={() => onSelect('superspeed-l1')}
-          style={[styles.protocolCard, { backgroundColor: colors.surface, borderColor: colors.accent }]}
+          style={[styles.protocolCard, { borderColor: citron }]}
         >
-          <MaterialIcons name="bolt" size={28} color={colors.accent} />
+          <View style={styles.protocolIcon}>
+            <Text style={styles.protocolIconText}>{'\u26A1'}</Text>
+          </View>
           <View style={styles.protocolCardText}>
-            <Text style={[styles.protocolName, { color: colors.text }]}>
+            <Text style={styles.protocolName}>
               Super Speed Sticks L1
             </Text>
-            <Text style={[styles.protocolDesc, { color: colors.textSecondary }]}>
+            <Text style={styles.protocolDesc}>
               3 weighted sticks, progressive overload
             </Text>
           </View>
-          <MaterialIcons name="chevron-right" size={24} color={colors.textSecondary} />
+          <Text style={styles.protocolChevron}>{'\u203A'}</Text>
         </Pressable>
 
-        <View
-          style={[
-            styles.protocolCard,
-            { backgroundColor: colors.surface, borderColor: colors.border, opacity: 0.5 },
-          ]}
-        >
-          <MaterialIcons name="speed" size={28} color={colors.textSecondary} />
+        <View style={[styles.protocolCard, { borderColor: rule, opacity: 0.5 }]}>
+          <View style={styles.protocolIcon}>
+            <Text style={styles.protocolIconText}>{'\uD83C\uDFCE\uFE0F'}</Text>
+          </View>
           <View style={styles.protocolCardText}>
-            <Text style={[styles.protocolName, { color: colors.text }]}>
+            <Text style={styles.protocolName}>
               BMC&apos;s Speedy Sticks{'\u00A0'}of{'\u00A0'}Quickness
             </Text>
-            <Text style={[styles.protocolDesc, { color: colors.textSecondary }]}>
-              Alternative protocol
-            </Text>
+            <Text style={styles.protocolDesc}>Alternative protocol</Text>
           </View>
-          <View style={[styles.badge, { backgroundColor: colors.border }]}>
-            <Text style={[styles.badgeText, { color: colors.textSecondary }]}>Coming Soon</Text>
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>Coming Soon</Text>
           </View>
         </View>
       </View>
@@ -191,7 +204,6 @@ function ProtocolPicker({ onSelect }: { onSelect: (p: 'superspeed-l1') => void }
 // ── Speed Input Wizard ────────────────────────────────────────
 
 function SpeedWizard({ protocol }: { protocol: string }) {
-  const colors = useColors();
   const { logHabit } = useHabits();
   const today = formatDate(new Date());
 
@@ -203,18 +215,30 @@ function SpeedWizard({ protocol }: { protocol: string }) {
   const [errors, setErrors] = useState<Set<string>>(new Set());
   const [loaded, setLoaded] = useState(false);
   const [showDiscard, setShowDiscard] = useState(false);
+  const [sessionNumber, setSessionNumber] = useState(1);
+  const [driverPR, setDriverPR] = useState<number | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  // Load existing session for today
+  // Load existing session, session count, and PR on mount
   useEffect(() => {
     (async () => {
       const existing = await loadSpeedSession(today);
       if (existing) setSession(existing);
+
+      // Session count
+      const allKeys = await AsyncStorage.getAllKeys();
+      const sessionCount = allKeys.filter((k) => k.startsWith('speed-session-')).length;
+      setSessionNumber(sessionCount + 1);
+
+      // Driver PR
+      const stats = await loadSpeedStats();
+      if (stats?.driverPR) setDriverPR(stats.driverPR.mph);
+
       setLoaded(true);
     })();
   }, [today]);
 
   const currentFields = FIELDS_BY_STEP[step];
-  const drillInfo = DRILL_STEPS[step];
 
   const handleDigit = useCallback(
     (d: string) => {
@@ -223,7 +247,7 @@ function SpeedWizard({ protocol }: { protocol: string }) {
       setSession((prev) => {
         const current = getFieldValue(prev, activeField);
         const currentStr = current !== null ? String(current) : '';
-        if (currentStr.length >= 3) return prev; // max 3 digits
+        if (currentStr.length >= 3) return prev;
         const newStr = currentStr + d;
         if (newStr.length === 3) shouldAdvance = true;
         return setFieldValue(prev, activeField, parseInt(newStr, 10));
@@ -254,34 +278,31 @@ function SpeedWizard({ protocol }: { protocol: string }) {
     });
   }, [activeField]);
 
-  const handleTab = useCallback(() => {
+  const handleNext = useCallback(() => {
     if (!activeField) {
       setActiveField(currentFields[0]);
       return;
     }
     const idx = currentFields.indexOf(activeField);
-    const nextIdx = (idx + 1) % currentFields.length;
-    setActiveField(currentFields[nextIdx]);
+    if (idx < currentFields.length - 1) {
+      setActiveField(currentFields[idx + 1]);
+    }
+    // After last field in drill, NEXT does nothing
   }, [activeField, currentFields]);
 
   const handleBack = useCallback(() => {
-    setActiveField(null);
-    if (step > 0) {
-      setStep(step - 1);
+    if (hasAnyData(sessionRef.current)) {
+      setShowDiscard(true);
     } else {
-      if (hasAnyData(sessionRef.current)) {
-        setShowDiscard(true);
-      } else {
-        router.back();
-      }
+      router.back();
     }
-  }, [step]);
+  }, []);
 
-  const handleNext = useCallback(() => {
-    const nextStep = step + 1;
-    setStep(nextStep);
-    setActiveField(FIELDS_BY_STEP[nextStep][0]);
-  }, [step]);
+  const handleTabChange = useCallback((index: number) => {
+    setStep(index);
+    setActiveField(FIELDS_BY_STEP[index][0]);
+    setErrors(new Set());
+  }, []);
 
   const handleSubmit = useCallback(async () => {
     const current = sessionRef.current;
@@ -290,6 +311,7 @@ function SpeedWizard({ protocol }: { protocol: string }) {
       setActiveField(null);
       return;
     }
+    setSubmitting(true);
     const final: SpeedSession = { ...current, completedAt: new Date().toISOString() };
     await saveSpeedSession(final);
 
@@ -312,112 +334,126 @@ function SpeedWizard({ protocol }: { protocol: string }) {
     router.back();
   }, [logHabit, today]);
 
-  const isLastStep = step === 2;
+  // CTA helpers
+  const focusedValue = activeField ? getFieldValue(session, activeField) : null;
+  const isMaxOut = step === 2;
+
+  const handleCTAPress = useCallback(() => {
+    if (isMaxOut) {
+      handleSubmit();
+    } else {
+      // Advance to next empty cell in current drill, or next tab
+      const filled = countFilledInStep(sessionRef.current, step);
+      if (filled >= DRILL_CONFIG[step].totalFields) {
+        // All filled in this drill — advance to next tab
+        const nextStep = step + 1;
+        setStep(nextStep);
+        setActiveField(FIELDS_BY_STEP[nextStep][0]);
+        setErrors(new Set());
+      } else if (activeField) {
+        // Advance to next field
+        const idx = currentFields.indexOf(activeField);
+        if (idx < currentFields.length - 1) {
+          setActiveField(currentFields[idx + 1]);
+        }
+      }
+    }
+  }, [isMaxOut, handleSubmit, step, activeField, currentFields]);
+
+  const ctaLabel = isMaxOut
+    ? `Submit ${focusedValue ?? ''} mph`
+    : `Log ${focusedValue ?? ''} mph`;
+  const ctaGlyph = isMaxOut ? '\u2713' : '\u2192';
+
+  // Determine which stick is active (has the focused field)
+  function getActiveStick(): StickColor | null {
+    if (!activeField) return null;
+    const parts = activeField.split('.');
+    if (parts[0] === 'maxOut') return null;
+    return parts[1] as StickColor;
+  }
+
+  const filledCount = countFilledInStep(session, step);
+  const config = DRILL_CONFIG[step];
 
   if (!loaded) return null;
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* Header */}
-      <View style={styles.topBar}>
-        <Pressable onPress={handleBack} hitSlop={12}>
-          <MaterialIcons name="arrow-back" size={24} color={colors.text} />
-        </Pressable>
-        <Text style={[styles.topTitle, { color: colors.text }]}>Speed Training</Text>
-        <View style={{ width: 24 }} />
-      </View>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <ForestHero
+        activeTab={step as 0 | 1 | 2}
+        onTabChange={handleTabChange}
+        sessionNumber={sessionNumber}
+        prValue={driverPR}
+        prCaption={isMaxOut ? 'DRIVER PR' : 'PR \u00B7 MPH'}
+        onBack={handleBack}
+      />
 
-      {/* Step tabs */}
-      <View style={styles.stepTabs}>
-        {DRILL_STEPS.map((d, i) => (
-          <StepTab
-            key={d.key}
-            label={d.label}
-            active={i === step}
-            onPress={() => {
-              setStep(i);
-              setActiveField(FIELDS_BY_STEP[i][0]);
-            }}
-          />
-        ))}
-      </View>
-
-      {/* Form content */}
       <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={styles.formContent}
+        style={{ flex: 1, backgroundColor: paper }}
+        contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <Text style={[styles.drillInstruction, { color: colors.textSecondary }]}>
-          {drillInfo.instruction}
-        </Text>
+        <SectionHeading
+          eyebrow={config.eyebrow}
+          title={config.title}
+          helper={config.helper}
+          progressNum={`${filledCount} / ${config.totalFields}`}
+          progressCaption={config.progressCaption}
+        />
 
         {step < 2 ? (
-          // Normal Stance / Step Drill — 3 sticks, dom + nonDom each
-          STICK_COLORS.map((stick) => {
-            const drillKey = DRILL_STEPS[step].key as 'normalStance' | 'stepDrill';
-            const domId = `${drillKey}.${stick.key}.dom`;
-            const nonDomId = `${drillKey}.${stick.key}.nonDom`;
-            return (
-              <View key={stick.key} style={styles.stickRow}>
-                <View style={styles.stickLabel}>
-                  <View style={[styles.colorDot, { backgroundColor: stick.color }]} />
-                  <Text style={[styles.stickName, { color: colors.text }]}>{stick.label}</Text>
-                </View>
-                <View style={styles.fieldsRow}>
-                  <SpeedInputField
-                    value={getFieldValue(session, domId)}
-                    active={activeField === domId}
-                    onPress={() => setActiveField(domId)}
-                    label="Dom"
-                    error={errors.has(domId)}
-                  />
-                  <SpeedInputField
-                    value={getFieldValue(session, nonDomId)}
-                    active={activeField === nonDomId}
-                    onPress={() => setActiveField(nonDomId)}
-                    label="Non-Dom"
-                    error={errors.has(nonDomId)}
-                  />
-                </View>
-              </View>
-            );
-          })
+          // Normal Stance / Step Drill — 3 stick pillars
+          <View style={styles.pillarsRow}>
+            {STICK_COLORS.map((stick, i) => {
+              const drillKey = DRILL_STEPS[step].key as 'normalStance' | 'stepDrill';
+              const domId = `${drillKey}.${stick.key}.dom`;
+              const nonDomId = `${drillKey}.${stick.key}.nonDom`;
+              const isActive = getActiveStick() === stick.key;
+
+              return (
+                <StickPillar
+                  key={stick.key}
+                  stick={stick.key}
+                  active={isActive}
+                  domValue={getFieldValue(session, domId)}
+                  nonDomValue={getFieldValue(session, nonDomId)}
+                  focusedCell={
+                    activeField === domId
+                      ? 'dom'
+                      : activeField === nonDomId
+                        ? 'nonDom'
+                        : null
+                  }
+                  onCellPress={(cell) => {
+                    setActiveField(cell === 'dom' ? domId : nonDomId);
+                  }}
+                  animDelay={i * 60}
+                />
+              );
+            })}
+          </View>
         ) : (
-          // Max Out — green + driver
-          <>
-            <View style={styles.stickRow}>
-              <View style={styles.stickLabel}>
-                <View style={[styles.colorDot, { backgroundColor: '#22C55E' }]} />
-                <Text style={[styles.stickName, { color: colors.text }]}>Green</Text>
-              </View>
-              <View style={styles.fieldsRow}>
-                <SpeedInputField
-                  value={getFieldValue(session, 'maxOut.green')}
-                  active={activeField === 'maxOut.green'}
-                  onPress={() => setActiveField('maxOut.green')}
-                  label="Speed"
-                  error={errors.has('maxOut.green')}
-                />
-              </View>
-            </View>
-            <View style={styles.stickRow}>
-              <View style={styles.stickLabel}>
-                <MaterialIcons name="golf-course" size={16} color={colors.textSecondary} />
-                <Text style={[styles.stickName, { color: colors.text }]}>Driver</Text>
-              </View>
-              <View style={styles.fieldsRow}>
-                <SpeedInputField
-                  value={getFieldValue(session, 'maxOut.driver')}
-                  active={activeField === 'maxOut.driver'}
-                  onPress={() => setActiveField('maxOut.driver')}
-                  label="Speed"
-                  error={errors.has('maxOut.driver')}
-                />
-              </View>
-            </View>
-          </>
+          // Max Out — green stick + driver
+          <View style={styles.pillarsRowMaxOut}>
+            <StickPillar
+              variant="maxOut"
+              stick="green"
+              active={activeField === 'maxOut.green'}
+              value={getFieldValue(session, 'maxOut.green')}
+              focused={activeField === 'maxOut.green'}
+              onCellPress={() => setActiveField('maxOut.green')}
+              animDelay={0}
+            />
+            <DriverPillar
+              active={activeField === 'maxOut.driver'}
+              value={getFieldValue(session, 'maxOut.driver')}
+              focused={activeField === 'maxOut.driver'}
+              onCellPress={() => setActiveField('maxOut.driver')}
+              animDelay={60}
+            />
+          </View>
         )}
 
         {errors.size > 0 && (
@@ -425,48 +461,44 @@ function SpeedWizard({ protocol }: { protocol: string }) {
         )}
       </ScrollView>
 
-      {/* Numpad — always visible */}
-      <SpeedNumpad
+      <Keypad
         onDigit={handleDigit}
         onDelete={handleDelete}
-        onTab={handleTab}
+        onNext={handleNext}
       />
 
-      {/* Bottom action */}
-      <View style={[styles.bottomBar, { borderTopColor: colors.border }]}>
-        <Pressable
-          onPress={isLastStep ? handleSubmit : handleNext}
-          style={[styles.actionButton, { backgroundColor: colors.accent }]}
-        >
-          <Text style={styles.actionButtonText}>{isLastStep ? 'Submit' : 'Next'}</Text>
-        </Pressable>
-      </View>
+      <CTABar
+        label={ctaLabel}
+        glyph={ctaGlyph}
+        onPress={handleCTAPress}
+        loading={submitting}
+      />
 
-      {/* Discard confirmation */}
+      {/* Discard confirmation modal */}
       <Modal visible={showDiscard} transparent animationType="fade">
         <View style={styles.discardOverlay}>
-          <View style={[styles.discardCard, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.discardTitle, { color: colors.text }]}>
+          <View style={styles.discardCard}>
+            <Text style={styles.discardTitle}>
               Discard this session?
             </Text>
-            <Text style={[styles.discardBody, { color: colors.textSecondary }]}>
+            <Text style={styles.discardBody}>
               Your entered speeds will be lost.
             </Text>
             <View style={styles.discardActions}>
               <Pressable
                 onPress={() => setShowDiscard(false)}
-                style={[styles.discardBtn, { borderColor: colors.border }]}
+                style={[styles.discardBtn, styles.discardBtnCancel]}
               >
-                <Text style={[styles.discardBtnText, { color: colors.text }]}>Cancel</Text>
+                <Text style={styles.discardBtnCancelText}>Cancel</Text>
               </Pressable>
               <Pressable
                 onPress={() => {
                   setShowDiscard(false);
                   router.back();
                 }}
-                style={[styles.discardBtn, { backgroundColor: '#EF4444', borderColor: '#EF4444' }]}
+                style={[styles.discardBtn, styles.discardBtnDiscard]}
               >
-                <Text style={[styles.discardBtnText, { color: '#FFFFFF' }]}>Discard</Text>
+                <Text style={styles.discardBtnDiscardText}>Discard</Text>
               </Pressable>
             </View>
           </View>
@@ -500,27 +532,35 @@ export default function SpeedScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: paper,
     userSelect: 'none',
   } as any,
-  topBar: {
+  // Protocol picker
+  pickerTopBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 12,
   },
-  topTitle: {
-    fontSize: 17,
-    fontWeight: '700',
+  pickerBackText: {
+    fontSize: 24,
+    color: ink,
+    fontFamily: FontFamily.outfitBold,
   },
-  // Protocol picker
+  pickerTopTitle: {
+    fontFamily: FontFamily.outfitBold,
+    fontSize: 17,
+    color: ink,
+  },
   pickerContent: {
     padding: 20,
     gap: 16,
   },
   pickerTitle: {
+    fontFamily: FontFamily.outfitExtraBold,
     fontSize: 24,
-    fontWeight: '800',
+    color: ink,
     marginBottom: 8,
   },
   protocolCard: {
@@ -530,100 +570,76 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderWidth: 1,
     gap: 12,
+    backgroundColor: '#fff',
+  },
+  protocolIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: paper,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  protocolIconText: {
+    fontSize: 20,
   },
   protocolCardText: {
     flex: 1,
     gap: 2,
   },
   protocolName: {
+    fontFamily: FontFamily.outfitBold,
     fontSize: 16,
-    fontWeight: '700',
+    color: ink,
   },
   protocolDesc: {
+    fontFamily: FontFamily.outfitMedium,
     fontSize: 13,
+    color: '#6b756f',
+  },
+  protocolChevron: {
+    fontSize: 24,
+    color: '#6b756f',
   },
   badge: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
+    backgroundColor: rule,
   },
   badgeText: {
+    fontFamily: FontFamily.outfitBold,
     fontSize: 11,
-    fontWeight: '700',
+    color: '#6b756f',
   },
-  // Wizard
-  stepTabs: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 8,
-    paddingHorizontal: 20,
-    paddingVertical: 8,
-  },
-  stepTab: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 12,
-    borderWidth: 1,
-  },
-  stepTabText: {
-    fontSize: 15,
-  },
-  formContent: {
-    padding: 20,
-    paddingBottom: 16,
-    gap: 16,
-  },
-  drillInstruction: {
-    fontSize: 14,
-    textAlign: 'center',
-    marginBottom: 4,
-  },
-  stickRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-  },
-  stickLabel: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    minWidth: 80,
-  },
-  colorDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-  },
-  stickName: {
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  fieldsRow: {
+  // Wizard pillars
+  pillarsRow: {
+    padding: 8,
+    paddingHorizontal: 14,
+    paddingBottom: 18,
+    flex: 1,
     flexDirection: 'row',
     gap: 10,
+    alignItems: 'stretch',
+  },
+  pillarsRowMaxOut: {
+    padding: 8,
+    paddingHorizontal: 16,
+    paddingBottom: 20,
+    flex: 1,
+    flexDirection: 'row',
+    gap: 14,
+    alignItems: 'stretch',
   },
   errorText: {
-    color: '#EF4444',
+    fontFamily: FontFamily.outfitMedium,
+    color: '#cc6f4a',
     fontSize: 13,
     textAlign: 'center',
     marginTop: 4,
+    paddingBottom: 8,
   },
-  bottomBar: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderTopWidth: StyleSheet.hairlineWidth,
-  },
-  actionButton: {
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  actionButtonText: {
-    color: '#FFFFFF',
-    fontSize: 17,
-    fontWeight: '700',
-  },
+  // Discard modal — Subpar v3
   discardOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
@@ -632,19 +648,28 @@ const styles = StyleSheet.create({
     padding: 32,
   },
   discardCard: {
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 24,
     width: '100%',
     maxWidth: 320,
     gap: 8,
+    backgroundColor: paper,
+    shadowColor: '#11371f',
+    shadowOffset: { width: 0, height: 22 },
+    shadowOpacity: 0.18,
+    shadowRadius: 40,
+    elevation: 8,
   },
   discardTitle: {
+    fontFamily: FontFamily.outfitBold,
     fontSize: 17,
-    fontWeight: '700',
+    color: ink,
     textAlign: 'center',
   },
   discardBody: {
+    fontFamily: FontFamily.outfitMedium,
     fontSize: 14,
+    color: '#6b756f',
     textAlign: 'center',
     marginBottom: 12,
   },
@@ -655,12 +680,25 @@ const styles = StyleSheet.create({
   discardBtn: {
     flex: 1,
     paddingVertical: 12,
-    borderRadius: 10,
-    borderWidth: 1,
+    borderRadius: 12,
     alignItems: 'center',
   },
-  discardBtnText: {
+  discardBtnCancel: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: rule,
+  },
+  discardBtnCancelText: {
+    fontFamily: FontFamily.outfitSemiBold,
     fontSize: 15,
-    fontWeight: '600',
+    color: forest,
+  },
+  discardBtnDiscard: {
+    backgroundColor: citron,
+  },
+  discardBtnDiscardText: {
+    fontFamily: FontFamily.outfitSemiBold,
+    fontSize: 15,
+    color: greenDeep,
   },
 });

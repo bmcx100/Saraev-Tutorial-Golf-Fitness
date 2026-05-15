@@ -1,0 +1,4505 @@
+[
+  {
+    "date": "2026-03-10",
+    "completedAt": "2026-03-17T19:00:59.496+00:00",
+    "template": "Legs 1 — Squat Focus",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Piston Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 4,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 5,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-11",
+    "completedAt": "2026-03-17T19:03:26.59+00:00",
+    "template": "Push",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-12",
+    "completedAt": "2026-03-17T19:05:15.283+00:00",
+    "template": "Legs 2 — Deadlift Focus",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Deadlifts",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Deadlifts",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Deadlifts",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Piston Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-13",
+    "completedAt": "2026-03-17T19:07:52.998+00:00",
+    "template": "Pull",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 100,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 100,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 100,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 60,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 60,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 60,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-14",
+    "completedAt": "2026-03-17T19:08:41.87+00:00",
+    "template": "Legs 1 — Squat Focus",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Piston Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 4,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 5,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-14",
+    "completedAt": "2026-03-17T19:10:19.33+00:00",
+    "template": "Conditioning",
+    "group": "Conditioning",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Cardio",
+        "trackingType": "duration",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 1,
+        "duration": 1800,
+        "completed": true,
+        "notes": "Bike"
+      },
+      {
+        "exercise": "Crunches",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 100,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Obliques",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "Quad / Hamstring"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-15",
+    "completedAt": "2026-03-17T19:11:04.903+00:00",
+    "template": "Push",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-15",
+    "completedAt": "2026-03-17T19:12:48.839+00:00",
+    "template": "Conditioning",
+    "group": "Conditioning",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Cardio",
+        "trackingType": "duration",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 1,
+        "duration": 1800,
+        "completed": true,
+        "notes": "Bike"
+      },
+      {
+        "exercise": "Crunches",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 100,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Obliques",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 30,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "L Quad"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "R Quad"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "Elephant Steps"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 4,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "L Quad"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 5,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "R Quad"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 6,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "Elephant Steps"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-16",
+    "completedAt": "2026-03-17T19:13:57.705+00:00",
+    "template": "Legs 2 — Deadlift Focus",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Deadlifts",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Piston Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-16",
+    "completedAt": "2026-03-17T19:27:55.24+00:00",
+    "template": "Conditioning",
+    "group": "Conditioning",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Cardio",
+        "trackingType": "duration",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "Bike"
+      },
+      {
+        "exercise": "Crunches",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 100,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Obliques",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "L Quad"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "R Quad"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "Elephant Walk"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 4,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "L Quad"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 5,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "R Quad"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 6,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "Elephant Walk"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-17",
+    "completedAt": "2026-03-17T20:39:17.581+00:00",
+    "template": "Pull",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 60,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 60,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 60,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 100,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 100,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 100,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 60,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 60,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 60,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-17",
+    "completedAt": "2026-03-18T01:01:59.473+00:00",
+    "template": "Conditioning",
+    "group": "Conditioning",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Cardio",
+        "trackingType": "duration",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 1,
+        "duration": 1800,
+        "completed": true,
+        "notes": "Bike"
+      },
+      {
+        "exercise": "Crunches",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 100,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Obliques",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "L Quad"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "R Quad"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "Elephant Steps"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 4,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "L Quad"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 5,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "R Quad"
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 6,
+        "weight": null,
+        "reps": 1,
+        "duration": 60,
+        "completed": true,
+        "notes": "Elephant Steps"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-19",
+    "completedAt": "2026-03-19T01:55:27.303+00:00",
+    "template": "Legs 1 — Squat Focus",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Piston Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 4,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 5,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-24",
+    "completedAt": "2026-03-24T15:51:48.211+00:00",
+    "template": "Pull",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 60,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 60,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 60,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 100,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 100,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 100,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 60,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 60,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-28",
+    "completedAt": "2026-03-28T22:01:58.79+00:00",
+    "template": "Legs 1 — Squat Focus",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Piston Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 4,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 5,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-28",
+    "completedAt": "2026-03-29T04:51:14.802+00:00",
+    "template": "Conditioning",
+    "group": "Conditioning",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Crunches",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 100,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Obliques",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-29",
+    "completedAt": "2026-03-30T00:54:41.496+00:00",
+    "template": "Push",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-29",
+    "completedAt": "2026-03-30T15:24:22.959+00:00",
+    "template": "Conditioning",
+    "group": "Conditioning",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Crunches",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 100,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Obliques",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 1,
+        "duration": null,
+        "completed": false,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-30",
+    "completedAt": "2026-03-30T17:04:07.378+00:00",
+    "template": "Legs 2 — Deadlift Focus",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 30,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Deadlifts",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 30,
+        "reps": 6,
+        "duration": null,
+        "completed": false,
+        "notes": null
+      },
+      {
+        "exercise": "Piston Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-30",
+    "completedAt": "2026-03-30T17:04:30.614+00:00",
+    "template": "Conditioning",
+    "group": "Conditioning",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Crunches",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 100,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Obliques",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-03-31",
+    "completedAt": "2026-03-31T16:42:11.43+00:00",
+    "template": "Pull",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 65,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 65,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 65,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 120,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 120,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 120,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 65,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 65,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 65,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-03",
+    "completedAt": "2026-04-03T21:06:12.867+00:00",
+    "template": "Legs 1 — Squat Focus",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Piston Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 4,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 5,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-05",
+    "completedAt": "2026-04-05T18:50:39.888+00:00",
+    "template": "Push",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-15",
+    "completedAt": "2026-04-15T20:27:27.217+00:00",
+    "template": "Pull",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 65,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 65,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 65,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 120,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 120,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 120,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 65,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 65,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 65,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-16",
+    "completedAt": "2026-04-17T01:49:19.127+00:00",
+    "template": "Legs 1 — Squat Focus",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Piston Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 0,
+        "duration": null,
+        "completed": false,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 4,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 5,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-16",
+    "completedAt": "2026-04-17T01:50:23.191+00:00",
+    "template": "Conditioning",
+    "group": "Conditioning",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Cardio",
+        "trackingType": "duration",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 1,
+        "duration": 1800,
+        "completed": true,
+        "notes": "Bike"
+      },
+      {
+        "exercise": "Crunches",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 100,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Obliques",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Stretching",
+        "trackingType": "duration",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 1,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-17",
+    "completedAt": "2026-04-17T17:29:39.765+00:00",
+    "template": "Push",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 4,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 4,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": false,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 40,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 40,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 40,
+        "reps": 8,
+        "duration": null,
+        "completed": false,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-20",
+    "completedAt": "2026-04-20T21:00:42.155+00:00",
+    "template": "Pull",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 70,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 70,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bent Over Rows",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 70,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 35,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 7,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 70,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 70,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 70,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-21",
+    "completedAt": "2026-04-21T20:07:45.62+00:00",
+    "template": "Legs 2 — Deadlift Focus",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 30,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Deadlifts",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Deadlifts",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Deadlifts",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 30,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-22",
+    "completedAt": "2026-04-22T18:18:17.987+00:00",
+    "template": "Push",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 4,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 3,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 40,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-23",
+    "completedAt": "2026-04-23T18:20:51.58+00:00",
+    "template": "Pull",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 35,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 35,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 35,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 120,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 120,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 75,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 75,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 70,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-25",
+    "completedAt": "2026-04-25T22:06:17.374+00:00",
+    "template": "Legs 1 — Squat Focus",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 4,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 5,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-04-26",
+    "completedAt": "2026-04-26T21:24:27.319+00:00",
+    "template": "Push",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 3,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 3,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-05-01",
+    "completedAt": "2026-05-01T17:41:53.077+00:00",
+    "template": "Pull",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 30,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 30,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bicep Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 30,
+        "reps": 0,
+        "duration": null,
+        "completed": false,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 120,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 120,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Chin-ups",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 120,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 75,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 75,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Shrugs",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 75,
+        "reps": 12,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-05-04",
+    "completedAt": "2026-05-05T13:17:02.879+00:00",
+    "template": "Legs 2 — Deadlift Focus",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Back Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Nordic Curls",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-05-05",
+    "completedAt": "2026-05-05T14:05:31.841+00:00",
+    "template": "Push",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Bench Press",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 40,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Dips",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 2,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Front Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Overhead Press",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 25,
+        "reps": 6,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Side Delt Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 25,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tricep Extensions",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 40,
+        "reps": 10,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  },
+  {
+    "date": "2026-05-06",
+    "completedAt": "2026-05-06T17:04:43.952+00:00",
+    "template": "Legs 1 — Squat Focus",
+    "group": "Strength",
+    "notes": null,
+    "sets": [
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Calf Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 4,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Split Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 5,
+        "weight": null,
+        "reps": 5,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Squats",
+        "trackingType": "sets_reps",
+        "setNumber": 3,
+        "weight": 50,
+        "reps": 8,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 1,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      },
+      {
+        "exercise": "Tibial Raises",
+        "trackingType": "sets_reps",
+        "setNumber": 2,
+        "weight": 50,
+        "reps": 25,
+        "duration": null,
+        "completed": true,
+        "notes": null
+      }
+    ]
+  }
+]

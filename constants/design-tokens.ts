@@ -36,6 +36,15 @@ export const flax = '#e6c772';
 export const peach = '#f1d9cc';
 export const flaxLight = '#f3eccd';
 
+// Speed stick colors
+export const stickBlue = '#5e7eb8';
+
+export const stickColors = {
+  green: G7,         // #6db483
+  blue: '#5e7eb8',
+  red: clay,         // #cc6f4a
+} as const;
+
 // Topo contour stroke
 export const topoStroke = '#9eb59a';
 
@@ -99,6 +108,7 @@ export const radii = {
   cardM: 26,
   cardL: 28,
   cardXl: 30,
+  progressSeg: 4,
 } as const;
 
 // ── Shadows ──────────────────────────────────────────────────────────
