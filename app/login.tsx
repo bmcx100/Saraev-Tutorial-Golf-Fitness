@@ -90,6 +90,24 @@ export default function LoginScreen() {
     setLoading(false);
   };
 
+  const handleForgotPassword = async () => {
+    clearState();
+    if (!email.trim()) {
+      setError('Enter your email to reset your password');
+      return;
+    }
+    setLoading(true);
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo,
+    });
+    if (resetError) {
+      setError(resetError.message);
+    } else {
+      setMessage('Check your email for a password reset link');
+    }
+    setLoading(false);
+  };
+
   const handleSubmit = () => {
     if (mode === 'sign-in') handleSignIn();
     else if (mode === 'sign-up') handleSignUp();
@@ -172,6 +190,14 @@ export default function LoginScreen() {
                 secureTextEntry
                 textContentType={mode === 'sign-up' ? 'newPassword' : 'password'}
               />
+            )}
+
+            {mode === 'sign-in' && (
+              <Pressable onPress={handleForgotPassword} style={styles.forgotPassword}>
+                <Text style={[styles.linkText, { color: colors.tint }]}>
+                  Forgot Password?
+                </Text>
+              </Pressable>
             )}
 
             <Pressable
@@ -335,6 +361,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     marginTop: 4,
+  },
+  forgotPassword: {
+    alignSelf: 'flex-end',
+    marginTop: -8,
   },
   linkText: {
     fontSize: 15,

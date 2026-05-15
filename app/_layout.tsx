@@ -48,7 +48,7 @@ const GolfDarkTheme = {
   },
 };
 
-function useProtectedRoute(session: Session | null, isLoading: boolean) {
+function useProtectedRoute(session: Session | null, isLoading: boolean, isPasswordRecovery: boolean) {
   const segments = useSegments();
   const router = useRouter();
 
@@ -56,18 +56,22 @@ function useProtectedRoute(session: Session | null, isLoading: boolean) {
     if (isLoading) return;
 
     const inLogin = segments[0] === 'login';
-    if (!session && !inLogin) {
+    const inResetPassword = segments[0] === 'reset-password';
+
+    if (session && isPasswordRecovery && !inResetPassword) {
+      router.replace('/reset-password');
+    } else if (!session && !inLogin) {
       router.replace('/login');
-    } else if (session && inLogin) {
+    } else if (session && !isPasswordRecovery && (inLogin || inResetPassword)) {
       router.replace('/');
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps -- router is stable
-  }, [session, segments, isLoading]);
+  }, [session, segments, isLoading, isPasswordRecovery]);
 }
 
 function InnerNavigator() {
   const colorScheme = useColorScheme();
-  const { session, isLoading } = useAuth();
+  const { session, isLoading, isPasswordRecovery } = useAuth();
   const [fontsLoaded] = useFonts({
     Outfit_400Regular,
     Outfit_500Medium,
@@ -80,7 +84,7 @@ function InnerNavigator() {
     JetBrainsMono_800ExtraBold,
   });
 
-  useProtectedRoute(session, isLoading);
+  useProtectedRoute(session, isLoading, isPasswordRecovery);
 
   useEffect(() => {
     migrateIfNeeded();
@@ -93,6 +97,7 @@ function InnerNavigator() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="reset-password" options={{ headerShown: false }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen name="settings" options={{ headerShown: false, presentation: 'card' }} />
         <Stack.Screen name="speed" options={{ headerShown: false, presentation: 'card' }} />
