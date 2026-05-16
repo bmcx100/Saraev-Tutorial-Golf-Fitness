@@ -73,24 +73,14 @@ class LargeSecureStore {
   }
 }
 
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? '';
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '';
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
 
-// Lazy-init: avoid crashing during Expo static render (build-time SSR)
-let _supabase: ReturnType<typeof createClient<Database>> | null = null;
-
-export const supabase = new Proxy({} as ReturnType<typeof createClient<Database>>, {
-  get(_target, prop) {
-    if (!_supabase) {
-      _supabase = createClient<Database>(supabaseUrl || 'https://placeholder.supabase.co', supabaseAnonKey || 'placeholder', {
-        auth: {
-          storage: new LargeSecureStore(),
-          autoRefreshToken: true,
-          persistSession: true,
-          detectSessionInUrl: Platform.OS === 'web',
-        },
-      });
-    }
-    return (_supabase as any)[prop];
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    storage: new LargeSecureStore(),
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: Platform.OS === 'web',
   },
 });
