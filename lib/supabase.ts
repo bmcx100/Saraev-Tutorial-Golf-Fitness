@@ -78,20 +78,26 @@ const supabaseAnonKey = (process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '')
 
 // When credentials are missing (e.g. web builds without env vars), export a
 // deep no-op proxy so the app boots without crashing. Every property access
-// returns another proxy, and every function call resolves to { data: null, error: null }.
+// returns another proxy, and every function call resolves to a thenable result.
 function createNoopProxy(): any {
+  const noopResult = { data: { subscription: { unsubscribe() {} }, session: null, user: null }, error: null };
+  const thenable = { ...noopResult, then: (cb: any) => Promise.resolve(noopResult).then(cb) };
+
   const handler: ProxyHandler<any> = {
-    get(_target, _prop) {
-      // Return a callable proxy for chaining (e.g. supabase.auth.onAuthStateChange)
+    get(_target, prop) {
+      if (prop === 'then') return undefined; // Don't make the proxy itself thenable
       return new Proxy(() => {}, {
-        get: handler.get!,
+        get: (_t, p) => {
+          if (p === 'then') return (cb: any) => Promise.resolve(noopResult).then(cb);
+          return handler.get!(_t, p, _t);
+        },
         apply() {
-          return { data: { subscription: { unsubscribe() {} }, session: null }, error: null };
+          return thenable;
         },
       });
     },
     apply() {
-      return { data: null, error: null };
+      return thenable;
     },
   };
   return new Proxy(() => {}, handler);
