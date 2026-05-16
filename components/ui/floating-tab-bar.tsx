@@ -9,13 +9,13 @@ import Animated, {
 import { useEffect } from 'react';
 import * as Haptics from 'expo-haptics';
 import { forest, citron, FontFamily, shadows } from '@/constants/design-tokens';
-import { CheckCircleIcon, FlagIcon, BarsIcon } from '@/components/ui/design-icons';
+import { CheckCircleIcon, FlagIcon, ClockIcon } from '@/components/ui/design-icons';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
 const TABS = [
   { key: 'index', label: 'Today', Icon: CheckCircleIcon },
   { key: 'challenges', label: 'Challenges', Icon: FlagIcon },
-  { key: 'stats', label: 'Stats', Icon: BarsIcon },
+  { key: 'stats', label: 'History', Icon: ClockIcon },
 ] as const;
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -83,6 +83,7 @@ function TabItem({ label, Icon, isActive, onPress }: TabItemProps) {
     <AnimatedPressable
       style={[styles.tab, pillStyle]}
       onPress={onPress}
+      android_ripple={null}
     >
       <Icon
         size={18}
@@ -122,11 +123,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
+    gap: 5,
     paddingVertical: 10,
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     borderRadius: 24,
     minHeight: 44,
+    overflow: 'hidden',
   },
   tabLabel: {
     fontSize: 12,

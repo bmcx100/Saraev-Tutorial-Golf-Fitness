@@ -136,6 +136,22 @@ export function TrendIcon({ size = 24, color = '#1d4e34' }: IconProps) {
   );
 }
 
+export function ClockIcon({ size = 24, color = '#1d4e34' }: IconProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+      <Circle cx={12} cy={12} r={10} />
+      <Path
+        d="M12 6v6l4 2"
+        fill="none"
+        stroke="#fff"
+        strokeWidth={2.2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
+
 export function CheckIcon({ size = 24, color = '#1d4e34' }: IconProps) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
