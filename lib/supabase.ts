@@ -73,14 +73,39 @@ class LargeSecureStore {
   }
 }
 
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '';
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    storage: new LargeSecureStore(),
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: Platform.OS === 'web',
-  },
-});
+// When credentials are missing (e.g. web builds without env vars), export a
+// deep no-op proxy so the app boots without crashing. Every property access
+// returns another proxy, and every function call resolves to { data: null, error: null }.
+function createNoopProxy(): any {
+  const handler: ProxyHandler<any> = {
+    get(_target, _prop) {
+      // Return a callable proxy for chaining (e.g. supabase.auth.onAuthStateChange)
+      return new Proxy(() => {}, {
+        get: handler.get!,
+        apply() {
+          return { data: { subscription: { unsubscribe() {} }, session: null }, error: null };
+        },
+      });
+    },
+    apply() {
+      return { data: null, error: null };
+    },
+  };
+  return new Proxy(() => {}, handler);
+}
+
+export const supabaseAvailable = !!(supabaseUrl && supabaseAnonKey);
+
+export const supabase: ReturnType<typeof createClient<Database>> = supabaseAvailable
+  ? createClient<Database>(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        storage: new LargeSecureStore(),
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: Platform.OS === 'web',
+      },
+    })
+  : createNoopProxy();
