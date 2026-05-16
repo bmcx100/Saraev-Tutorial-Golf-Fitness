@@ -30,11 +30,13 @@ import {
 } from '@/constants/strength-protocols';
 import {
   ink,
+  forest,
   greenDeep,
   citron,
   paper,
   rule,
   FontFamily,
+  shadows,
 } from '@/constants/design-tokens';
 import { StrengthHero } from '@/components/strength/strength-hero';
 import { ExerciseCard, deriveTone } from '@/components/strength/exercise-card';
@@ -667,12 +669,13 @@ const modalStyles = StyleSheet.create({
     padding: 32,
   },
   card: {
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 24,
     width: '100%',
     maxWidth: 320,
     gap: 8,
-    backgroundColor: '#fff',
+    backgroundColor: paper,
+    ...shadows.formCard,
   },
   title: {
     fontFamily: FontFamily.outfitBold,
@@ -681,9 +684,9 @@ const modalStyles = StyleSheet.create({
     textAlign: 'center',
   },
   body: {
-    fontFamily: FontFamily.outfit,
+    fontFamily: FontFamily.outfitMedium,
     fontSize: 14,
-    color: '#687076',
+    color: '#6b756f',
     textAlign: 'center',
     marginBottom: 12,
   },
@@ -694,7 +697,8 @@ const modalStyles = StyleSheet.create({
   cancelBtn: {
     flex: 1,
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: 12,
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: rule,
     alignItems: 'center',
@@ -702,24 +706,24 @@ const modalStyles = StyleSheet.create({
   cancelBtnText: {
     fontFamily: FontFamily.outfitSemiBold,
     fontSize: 15,
-    color: ink,
+    color: forest,
   },
   destructBtn: {
     flex: 1,
     paddingVertical: 12,
-    borderRadius: 10,
-    backgroundColor: '#EF4444',
+    borderRadius: 12,
+    backgroundColor: citron,
     alignItems: 'center',
   },
   destructBtnText: {
     fontFamily: FontFamily.outfitSemiBold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: greenDeep,
   },
   submitPartialBtn: {
     flex: 1,
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: 12,
     backgroundColor: citron,
     alignItems: 'center',
   },
