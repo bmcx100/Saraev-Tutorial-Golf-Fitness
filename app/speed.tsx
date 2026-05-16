@@ -3,6 +3,7 @@ import { View, Text, Pressable, ScrollView, Modal, StyleSheet } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 import { useUser } from '@/contexts/user-context';
 import { useAuth } from '@/contexts/auth-context';
 import { useHabits } from '@/contexts/habit-context';
@@ -32,11 +33,13 @@ import {
   greenDeep,
   citron,
   rule,
+  stickColors,
   FontFamily,
 } from '@/constants/design-tokens';
 
 import { ForestHero } from '@/components/speed/forest-hero';
 import { SectionHeading } from '@/components/speed/section-heading';
+import { SpeedCell } from '@/components/speed/speed-cell';
 import { StickPillar } from '@/components/speed/stick-pillar';
 import { DriverPillar } from '@/components/speed/driver-pillar';
 import { Keypad } from '@/components/speed/keypad';
@@ -234,6 +237,7 @@ function SpeedWizard({ protocol }: { protocol: string }) {
   sessionRef.current = session;
   const [step, setStep] = useState(0);
   const [activeField, setActiveField] = useState<FieldId | null>(FIELDS_BY_STEP[0][0]);
+  const [activeStickIndex, setActiveStickIndex] = useState(0); // 0=green, 1=blue, 2=red
   const [errors, setErrors] = useState<Set<string>>(new Set());
   const [loaded, setLoaded] = useState(false);
   const [showDiscard, setShowDiscard] = useState(false);
@@ -290,11 +294,16 @@ function SpeedWizard({ protocol }: { protocol: string }) {
       if (shouldAdvance) {
         const idx = currentFields.indexOf(activeField);
         if (idx < currentFields.length - 1) {
-          setActiveField(currentFields[idx + 1]);
+          const nextIdx = idx + 1;
+          setActiveField(currentFields[nextIdx]);
+          // Update stick index when crossing stick boundary (steps 0 and 1 only)
+          if (step < 2) {
+            setActiveStickIndex(Math.floor(nextIdx / 2));
+          }
         }
       }
     },
-    [activeField, currentFields],
+    [activeField, currentFields, step],
   );
 
   const handleDelete = useCallback(() => {
@@ -315,10 +324,13 @@ function SpeedWizard({ protocol }: { protocol: string }) {
     }
     const idx = currentFields.indexOf(activeField);
     if (idx < currentFields.length - 1) {
-      setActiveField(currentFields[idx + 1]);
+      const nextIdx = idx + 1;
+      setActiveField(currentFields[nextIdx]);
+      if (step < 2) {
+        setActiveStickIndex(Math.floor(nextIdx / 2));
+      }
     }
-    // After last field in drill, NEXT does nothing
-  }, [activeField, currentFields]);
+  }, [activeField, currentFields, step]);
 
   const handleBack = useCallback(() => {
     if (hasAnyData(sessionRef.current)) {
@@ -331,6 +343,7 @@ function SpeedWizard({ protocol }: { protocol: string }) {
   const handleTabChange = useCallback((index: number) => {
     setStep(index);
     setActiveField(FIELDS_BY_STEP[index][0]);
+    setActiveStickIndex(0);
     setErrors(new Set());
   }, []);
 
@@ -422,43 +435,48 @@ function SpeedWizard({ protocol }: { protocol: string }) {
   }, [logHabit, today, user?.id, profile.soundEnabled]);
 
   // CTA helpers
-  const focusedValue = activeField ? getFieldValue(session, activeField) : null;
   const isMaxOut = step === 2;
 
   const handleCTAPress = useCallback(() => {
     if (isMaxOut) {
       handleSubmit();
     } else {
-      // Advance to next empty cell in current drill, or next tab
-      const filled = countFilledInStep(sessionRef.current, step);
-      if (filled >= DRILL_CONFIG[step].totalFields) {
-        // All filled in this drill — advance to next tab
-        const nextStep = step + 1;
-        setStep(nextStep);
-        setActiveField(FIELDS_BY_STEP[nextStep][0]);
-        setErrors(new Set());
+      // Check if both DOM and NON-DOM for current stick are filled
+      const drillKey = DRILL_STEPS[step].key as 'normalStance' | 'stepDrill';
+      const currentStick = STICK_COLORS[activeStickIndex];
+      const domId = `${drillKey}.${currentStick.key}.dom`;
+      const nonDomId = `${drillKey}.${currentStick.key}.nonDom`;
+      const domFilled = getFieldValue(sessionRef.current, domId) !== null;
+      const nonDomFilled = getFieldValue(sessionRef.current, nonDomId) !== null;
+
+      if (domFilled && nonDomFilled) {
+        // Both sides filled — advance to next stick or next drill step
+        if (activeStickIndex < 2) {
+          const nextStickIdx = activeStickIndex + 1;
+          setActiveStickIndex(nextStickIdx);
+          setActiveField(currentFields[nextStickIdx * 2]);
+        } else {
+          // All 3 sticks done — advance to next drill step
+          const nextStep = step + 1;
+          setStep(nextStep);
+          setActiveField(FIELDS_BY_STEP[nextStep][0]);
+          setActiveStickIndex(0);
+          setErrors(new Set());
+        }
       } else if (activeField) {
-        // Advance to next field
+        // Advance within current stick (dom → nonDom)
         const idx = currentFields.indexOf(activeField);
-        if (idx < currentFields.length - 1) {
+        const stickEndIdx = activeStickIndex * 2 + 1;
+        if (idx < stickEndIdx) {
           setActiveField(currentFields[idx + 1]);
         }
       }
     }
-  }, [isMaxOut, handleSubmit, step, activeField, currentFields]);
+  }, [isMaxOut, handleSubmit, step, activeField, currentFields, activeStickIndex]);
 
-  const ctaLabel = isMaxOut
-    ? `Submit ${focusedValue ?? ''} mph`
-    : `Log ${focusedValue ?? ''} mph`;
+  // CTA labels: "Next" with arrow during sticks, "Submit" with check on Max Out
+  const ctaLabel = isMaxOut ? 'Submit' : 'Next';
   const ctaGlyph = isMaxOut ? '\u2713' : '\u2192';
-
-  // Determine which stick is active (has the focused field)
-  function getActiveStick(): StickColor | null {
-    if (!activeField) return null;
-    const parts = activeField.split('.');
-    if (parts[0] === 'maxOut') return null;
-    return parts[1] as StickColor;
-  }
 
   const filledCount = countFilledInStep(session, step);
   const config = DRILL_CONFIG[step];
@@ -491,38 +509,96 @@ function SpeedWizard({ protocol }: { protocol: string }) {
         />
 
         {step < 2 ? (
-          // Normal Stance / Step Drill — 3 stick pillars
-          <View style={styles.pillarsRow}>
-            {STICK_COLORS.map((stick, i) => {
+          // Normal Stance / Step Drill — single wide card per stick
+          <>
+            {(() => {
+              const stick = STICK_COLORS[activeStickIndex];
               const drillKey = DRILL_STEPS[step].key as 'normalStance' | 'stepDrill';
               const domId = `${drillKey}.${stick.key}.dom`;
               const nonDomId = `${drillKey}.${stick.key}.nonDom`;
-              const isActive = getActiveStick() === stick.key;
+              const sc = stickColors[stick.key];
 
               return (
-                <StickPillar
-                  key={stick.key}
-                  stick={stick.key}
-                  active={isActive}
-                  domValue={getFieldValue(session, domId)}
-                  nonDomValue={getFieldValue(session, nonDomId)}
-                  focusedCell={
-                    activeField === domId
-                      ? 'dom'
-                      : activeField === nonDomId
-                        ? 'nonDom'
-                        : null
-                  }
-                  onCellPress={(cell) => {
-                    setActiveField(cell === 'dom' ? domId : nonDomId);
-                  }}
-                  animDelay={i * 60}
-                  domPR={fieldPRs[domId]}
-                  nonDomPR={fieldPRs[nonDomId]}
-                />
+                <Animated.View
+                  key={`${step}-${stick.key}`}
+                  entering={FadeInUp.duration(250).springify()}
+                  style={styles.wideCard}
+                >
+                  {/* Color accent band */}
+                  <View style={[styles.wideCardBand, { backgroundColor: sc }]}>
+                    <Text style={styles.wideCardBandText}>
+                      {stick.label.toUpperCase()} STICK
+                    </Text>
+                  </View>
+
+                  {/* DOM + NON-DOM side by side */}
+                  <View style={styles.wideCardCells}>
+                    <View style={styles.wideCardCellWrapper}>
+                      <SpeedCell
+                        label="DOM"
+                        value={getFieldValue(session, domId)}
+                        focused={activeField === domId}
+                        muted={false}
+                        accentColor={sc}
+                        variant="large"
+                        onPress={() => setActiveField(domId)}
+                        prValue={fieldPRs[domId]}
+                      />
+                    </View>
+                    <View style={styles.wideCardCellWrapper}>
+                      <SpeedCell
+                        label="NON-DOM"
+                        value={getFieldValue(session, nonDomId)}
+                        focused={activeField === nonDomId}
+                        muted={false}
+                        accentColor={sc}
+                        variant="large"
+                        onPress={() => setActiveField(nonDomId)}
+                        prValue={fieldPRs[nonDomId]}
+                      />
+                    </View>
+                  </View>
+                </Animated.View>
               );
-            })}
-          </View>
+            })()}
+
+            {/* Stick color breadcrumb */}
+            <View style={styles.breadcrumbRow}>
+              {STICK_COLORS.map((stick, i) => {
+                const sc = stickColors[stick.key];
+                const drillKey = DRILL_STEPS[step].key as 'normalStance' | 'stepDrill';
+                const domId = `${drillKey}.${stick.key}.dom`;
+                const nonDomId = `${drillKey}.${stick.key}.nonDom`;
+                const bothFilled =
+                  getFieldValue(session, domId) !== null &&
+                  getFieldValue(session, nonDomId) !== null;
+                const isActive = i === activeStickIndex;
+                const isCompleted = i < activeStickIndex || bothFilled;
+
+                return (
+                  <Pressable
+                    key={stick.key}
+                    onPress={() => {
+                      setActiveStickIndex(i);
+                      setActiveField(currentFields[i * 2]);
+                    }}
+                    style={[
+                      styles.breadcrumbDot,
+                      isActive && styles.breadcrumbDotActive,
+                      {
+                        backgroundColor: isActive || isCompleted ? sc : 'transparent',
+                        borderColor: sc,
+                      },
+                    ]}
+                  >
+                    {isCompleted && !isActive && (
+                      <Text style={styles.breadcrumbCheck}>{'\u2713'}</Text>
+                    )}
+                  </Pressable>
+                );
+              })}
+            </View>
+          </>
         ) : (
           // Max Out — green stick + driver
           <View style={styles.pillarsRowMaxOut}>
@@ -775,16 +851,72 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#6b756f',
   },
-  // Wizard pillars
-  pillarsRow: {
-    padding: 8,
-    paddingHorizontal: 14,
-    paddingBottom: 18,
-    flex: 1,
-    flexDirection: 'row',
-    gap: 10,
-    alignItems: 'stretch',
+  // Wide single-stick card
+  wideCard: {
+    marginHorizontal: 16,
+    marginBottom: 12,
+    borderRadius: 18,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: rule,
+    overflow: 'hidden',
+    shadowColor: '#11371f',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.10,
+    shadowRadius: 22,
+    elevation: 4,
   },
+  wideCardBand: {
+    paddingVertical: 8,
+    alignItems: 'center',
+  },
+  wideCardBandText: {
+    fontFamily: FontFamily.outfitExtraBold,
+    fontSize: 12,
+    color: '#fff',
+    letterSpacing: 12 * 0.18,
+    textShadowColor: 'rgba(0,0,0,0.15)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 0,
+  },
+  wideCardCells: {
+    flexDirection: 'row',
+    padding: 16,
+    gap: 16,
+    justifyContent: 'center',
+  },
+  wideCardCellWrapper: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  // Stick breadcrumb
+  breadcrumbRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 12,
+    paddingBottom: 16,
+  },
+  breadcrumbDot: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  breadcrumbDotActive: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 2.5,
+  },
+  breadcrumbCheck: {
+    fontSize: 12,
+    color: '#fff',
+    fontWeight: '700',
+  },
+  // Max Out pillars
   pillarsRowMaxOut: {
     padding: 8,
     paddingHorizontal: 16,
