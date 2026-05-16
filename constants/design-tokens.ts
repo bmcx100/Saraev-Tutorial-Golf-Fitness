@@ -30,11 +30,33 @@ export const sage = G9;
 export const sageLight = '#dde9d4';
 export const citron = Y5;
 
+// Muted text (mono eyebrows, secondary labels)
+export const muted = '#6b756f';
+// Subtitle text
+export const subtitleText = '#5d6e64';
+// Disabled state
+export const disabledBg = '#e6e1d3';
+export const disabledFg = '#a4a39a';
+
 // Accents
 export const clay = '#cc6f4a';
 export const flax = '#e6c772';
 export const peach = '#f1d9cc';
 export const flaxLight = '#f3eccd';
+export const orange = '#ff8d52';
+
+// Category tile foreground colors
+export const slate = '#3a6688';
+export const plum = '#6b4288';
+export const amber = '#a37a1f';
+
+// Tile background colors
+export const blueTile = '#dbe6f0';
+export const plumTile = '#e7d8f0';
+
+// Get Strong card gradient
+export const brownDark = '#3a221a';
+export const brownDeep = '#22120c';
 
 // Speed stick colors
 export const stickBlue = '#5e7eb8';

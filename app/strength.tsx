@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { View, Text, TextInput, Pressable, ScrollView, Modal, StyleSheet } from 'react-native';
+import { View, Text, Pressable, ScrollView, Modal, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useUser } from '@/contexts/user-context';
 import { useAuth } from '@/contexts/auth-context';
 import { useHabits } from '@/contexts/habit-context';
@@ -25,11 +24,21 @@ import {
   WORKOUT_ROTATION,
   SETS_PER_EXERCISE,
   type WorkoutDay,
-  type ExerciseDef,
   type ExerciseLog,
   type ExerciseSet,
   type StrengthSession,
 } from '@/constants/strength-protocols';
+import {
+  ink,
+  greenDeep,
+  citron,
+  paper,
+  rule,
+  FontFamily,
+} from '@/constants/design-tokens';
+import { StrengthHero } from '@/components/strength/strength-hero';
+import { ExerciseCard, deriveTone } from '@/components/strength/exercise-card';
+import { AdjustSheet, type AdjustField, type AdjustScope } from '@/components/strength/adjust-sheet';
 
 // ── Types ─────────────────────────────────────────────────────
 
@@ -62,12 +71,16 @@ function buildExerciseLogs(
   });
 }
 
-function allSetsCompleted(exercises: ExerciseLog[]): boolean {
-  return exercises.every((ex) => ex.sets.every((s) => s.completed));
-}
-
 function anySetsCompleted(exercises: ExerciseLog[]): boolean {
   return exercises.some((ex) => ex.sets.some((s) => s.completed));
+}
+
+function countCompletedSets(exercises: ExerciseLog[]): number {
+  return exercises.reduce((sum, ex) => sum + ex.sets.filter((s) => s.completed).length, 0);
+}
+
+function countTotalSets(exercises: ExerciseLog[]): number {
+  return exercises.reduce((sum, ex) => sum + ex.sets.length, 0);
 }
 
 // ── Protocol Picker ───────────────────────────────────────────
@@ -76,30 +89,30 @@ function ProtocolPicker({ onSelect }: { onSelect: (p: 'lplp') => void }) {
   const colors = useColors();
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={styles.topBar}>
+    <SafeAreaView style={[pickerStyles.container, { backgroundColor: colors.background }]}>
+      <View style={pickerStyles.topBar}>
         <Pressable onPress={() => router.replace('/(tabs)')} hitSlop={12}>
           <MaterialIcons name="arrow-back" size={24} color={colors.text} />
         </Pressable>
-        <Text style={[styles.topTitle, { color: colors.text }]}>Strength Training</Text>
+        <Text style={[pickerStyles.topTitle, { color: colors.text }]}>Strength Training</Text>
         <View style={{ width: 24 }} />
       </View>
 
-      <View style={styles.pickerContent}>
-        <Text style={[styles.pickerTitle, { color: colors.text }]}>
+      <View style={pickerStyles.content}>
+        <Text style={[pickerStyles.title, { color: colors.text }]}>
           Choose Your Protocol
         </Text>
 
         <Pressable
           onPress={() => onSelect('lplp')}
-          style={[styles.protocolCard, { backgroundColor: colors.surface, borderColor: colors.accent }]}
+          style={[pickerStyles.card, { backgroundColor: colors.surface, borderColor: colors.accent }]}
         >
           <MaterialIcons name="fitness-center" size={28} color={colors.accent} />
-          <View style={styles.protocolCardText}>
-            <Text style={[styles.protocolName, { color: colors.text }]}>
+          <View style={pickerStyles.cardText}>
+            <Text style={[pickerStyles.cardName, { color: colors.text }]}>
               Legs / Pull / Legs / Push
             </Text>
-            <Text style={[styles.protocolDesc, { color: colors.textSecondary }]}>
+            <Text style={[pickerStyles.cardDesc, { color: colors.textSecondary }]}>
               4-day rotation, progressive overload
             </Text>
           </View>
@@ -108,21 +121,21 @@ function ProtocolPicker({ onSelect }: { onSelect: (p: 'lplp') => void }) {
 
         <View
           style={[
-            styles.protocolCard,
+            pickerStyles.card,
             { backgroundColor: colors.surface, borderColor: colors.border, opacity: 0.5 },
           ]}
         >
           <MaterialIcons name="fitness-center" size={28} color={colors.textSecondary} />
-          <View style={styles.protocolCardText}>
-            <Text style={[styles.protocolName, { color: colors.text }]}>
+          <View style={pickerStyles.cardText}>
+            <Text style={[pickerStyles.cardName, { color: colors.text }]}>
               BMC&apos;s Super Heavy Lifting{'\u00A0'}Thingy
             </Text>
-            <Text style={[styles.protocolDesc, { color: colors.textSecondary }]}>
+            <Text style={[pickerStyles.cardDesc, { color: colors.textSecondary }]}>
               Alternative protocol
             </Text>
           </View>
-          <View style={[styles.badge, { backgroundColor: colors.border }]}>
-            <Text style={[styles.badgeText, { color: colors.textSecondary }]}>Coming Soon</Text>
+          <View style={[pickerStyles.badge, { backgroundColor: colors.border }]}>
+            <Text style={[pickerStyles.badgeText, { color: colors.textSecondary }]}>Coming Soon</Text>
           </View>
         </View>
       </View>
@@ -130,189 +143,108 @@ function ProtocolPicker({ onSelect }: { onSelect: (p: 'lplp') => void }) {
   );
 }
 
-// ── Exercise Card ────────────────────────────────────────────
+const pickerStyles = StyleSheet.create({
+  container: { flex: 1 },
+  topBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+  },
+  topTitle: { fontSize: 17, fontWeight: '700' },
+  content: { padding: 20, gap: 16 },
+  title: { fontSize: 24, fontWeight: '800', marginBottom: 8 },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 14,
+    borderWidth: 1,
+    gap: 12,
+  },
+  cardText: { flex: 1, gap: 2 },
+  cardName: { fontSize: 16, fontWeight: '700' },
+  cardDesc: { fontSize: 13 },
+  badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
+  badgeText: { fontSize: 11, fontWeight: '700' },
+});
 
-const COLLAPSED_HEIGHT = 52;
+// ── Submit CTA ────────────────────────────────────────────────
 
-function ExerciseCard({
-  exDef,
-  exLog,
-  onFieldChange,
-  onToggleSet,
+function SubmitCTA({
+  setsDone,
+  setsTotal,
+  onPress,
 }: {
-  exDef: ExerciseDef;
-  exLog: ExerciseLog | undefined;
-  onFieldChange: (exId: string, setIdx: number, field: 'weight' | 'reps', value: number | null) => void;
-  onToggleSet: (exId: string, setIdx: number) => void;
+  setsDone: number;
+  setsTotal: number;
+  onPress: () => void;
 }) {
-  const colors = useColors();
-  const [expanded, setExpanded] = useState(false);
-  const expandedHeight = useSharedValue(0);
-  const heightAnim = useSharedValue(COLLAPSED_HEIGHT);
-  const crossfade = useSharedValue(0);
-
-  const toggle = () => {
-    const next = !expanded;
-    setExpanded(next);
-    if (expandedHeight.value > 0) {
-      heightAnim.value = withTiming(next ? expandedHeight.value : COLLAPSED_HEIGHT, {
-        duration: 300,
-      });
-    }
-    crossfade.value = withTiming(next ? 1 : 0, { duration: 300 });
-  };
-
-  const handleCheckNext = () => {
-    if (!exLog) return;
-    const nextIdx = exLog.sets.findIndex((s) => !s.completed);
-    if (nextIdx !== -1) onToggleSet(exDef.id, nextIdx);
-  };
-
-  const outerStyle = useAnimatedStyle(() => ({
-    height: heightAnim.value,
-  }));
-
-  const collapsedOpacity = useAnimatedStyle(() => ({
-    opacity: 1 - crossfade.value,
-  }));
-
-  const expandedOpacity = useAnimatedStyle(() => ({
-    opacity: crossfade.value,
-  }));
+  const isComplete = setsDone === setsTotal;
 
   return (
-    <Animated.View style={[styles.exerciseCard, { borderColor: colors.border }, outerStyle]}>
-      {/* Expanded content — always rendered for height measurement */}
-      <Animated.View
-        style={expandedOpacity}
-        onLayout={(e) => {
-          const h = e.nativeEvent.layout.height;
-          if (h > 0) expandedHeight.value = h;
-        }}
-        pointerEvents={expanded ? 'auto' : 'none'}
+    <View style={submitStyles.bar}>
+      <Pressable
+        onPress={onPress}
+        style={[submitStyles.btn, isComplete ? submitStyles.btnComplete : submitStyles.btnIncomplete]}
       >
-        <Pressable onPress={toggle} style={styles.expandedHeader}>
-          <Text style={[styles.exerciseName, { color: colors.text, marginBottom: 0 }]}>
-            {exDef.name}
-          </Text>
-          <MaterialIcons name="expand-less" size={24} color={colors.textSecondary} />
-        </Pressable>
-
-        <View style={{ paddingHorizontal: 8, paddingBottom: 8 }}>
-          <View style={styles.setHeaderRow}>
-            <Text style={[styles.setHeaderLabel, { color: colors.textSecondary, width: 32, textAlign: 'center' }]}>
-              Set
-            </Text>
-            <View style={styles.setColumnGroup}>
-              <Text style={[styles.setHeaderLabel, { color: colors.textSecondary }]}>
-                Weight
-              </Text>
-            </View>
-            <View style={styles.setColumnGroup}>
-              <Text style={[styles.setHeaderLabel, { color: colors.textSecondary }]}>
-                Reps
-              </Text>
-            </View>
-            <View style={{ width: 28 }} />
-          </View>
-
-          {exLog?.sets.map((set, si) => (
-            <View key={si} style={[styles.setRow, { borderColor: colors.border }]}>
-              <Text style={[styles.setNumber, { color: colors.textSecondary }]}>{si + 1}</Text>
-              <View style={styles.setColumnGroup}>
-                <View
-                  style={[
-                    styles.inputField,
-                    { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1 },
-                  ]}
-                >
-                  <TextInput
-                    style={[styles.textInput, { color: colors.text }]}
-                    value={set.weight !== null ? String(set.weight) : ''}
-                    onChangeText={(text) => {
-                      const num = text === '' ? null : parseInt(text, 10);
-                      if (text !== '' && isNaN(num!)) return;
-                      onFieldChange(exDef.id, si, 'weight', num);
-                    }}
-                    keyboardType="number-pad"
-                    placeholder="--"
-                    placeholderTextColor={colors.textSecondary}
-                    selectTextOnFocus
-                  />
-                </View>
-                <Text style={[styles.inputUnit, { color: colors.textSecondary }]}>lbs</Text>
-              </View>
-              <View style={styles.setColumnGroup}>
-                <View
-                  style={[
-                    styles.inputField,
-                    { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1 },
-                  ]}
-                >
-                  <TextInput
-                    style={[styles.textInput, { color: colors.text }]}
-                    value={String(set.reps)}
-                    onChangeText={(text) => {
-                      const num = text === '' ? 0 : parseInt(text, 10);
-                      if (isNaN(num)) return;
-                      onFieldChange(exDef.id, si, 'reps', num);
-                    }}
-                    keyboardType="number-pad"
-                    selectTextOnFocus
-                  />
-                </View>
-                <Text style={[styles.inputUnit, { color: colors.textSecondary }]}>reps</Text>
-              </View>
-              <Pressable onPress={() => onToggleSet(exDef.id, si)} hitSlop={8}>
-                <MaterialIcons
-                  name={set.completed ? 'check-circle' : 'radio-button-unchecked'}
-                  size={28}
-                  color={set.completed ? colors.accent : colors.border}
-                />
-              </Pressable>
-            </View>
-          ))}
-        </View>
-      </Animated.View>
-
-      {/* Collapsed overlay */}
-      <Animated.View
-        style={[{ position: 'absolute', top: 0, left: 0, right: 0 }, collapsedOpacity]}
-        pointerEvents={expanded ? 'none' : 'auto'}
-      >
-        <Pressable onPress={handleCheckNext} style={styles.collapsedRow}>
-          <Text
-            style={[styles.exerciseName, { color: colors.text, marginBottom: 0, flex: 1 }]}
-            numberOfLines={1}
-          >
-            {exDef.name}
-          </Text>
-          <Pressable onPress={toggle} hitSlop={8}>
-            <Text style={[styles.collapsedStats, { color: colors.textSecondary }]}>
-              {exLog?.sets[0]?.weight ?? '--'} lbs{' · '}
-              {exLog?.sets[0]?.reps ?? '--'} reps
-            </Text>
-          </Pressable>
-          <View style={styles.collapsedCheckboxRow}>
-            {exLog?.sets.map((set, si) => (
-              <MaterialIcons
-                key={si}
-                name={set.completed ? 'check-circle' : 'radio-button-unchecked'}
-                size={22}
-                color={set.completed ? colors.accent : colors.border}
-              />
-            ))}
-          </View>
-        </Pressable>
-      </Animated.View>
-    </Animated.View>
+        <Text style={[submitStyles.label, { color: isComplete ? greenDeep : 'rgba(17,55,31,0.5)' }]}>
+          Submit Workout
+        </Text>
+        <Text style={[submitStyles.progress, { color: isComplete ? greenDeep : 'rgba(17,55,31,0.5)' }]}>
+          {setsDone} / {setsTotal} SETS
+        </Text>
+      </Pressable>
+    </View>
   );
 }
+
+const submitStyles = StyleSheet.create({
+  bar: {
+    paddingTop: 12,
+    paddingHorizontal: 18,
+    paddingBottom: 22,
+    borderTopWidth: 1,
+    borderTopColor: rule,
+    backgroundColor: '#fff',
+  },
+  btn: {
+    width: '100%',
+    borderRadius: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  btnIncomplete: {
+    backgroundColor: 'rgba(207,222,80,0.35)',
+  },
+  btnComplete: {
+    backgroundColor: citron,
+    shadowColor: citron,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.32,
+    shadowRadius: 22,
+    elevation: 6,
+  },
+  label: {
+    fontFamily: FontFamily.outfitExtraBold,
+    fontSize: 15,
+    letterSpacing: -0.005 * 15,
+  },
+  progress: {
+    fontFamily: FontFamily.monoBold,
+    fontSize: 13,
+    letterSpacing: 0.06 * 13,
+    fontVariant: ['tabular-nums'],
+  },
+});
 
 // ── Workout Tracker ───────────────────────────────────────────
 
 function WorkoutTracker() {
-  const colors = useColors();
   const { logHabit } = useHabits();
   const { user } = useAuth();
   const today = formatDate(new Date());
@@ -324,7 +256,19 @@ function WorkoutTracker() {
   const [defaults, setDefaults] = useState<ExerciseDefaults>({});
   const [loaded, setLoaded] = useState(false);
   const [showDiscard, setShowDiscard] = useState(false);
+  const [showPartialSubmit, setShowPartialSubmit] = useState(false);
   const [existingSession, setExistingSession] = useState<StrengthSession | null>(null);
+
+  // Adjust sheet state
+  const [adjustVisible, setAdjustVisible] = useState(false);
+  const [adjustExId, setAdjustExId] = useState('');
+  const [adjustField, setAdjustField] = useState<AdjustField>('weight');
+  const [adjustValue, setAdjustValue] = useState(0);
+
+  // Pending day change (when there's unsaved progress)
+  const [pendingDay, setPendingDay] = useState<WorkoutDay | null>(null);
+
+  const scrollRef = useRef<ScrollView>(null);
 
   // Load initial state
   useEffect(() => {
@@ -338,12 +282,10 @@ function WorkoutTracker() {
       setDefaults(defs);
 
       if (todaySession) {
-        // Re-entry: load existing session
         setSelectedDay(todaySession.workoutDay);
         setExercises(todaySession.exercises);
         setExistingSession(todaySession);
       } else {
-        // New session: determine recommended day
         const nextDay = getNextWorkoutDay(lastDay);
         setSelectedDay(nextDay);
         setExercises(buildExerciseLogs(nextDay, defs));
@@ -356,269 +298,330 @@ function WorkoutTracker() {
   // Switch workout day
   const handleDayChange = useCallback(
     (day: WorkoutDay) => {
+      if (day === selectedDay) return;
+      if (anySetsCompleted(exercisesRef.current) && !existingSession) {
+        setPendingDay(day);
+        setShowDiscard(true);
+        return;
+      }
       setSelectedDay(day);
       setExercises(buildExerciseLogs(day, defaults));
       setExistingSession(null);
     },
-    [defaults],
+    [defaults, selectedDay, existingSession],
   );
 
-  // Update a single field in an exercise set
-  const setFieldValue = useCallback(
-    (exId: string, setIdx: number, field: 'weight' | 'reps', value: number | null) => {
+  // Confirm discard and switch
+  const confirmDiscard = useCallback(() => {
+    setShowDiscard(false);
+    if (pendingDay) {
+      setSelectedDay(pendingDay);
+      setExercises(buildExerciseLogs(pendingDay, defaults));
+      setExistingSession(null);
+      setPendingDay(null);
+    } else {
+      router.replace('/(tabs)');
+    }
+  }, [pendingDay, defaults]);
+
+  // Log next set for an exercise (optimistic)
+  const handleLogSet = useCallback((exId: string) => {
+    setExercises((prev) =>
+      prev.map((ex) => {
+        if (ex.exerciseId !== exId) return ex;
+        const nextIdx = ex.sets.findIndex((s) => !s.completed);
+        if (nextIdx === -1) return ex;
+        return {
+          ...ex,
+          sets: ex.sets.map((s, i) =>
+            i === nextIdx ? { ...s, completed: true } : s,
+          ),
+        };
+      }),
+    );
+  }, []);
+
+  // Open adjust sheet
+  const handleOpenAdjust = useCallback(
+    (exId: string, field: AdjustField) => {
+      const ex = exercisesRef.current.find((e) => e.exerciseId === exId);
+      if (!ex) return;
+      const nextSet = ex.sets.find((s) => !s.completed) ?? ex.sets[0];
+      setAdjustExId(exId);
+      setAdjustField(field);
+      setAdjustValue(field === 'weight' ? (nextSet.weight ?? 0) : nextSet.reps);
+      setAdjustVisible(true);
+    },
+    [],
+  );
+
+  // Apply adjust
+  const handleApplyAdjust = useCallback(
+    (value: number, scope: AdjustScope) => {
+      setAdjustVisible(false);
       setExercises((prev) =>
         prev.map((ex) => {
-          if (ex.exerciseId !== exId) return ex;
+          if (ex.exerciseId !== adjustExId) return ex;
           return {
             ...ex,
             sets: ex.sets.map((s, i) => {
-              if (i !== setIdx) return s;
-              return field === 'weight' ? { ...s, weight: value } : { ...s, reps: value ?? 0 };
+              const shouldUpdate =
+                scope === 'all' ||
+                (scope === 'remaining' && !s.completed) ||
+                (scope === 'this' && i === ex.sets.findIndex((ss) => !ss.completed));
+              if (!shouldUpdate) return s;
+              return adjustField === 'weight'
+                ? { ...s, weight: value }
+                : { ...s, reps: value };
             }),
           };
         }),
       );
     },
-    [],
-  );
-
-  const toggleSetCompleted = useCallback(
-    (exId: string, setIdx: number) => {
-      setExercises((prev) =>
-        prev.map((ex) => {
-          if (ex.exerciseId !== exId) return ex;
-          return {
-            ...ex,
-            sets: ex.sets.map((s, i) => {
-              if (i !== setIdx) return s;
-              return { ...s, completed: !s.completed };
-            }),
-          };
-        }),
-      );
-    },
-    [],
+    [adjustExId, adjustField],
   );
 
   // Back / discard
   const handleBack = useCallback(() => {
     if (anySetsCompleted(exercisesRef.current) && !existingSession) {
+      setPendingDay(null);
       setShowDiscard(true);
     } else {
       router.replace('/(tabs)');
     }
   }, [existingSession]);
 
-  // Submit
-  const handleSubmit = useCallback(async () => {
-    const current = exercisesRef.current;
-    if (!allSetsCompleted(current)) return;
+  // Submit implementation
+  const doSubmit = useCallback(
+    async (current: ExerciseLog[]) => {
+      const session: StrengthSession = {
+        date: today,
+        protocol: 'lplp',
+        workoutDay: selectedDay,
+        exercises: current,
+        completedAt: new Date().toISOString(),
+      };
 
-    const session: StrengthSession = {
-      date: today,
-      protocol: 'lplp',
-      workoutDay: selectedDay,
-      exercises: current,
-      completedAt: new Date().toISOString(),
-    };
+      const newDefaults = { ...defaults };
+      for (const ex of current) {
+        newDefaults[ex.exerciseId] = ex.sets.map((s) => ({
+          weight: s.weight,
+          reps: s.reps,
+        }));
+      }
 
-    // Build updated defaults
-    const newDefaults = { ...defaults };
-    for (const ex of current) {
-      newDefaults[ex.exerciseId] = ex.sets.map((s) => ({
-        weight: s.weight,
-        reps: s.reps,
-      }));
-    }
+      await Promise.all([
+        saveStrengthSession(session, user?.id),
+        saveLastStrengthWorkoutDay(selectedDay, user?.id),
+        saveExerciseDefaults(newDefaults, user?.id),
+      ]);
 
-    await Promise.all([
-      saveStrengthSession(session, user?.id),
-      saveLastStrengthWorkoutDay(selectedDay, user?.id),
-      saveExerciseDefaults(newDefaults, user?.id),
-    ]);
+      // Update strength aggregate stats
+      const stats: StrengthStats = (await loadStrengthStats()) ?? {
+        exercisePRs: {},
+        streak: { days: 0, lastSessionDate: '' },
+        bestStreak: 0,
+        lastPR: null,
+      };
 
-    // Update strength aggregate stats
-    const stats: StrengthStats = (await loadStrengthStats()) ?? {
-      exercisePRs: {},
-      streak: { days: 0, lastSessionDate: '' },
-      bestStreak: 0,
-      lastPR: null,
-    };
-
-    // Streak calculation
-    if (stats.streak.lastSessionDate) {
-      const lastDate = new Date(stats.streak.lastSessionDate + 'T00:00:00');
-      const thisDate = new Date(today + 'T00:00:00');
-      const gap = Math.round((thisDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
-      if (gap === 0) {
-        // same day re-submit, no change
-      } else if (gap <= 2) {
-        stats.streak.days += gap;
+      if (stats.streak.lastSessionDate) {
+        const lastDate = new Date(stats.streak.lastSessionDate + 'T00:00:00');
+        const thisDate = new Date(today + 'T00:00:00');
+        const gap = Math.round(
+          (thisDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24),
+        );
+        if (gap === 0) {
+          // same day re-submit
+        } else if (gap <= 2) {
+          stats.streak.days += gap;
+        } else {
+          stats.streak.days = 1;
+        }
       } else {
         stats.streak.days = 1;
       }
-    } else {
-      stats.streak.days = 1;
-    }
-    stats.streak.lastSessionDate = today;
-    if (stats.streak.days > stats.bestStreak) {
-      stats.bestStreak = stats.streak.days;
-    }
+      stats.streak.lastSessionDate = today;
+      if (stats.streak.days > stats.bestStreak) {
+        stats.bestStreak = stats.streak.days;
+      }
 
-    // Exercise PRs
-    const dayDef = WORKOUT_DAYS.find((d) => d.key === selectedDay)!;
-    for (const exLog of current) {
-      let maxWeight = 0;
-      let maxReps = 0;
-      for (const set of exLog.sets) {
-        if (set.completed && set.weight != null && set.weight > maxWeight) {
-          maxWeight = set.weight;
-          maxReps = set.reps;
+      const dayDef = WORKOUT_DAYS.find((d) => d.key === selectedDay)!;
+      for (const exLog of current) {
+        let maxWeight = 0;
+        let maxReps = 0;
+        for (const set of exLog.sets) {
+          if (set.completed && set.weight != null && set.weight > maxWeight) {
+            maxWeight = set.weight;
+            maxReps = set.reps;
+          }
+        }
+        if (maxWeight > 0) {
+          const existing = stats.exercisePRs[exLog.exerciseId];
+          if (!existing || maxWeight > existing.weight) {
+            stats.exercisePRs[exLog.exerciseId] = {
+              weight: maxWeight,
+              reps: maxReps,
+              date: today,
+            };
+            const exDef = dayDef.exercises.find((e) => e.id === exLog.exerciseId);
+            stats.lastPR = {
+              exerciseId: exLog.exerciseId,
+              exerciseName: exDef?.name ?? exLog.exerciseId,
+              weight: maxWeight,
+              date: today,
+            };
+          }
         }
       }
-      if (maxWeight > 0) {
-        const existing = stats.exercisePRs[exLog.exerciseId];
-        if (!existing || maxWeight > existing.weight) {
-          stats.exercisePRs[exLog.exerciseId] = {
-            weight: maxWeight,
-            reps: maxReps,
-            date: today,
-          };
-          const exDef = dayDef.exercises.find((e) => e.id === exLog.exerciseId);
-          stats.lastPR = {
-            exerciseId: exLog.exerciseId,
-            exerciseName: exDef?.name ?? exLog.exerciseId,
-            weight: maxWeight,
-            date: today,
-          };
-        }
-      }
-    }
-    await saveStrengthStats(stats, user?.id);
+      await saveStrengthStats(stats, user?.id);
 
-    logHabit('gym');
-    router.replace('/(tabs)');
-  }, [today, selectedDay, defaults, logHabit, user?.id]);
+      logHabit('gym');
+      router.replace('/(tabs)');
+    },
+    [today, selectedDay, defaults, logHabit, user?.id],
+  );
+
+  // Submit handler (shows partial confirmation if incomplete)
+  const handleSubmit = useCallback(async () => {
+    const current = exercisesRef.current;
+    const done = countCompletedSets(current);
+    const total = countTotalSets(current);
+
+    if (done < total) {
+      setShowPartialSubmit(true);
+      return;
+    }
+
+    await doSubmit(current);
+  }, [doSubmit]);
 
   const dayDef = WORKOUT_DAYS.find((d) => d.key === selectedDay)!;
-  const canSubmit = allSetsCompleted(exercises);
+  const setsDone = countCompletedSets(exercises);
+  const setsTotal = countTotalSets(exercises);
+
+  // Build exercise summary for tone derivation
+  const exerciseSummary = exercises.map((ex) => ({
+    done: ex.sets.filter((s) => s.completed).length,
+    total: ex.sets.length,
+  }));
 
   if (!loaded) return null;
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* Header */}
-      <View style={styles.topBar}>
-        <Pressable onPress={handleBack} hitSlop={12}>
-          <MaterialIcons name="arrow-back" size={24} color={colors.text} />
-        </Pressable>
-        <Text style={[styles.topTitle, { color: colors.text }]}>Strength Training</Text>
-        <View style={{ width: 24 }} />
-      </View>
-
-      {/* Day selector chips */}
-      <View style={styles.daySelector}>
-        {WORKOUT_DAYS.map((day) => {
-          const isSelected = day.key === selectedDay;
-          return (
-            <Pressable
-              key={day.key}
-              onPress={() => handleDayChange(day.key)}
-              style={[
-                styles.dayChip,
-                {
-                  backgroundColor: isSelected ? colors.accent : 'transparent',
-                  borderColor: isSelected ? colors.accent : colors.border,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.dayChipText,
-                  { color: isSelected ? '#FFFFFF' : colors.textSecondary },
-                ]}
-              >
-                {day.label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
-
-      {/* Day subtitle */}
-      <Text style={[styles.daySubtitle, { color: colors.textSecondary }]}>
-        {dayDef.subtitle}
-      </Text>
+    <View style={styles.container}>
+      {/* Hero */}
+      <StrengthHero
+        selectedDay={selectedDay}
+        onDayChange={handleDayChange}
+        muscle={dayDef.subtitle}
+        exerciseCount={dayDef.exercises.length}
+        setsDone={setsDone}
+        setsTotal={setsTotal}
+        onBack={handleBack}
+      />
 
       {/* Exercise list */}
       <ScrollView
+        ref={scrollRef}
         contentContainerStyle={styles.exerciseList}
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
       >
-        {dayDef.exercises.map((exDef) => {
+        {dayDef.exercises.map((exDef, idx) => {
           const exLog = exercises.find((e) => e.exerciseId === exDef.id);
+          if (!exLog) return null;
+          const done = exLog.sets.filter((s) => s.completed).length;
+          const total = exLog.sets.length;
+          const tone = deriveTone(exerciseSummary, idx);
+          const nextSet = exLog.sets.find((s) => !s.completed) ?? exLog.sets[0];
+
           return (
             <ExerciseCard
               key={exDef.id}
-              exDef={exDef}
-              exLog={exLog}
-              onFieldChange={setFieldValue}
-              onToggleSet={toggleSetCompleted}
+              name={exDef.name}
+              weight={nextSet.weight}
+              reps={nextSet.reps}
+              done={done}
+              total={total}
+              tone={tone}
+              onLogSet={() => handleLogSet(exDef.id)}
+              onEditWeight={() => handleOpenAdjust(exDef.id, 'weight')}
+              onEditReps={() => handleOpenAdjust(exDef.id, 'reps')}
             />
           );
         })}
       </ScrollView>
 
-      {/* Submit button */}
-      <View style={[styles.bottomBar, { borderTopColor: colors.border }]}>
-        <Pressable
-          onPress={handleSubmit}
-          disabled={!canSubmit}
-          style={[
-            styles.submitButton,
-            {
-              backgroundColor: canSubmit ? colors.accent : colors.border,
-            },
-          ]}
-        >
-          <Text style={[styles.submitButtonText, { opacity: canSubmit ? 1 : 0.5 }]}>
-            Submit Workout
-          </Text>
-        </Pressable>
-      </View>
+      {/* Submit CTA */}
+      <SubmitCTA setsDone={setsDone} setsTotal={setsTotal} onPress={handleSubmit} />
+
+      {/* Adjust sheet */}
+      <AdjustSheet
+        visible={adjustVisible}
+        field={adjustField}
+        value={adjustValue}
+        onApply={handleApplyAdjust}
+        onCancel={() => setAdjustVisible(false)}
+      />
 
       {/* Discard confirmation */}
       <Modal visible={showDiscard} transparent animationType="fade">
-        <View style={styles.discardOverlay}>
-          <View style={[styles.discardCard, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.discardTitle, { color: colors.text }]}>
-              Discard this workout?
+        <View style={modalStyles.overlay}>
+          <View style={modalStyles.card}>
+            <Text style={modalStyles.title}>
+              {pendingDay ? 'Discard logged sets?' : 'Discard this workout?'}
             </Text>
-            <Text style={[styles.discardBody, { color: colors.textSecondary }]}>
-              Your progress will be lost.
+            <Text style={modalStyles.body}>
+              {pendingDay
+                ? `You have ${setsDone} logged sets that will be lost.`
+                : 'Your progress will be lost.'}
             </Text>
-            <View style={styles.discardActions}>
-              <Pressable
-                onPress={() => setShowDiscard(false)}
-                style={[styles.discardBtn, { borderColor: colors.border }]}
-              >
-                <Text style={[styles.discardBtnText, { color: colors.text }]}>Cancel</Text>
-              </Pressable>
+            <View style={modalStyles.actions}>
               <Pressable
                 onPress={() => {
                   setShowDiscard(false);
-                  router.replace('/(tabs)');
+                  setPendingDay(null);
                 }}
-                style={[styles.discardBtn, { backgroundColor: '#EF4444', borderColor: '#EF4444' }]}
+                style={modalStyles.cancelBtn}
               >
-                <Text style={[styles.discardBtnText, { color: '#FFFFFF' }]}>Discard</Text>
+                <Text style={modalStyles.cancelBtnText}>Cancel</Text>
+              </Pressable>
+              <Pressable onPress={confirmDiscard} style={modalStyles.destructBtn}>
+                <Text style={modalStyles.destructBtnText}>Discard</Text>
               </Pressable>
             </View>
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+
+      {/* Partial submit confirmation */}
+      <Modal visible={showPartialSubmit} transparent animationType="fade">
+        <View style={modalStyles.overlay}>
+          <View style={modalStyles.card}>
+            <Text style={modalStyles.title}>Submit incomplete workout?</Text>
+            <Text style={modalStyles.body}>
+              Submit with {setsTotal - setsDone} sets remaining?
+            </Text>
+            <View style={modalStyles.actions}>
+              <Pressable
+                onPress={() => setShowPartialSubmit(false)}
+                style={modalStyles.cancelBtn}
+              >
+                <Text style={modalStyles.cancelBtnText}>Cancel</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  setShowPartialSubmit(false);
+                  doSubmit(exercisesRef.current);
+                }}
+                style={modalStyles.submitPartialBtn}
+              >
+                <Text style={modalStyles.submitPartialBtnText}>Submit</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </View>
   );
 }
 
@@ -646,236 +649,83 @@ export default function StrengthScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    userSelect: 'none',
-  } as any,
-  topBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
+    backgroundColor: paper,
   },
-  topTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  // Protocol picker
-  pickerContent: {
-    padding: 20,
-    gap: 16,
-  },
-  pickerTitle: {
-    fontSize: 24,
-    fontWeight: '800',
-    marginBottom: 8,
-  },
-  protocolCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    borderRadius: 14,
-    borderWidth: 1,
+  exerciseList: {
+    padding: 14,
+    paddingTop: 14,
     gap: 12,
   },
-  protocolCardText: {
-    flex: 1,
-    gap: 2,
-  },
-  protocolName: {
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  protocolDesc: {
-    fontSize: 13,
-  },
-  badge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  badgeText: {
-    fontSize: 11,
-    fontWeight: '700',
-  },
-  // Day selector
-  daySelector: {
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    gap: 8,
-    marginBottom: 4,
-  },
-  dayChip: {
-    flex: 1,
-    paddingVertical: 8,
-    borderRadius: 10,
-    borderWidth: 1,
-    alignItems: 'center',
-  },
-  dayChipText: {
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  daySubtitle: {
-    fontSize: 14,
-    textAlign: 'center',
-    paddingVertical: 8,
-  },
-  // Exercise list
-  exerciseList: {
-    padding: 20,
-    paddingBottom: 20,
-    gap: 20,
-  },
-  exerciseCard: {
-    borderWidth: 1,
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  collapsedRow: {
-    height: 52,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 12,
-  },
-  collapsedStats: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  collapsedCheckboxRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    marginLeft: 12,
-  },
-  expandedHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 12,
-    paddingTop: 12,
-    paddingBottom: 4,
-  },
-  exerciseBlock: {
-    gap: 4,
-  },
-  exerciseName: {
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  setHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 4,
-    marginBottom: 2,
-  },
-  setHeaderLabel: {
-    fontSize: 11,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  setColumnGroup: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-  },
-  setRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 6,
-  },
-  setNumber: {
-    width: 32,
-    fontSize: 15,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  inputField: {
-    width: 60,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 10,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
-    overflow: 'hidden',
-  },
-  inputValue: {
-    fontSize: 18,
-    fontWeight: '700',
-    fontVariant: ['tabular-nums'],
-  },
-  textInput: {
-    fontSize: 18,
-    fontWeight: '700',
-    fontVariant: ['tabular-nums'],
-    textAlign: 'center',
-    padding: 0,
-    width: '100%',
-  },
-  inputUnit: {
-    fontSize: 11,
-    fontWeight: '500',
-    flexShrink: 0,
-  },
-  // Bottom bar
-  bottomBar: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderTopWidth: StyleSheet.hairlineWidth,
-  },
-  submitButton: {
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  submitButtonText: {
-    color: '#FFFFFF',
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  // Discard modal
-  discardOverlay: {
+});
+
+const modalStyles = StyleSheet.create({
+  overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 32,
   },
-  discardCard: {
+  card: {
     borderRadius: 16,
     padding: 24,
     width: '100%',
     maxWidth: 320,
     gap: 8,
+    backgroundColor: '#fff',
   },
-  discardTitle: {
+  title: {
+    fontFamily: FontFamily.outfitBold,
     fontSize: 17,
-    fontWeight: '700',
+    color: ink,
     textAlign: 'center',
   },
-  discardBody: {
+  body: {
+    fontFamily: FontFamily.outfit,
     fontSize: 14,
+    color: '#687076',
     textAlign: 'center',
     marginBottom: 12,
   },
-  discardActions: {
+  actions: {
     flexDirection: 'row',
     gap: 12,
   },
-  discardBtn: {
+  cancelBtn: {
     flex: 1,
     paddingVertical: 12,
     borderRadius: 10,
     borderWidth: 1,
+    borderColor: rule,
     alignItems: 'center',
   },
-  discardBtnText: {
+  cancelBtnText: {
+    fontFamily: FontFamily.outfitSemiBold,
     fontSize: 15,
-    fontWeight: '600',
+    color: ink,
+  },
+  destructBtn: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 10,
+    backgroundColor: '#EF4444',
+    alignItems: 'center',
+  },
+  destructBtnText: {
+    fontFamily: FontFamily.outfitSemiBold,
+    fontSize: 15,
+    color: '#FFFFFF',
+  },
+  submitPartialBtn: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 10,
+    backgroundColor: citron,
+    alignItems: 'center',
+  },
+  submitPartialBtnText: {
+    fontFamily: FontFamily.outfitBold,
+    fontSize: 15,
+    color: greenDeep,
   },
 });

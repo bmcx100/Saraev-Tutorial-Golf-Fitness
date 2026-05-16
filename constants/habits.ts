@@ -37,6 +37,18 @@ export const HABIT_LIBRARY: Habit[] = [
     ringColor: '#52B788',
     durationMinutes: 15,
   },
+  {
+    id: 'putt',
+    name: 'Putting',
+    icon: 'sports-golf',
+    category: 'golf',
+    trackingType: 'counter',
+    targetCount: 2,
+    unit: 'session',
+    duration: '2 sessions',
+    ringColor: '#52B788',
+    durationMinutes: 20,
+  },
 
   // Fitness
   {
@@ -112,6 +124,18 @@ export const HABIT_LIBRARY: Habit[] = [
     duration: '1 session',
     ringColor: '#9B51E0',
     durationMinutes: 2,
+  },
+  {
+    id: 'sleep',
+    name: 'Sleep',
+    icon: 'bedtime',
+    category: 'lifestyle',
+    trackingType: 'binary',
+    targetCount: 1,
+    unit: 'session',
+    duration: 'Nightly',
+    ringColor: '#457B9D',
+    durationMinutes: 0,
   },
 ];
 
