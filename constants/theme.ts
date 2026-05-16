@@ -1,5 +1,23 @@
 import { Platform } from 'react-native';
 
+/** Subpar design-system color tokens (from SPColors) */
+export const SPColors = {
+  ink: '#0e2118',
+  sub: '#6b756f',
+  forest: '#1d4e34',
+  greenDeep: '#11371f',
+  citron: '#cfde50',
+  cream: '#fbf6e6',
+  paper: '#f7f4ea',
+  rule: '#e2dcc0',
+  clay: '#cc6f4a',
+  // functional
+  toggleOn: '#3aa57c',
+  toggleOff: '#cdd0c8',
+  dayBtnBg: 'rgba(58,165,124,0.14)',
+  dayBtnFg: '#246b4f',
+} as const;
+
 export const Colors = {
   light: {
     text: '#11181C',

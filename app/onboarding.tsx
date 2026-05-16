@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import {
   ActivityIndicator,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -132,6 +133,7 @@ const PLAN_SECTIONS: PlanSection[] = [
 ];
 
 const ALL_PLAN_IDS = PLAN_SECTIONS.flatMap((s) => s.items.map((i) => i.id));
+const ENABLED_PLAN_IDS = ['speed-training', 'gym'];
 
 type ChallengeData = {
   id: string;
@@ -205,7 +207,7 @@ function PlanIcon({ name, color, size = 17 }: { name: string; color: string; siz
 
 function TopBar({ page }: { page: number }) {
   return (
-    <View style={s.topBar}>
+    <View style={[s.topBar, Platform.OS === 'web' && { paddingTop: 20 }]}>
       <Text style={s.stepCounter}>
         STEP {String(page).padStart(2, '0')} / 03
       </Text>
@@ -416,7 +418,7 @@ function PlanStep({
   onToggle: (id: string) => void;
   onToggleAll: () => void;
 }) {
-  const allSelected = selectedTracks.size === ALL_PLAN_IDS.length;
+  const allSelected = selectedTracks.size === ENABLED_PLAN_IDS.length;
 
   return (
     <View style={s.screenFill}>
@@ -426,7 +428,7 @@ function PlanStep({
       <View style={s.planHero}>
         <Text style={s.eyebrow}>YOUR PROGRAM</Text>
         <Text style={s.displayTitle}>
-          Build your{'\n'}game plan<Text style={{ color: citron }}>.</Text>
+          What are we{'\n'}tracking<Text style={{ color: citron }}>?</Text>
         </Text>
         <View style={s.planFooterRow}>
           <Text style={s.planFooterLeft}>
@@ -459,14 +461,20 @@ function PlanStep({
               <View style={{ gap: 8 }}>
                 {section.items.map((item) => {
                   const sel = selectedTracks.has(item.id);
+                  const enabled = ENABLED_PLAN_IDS.includes(item.id);
                   return (
-                    <Pressable key={item.id} onPress={() => onToggle(item.id)}>
+                    <Pressable
+                      key={item.id}
+                      onPress={() => onToggle(item.id)}
+                      disabled={!enabled}
+                    >
                       <View
                         style={[
                           s.planRow,
                           {
                             backgroundColor: sel ? cream : '#fff',
                             borderColor: sel ? forest : rule,
+                            opacity: enabled ? 1 : 0.45,
                             ...(sel
                               ? {
                                   shadowColor: '#1d4e34',
@@ -493,9 +501,11 @@ function PlanStep({
                         </View>
                         <View style={{ flex: 1, minWidth: 0 }}>
                           <Text style={s.planRowName}>{item.name}</Text>
-                          <Text style={s.planRowMeta}>{item.meta}</Text>
+                          <Text style={s.planRowMeta}>
+                            {enabled ? item.meta : 'Coming soon'}
+                          </Text>
                         </View>
-                        <Radio checked={sel} />
+                        {enabled && <Radio checked={sel} />}
                       </View>
                     </Pressable>
                   );
@@ -739,6 +749,7 @@ export default function OnboardingScreen() {
   const [stepKey, setStepKey] = useState(0);
 
   const toggleTrack = useCallback((id: string) => {
+    if (!ENABLED_PLAN_IDS.includes(id)) return;
     setSelectedTracks((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -749,8 +760,8 @@ export default function OnboardingScreen() {
 
   const toggleAll = useCallback(() => {
     setSelectedTracks((prev) => {
-      if (prev.size === ALL_PLAN_IDS.length) return new Set();
-      return new Set(ALL_PLAN_IDS);
+      if (prev.size === ENABLED_PLAN_IDS.length) return new Set();
+      return new Set(ENABLED_PLAN_IDS);
     });
   }, []);
 
@@ -809,7 +820,7 @@ export default function OnboardingScreen() {
     (step === 3 && selectedChallenge !== null);
 
   const ctaLabel =
-    step === 1 ? 'Continue' : step === 2 ? 'Next' : 'Start training';
+    step === 1 ? 'Begin' : step === 2 ? 'Next' : 'Start training';
 
   const handleCTA = step === 3 ? completeOnboarding : goNext;
 

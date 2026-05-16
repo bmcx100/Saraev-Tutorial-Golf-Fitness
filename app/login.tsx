@@ -469,6 +469,7 @@ const styles = StyleSheet.create({
     letterSpacing: 15 * -0.005,
     color: ink,
     padding: 0,
+    outlineStyle: 'none' as any,
   },
   showHideButton: {
     paddingVertical: 4,

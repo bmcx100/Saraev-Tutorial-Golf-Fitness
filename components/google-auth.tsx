@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { Pressable, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import {
-  GoogleSignin,
-  isSuccessResponse,
-} from '@react-native-google-signin/google-signin';
 import { supabase } from '@/lib/supabase';
 import {
   ink,
@@ -12,9 +8,19 @@ import {
   FontFamily,
 } from '@/constants/design-tokens';
 
-GoogleSignin.configure({
-  webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
-});
+// Native module — unavailable in Expo Go
+let GoogleSignin: any = null;
+let isSuccessResponse: ((r: any) => boolean) | null = null;
+try {
+  const mod = require('@react-native-google-signin/google-signin');
+  GoogleSignin = mod.GoogleSignin;
+  isSuccessResponse = mod.isSuccessResponse;
+  GoogleSignin.configure({
+    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+  });
+} catch {
+  // Running in Expo Go — Google Sign-In unavailable
+}
 
 interface GoogleAuthProps {
   onError: (message: string) => void;
@@ -37,6 +43,10 @@ export function GoogleAuth({ onError, onLoadingChange, disabled }: GoogleAuthPro
   const [loading, setLoading] = useState(false);
 
   const handleGoogleSignIn = async () => {
+    if (!GoogleSignin) {
+      onError('Google Sign-In is not available in Expo Go');
+      return;
+    }
     try {
       setLoading(true);
       onLoadingChange?.(true);
