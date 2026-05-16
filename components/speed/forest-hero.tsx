@@ -20,6 +20,7 @@ interface ForestHeroProps {
   prValue: number | null;
   prCaption: string;
   onBack: () => void;
+  compact?: boolean;
 }
 
 function BackIcon() {
@@ -45,6 +46,7 @@ export function ForestHero({
   prValue,
   prCaption,
   onBack,
+  compact,
 }: ForestHeroProps) {
   const eyebrowText =
     activeTab === 2
@@ -52,12 +54,12 @@ export function ForestHero({
       : `DAY 1 \u00B7 SESSION ${sessionNumber}`;
 
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, compact && styles.wrapperCompact]}>
       <LinearGradient
         colors={[forest, greenDeep]}
         start={{ x: 0.1, y: 0 }}
         end={{ x: 0.9, y: 1 }}
-        style={styles.gradient}
+        style={[styles.gradient, compact && styles.gradientCompact]}
       >
         {/* Topo lines overlay */}
         <Animated.View
@@ -83,30 +85,38 @@ export function ForestHero({
 
         {/* Top row: back button + eyebrow */}
         <View style={styles.topRow}>
-          <Pressable onPress={onBack} style={styles.backButton} hitSlop={12}>
+          <Pressable onPress={onBack} style={[styles.backButton, compact && styles.backButtonCompact]} hitSlop={12}>
             <BackIcon />
           </Pressable>
           <Text style={styles.eyebrowCaption} aria-hidden>
             {eyebrowText}
           </Text>
-        </View>
-
-        {/* Title row */}
-        <View style={styles.titleRow}>
-          <View style={styles.titleLeft}>
-            <Text style={styles.getLong}>Get Long</Text>
-            <Text style={styles.title}>Speed Training.</Text>
-          </View>
-          {prValue !== null && (
-            <View style={styles.titleRight}>
-              <Text style={styles.prValue}>{prValue}</Text>
-              <Text style={styles.prCaption}>{prCaption}</Text>
+          {compact && prValue !== null && (
+            <View style={styles.prInline}>
+              <Text style={styles.prValueCompact}>{prValue}</Text>
+              <Text style={styles.prCaptionCompact}>{prCaption}</Text>
             </View>
           )}
         </View>
 
+        {/* Title row — hidden in compact mode (info moved to top row) */}
+        {!compact && (
+          <View style={styles.titleRow}>
+            <View style={styles.titleLeft}>
+              <Text style={styles.getLong}>Get Long</Text>
+              <Text style={styles.title}>Speed Training.</Text>
+            </View>
+            {prValue !== null && (
+              <View style={styles.titleRight}>
+                <Text style={styles.prValue}>{prValue}</Text>
+                <Text style={styles.prCaption}>{prCaption}</Text>
+              </View>
+            )}
+          </View>
+        )}
+
         {/* Tab strip */}
-        <View style={styles.tabContainer}>
+        <View style={[styles.tabContainer, compact && styles.tabContainerCompact]}>
           {TAB_LABELS.map((label, i) => {
             const isActive = i === activeTab;
             return (
@@ -115,6 +125,7 @@ export function ForestHero({
                 onPress={() => onTabChange(i)}
                 style={[
                   styles.tab,
+                  compact && styles.tabCompact,
                   isActive && styles.tabActive,
                 ]}
               >
@@ -141,11 +152,20 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 28,
     borderBottomRightRadius: 28,
   },
+  wrapperCompact: {
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
   gradient: {
     paddingTop: 54,
     paddingHorizontal: 18,
     paddingBottom: 16,
     position: 'relative',
+  },
+  gradientCompact: {
+    paddingTop: 10,
+    paddingHorizontal: 14,
+    paddingBottom: 10,
   },
   topRow: {
     flexDirection: 'row',
@@ -162,6 +182,11 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(251,246,230,0.20)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  backButtonCompact: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
   },
   eyebrowCaption: {
     fontFamily: FontFamily.monoBold,
@@ -211,6 +236,22 @@ const styles = StyleSheet.create({
     letterSpacing: 9.5 * 0.2,
     color: 'rgba(251,246,230,0.6)',
   },
+  prInline: {
+    marginLeft: 'auto',
+    alignItems: 'flex-end',
+  },
+  prValueCompact: {
+    fontFamily: FontFamily.monoBold,
+    fontSize: 18,
+    color: citron,
+    letterSpacing: -0.01 * 18,
+  },
+  prCaptionCompact: {
+    fontFamily: FontFamily.monoBold,
+    fontSize: 8,
+    letterSpacing: 8 * 0.2,
+    color: 'rgba(251,246,230,0.6)',
+  },
   tabContainer: {
     flexDirection: 'row',
     gap: 6,
@@ -222,12 +263,22 @@ const styles = StyleSheet.create({
     marginTop: 14,
     zIndex: 1,
   },
+  tabContainerCompact: {
+    marginTop: 8,
+    gap: 4,
+    padding: 3,
+    borderRadius: 12,
+  },
   tab: {
     flex: 1,
     borderRadius: 10,
     paddingVertical: 8,
     paddingHorizontal: 6,
     alignItems: 'center',
+  },
+  tabCompact: {
+    paddingVertical: 6,
+    borderRadius: 8,
   },
   tabActive: {
     backgroundColor: citron,

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ink, sub, greenDeep, FontFamily } from '@/constants/design-tokens';
 
@@ -7,6 +8,9 @@ interface SectionHeadingProps {
   helper: string;
   progressNum: string;
   progressCaption: string;
+  /** Optional element rendered inline next to the eyebrow (e.g. breadcrumb dots) */
+  accessory?: ReactNode;
+  compact?: boolean;
 }
 
 export function SectionHeading({
@@ -15,16 +19,21 @@ export function SectionHeading({
   helper,
   progressNum,
   progressCaption,
+  accessory,
+  compact,
 }: SectionHeadingProps) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, compact && styles.containerCompact]}>
       <View style={styles.left}>
-        <Text style={styles.eyebrow}>{eyebrow}</Text>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.helper}>{helper}</Text>
+        <View style={styles.eyebrowRow}>
+          <Text style={styles.eyebrow}>{eyebrow}</Text>
+          {accessory}
+        </View>
+        <Text style={[styles.title, compact && styles.titleCompact]}>{title}</Text>
+        {!compact && <Text style={styles.helper}>{helper}</Text>}
       </View>
       <View style={styles.right}>
-        <Text style={styles.progressNum}>{progressNum}</Text>
+        <Text style={[styles.progressNum, compact && styles.progressNumCompact]}>{progressNum}</Text>
         <Text style={styles.progressCaption}>{progressCaption}</Text>
       </View>
     </View>
@@ -41,9 +50,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingBottom: 4,
   },
+  containerCompact: {
+    paddingTop: 8,
+    paddingBottom: 2,
+  },
   left: {
     flex: 1,
     minWidth: 0,
+  },
+  eyebrowRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
   },
   eyebrow: {
     fontFamily: FontFamily.monoBold,
@@ -58,6 +76,11 @@ const styles = StyleSheet.create({
     color: ink,
     lineHeight: 22,
     marginTop: 3,
+  },
+  titleCompact: {
+    fontSize: 19,
+    lineHeight: 19,
+    marginTop: 2,
   },
   helper: {
     fontFamily: FontFamily.outfitMedium,
@@ -76,6 +99,9 @@ const styles = StyleSheet.create({
     color: greenDeep,
     letterSpacing: -0.01 * 20,
     fontVariant: ['tabular-nums'],
+  },
+  progressNumCompact: {
+    fontSize: 17,
   },
   progressCaption: {
     fontFamily: FontFamily.monoBold,

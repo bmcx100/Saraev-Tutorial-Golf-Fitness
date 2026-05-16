@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { View, Text, Pressable, ScrollView, Modal, StyleSheet } from 'react-native';
+import { View, Text, Pressable, ScrollView, Modal, StyleSheet, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -481,6 +481,47 @@ function SpeedWizard({ protocol }: { protocol: string }) {
   const filledCount = countFilledInStep(session, step);
   const config = DRILL_CONFIG[step];
 
+  const isWeb = Platform.OS === 'web';
+
+  // Build breadcrumb dots for steps 0 and 1
+  const breadcrumbDots = step < 2 ? (
+    <View style={isWeb ? styles.breadcrumbRowInline : styles.breadcrumbRow}>
+      {STICK_COLORS.map((stick, i) => {
+        const sc = stickColors[stick.key];
+        const drillKey = DRILL_STEPS[step].key as 'normalStance' | 'stepDrill';
+        const domId = `${drillKey}.${stick.key}.dom`;
+        const nonDomId = `${drillKey}.${stick.key}.nonDom`;
+        const bothFilled =
+          getFieldValue(session, domId) !== null &&
+          getFieldValue(session, nonDomId) !== null;
+        const isActive = i === activeStickIndex;
+        const isCompleted = i < activeStickIndex || bothFilled;
+
+        return (
+          <Pressable
+            key={stick.key}
+            onPress={() => {
+              setActiveStickIndex(i);
+              setActiveField(currentFields[i * 2]);
+            }}
+            style={[
+              isWeb ? styles.breadcrumbDotSmall : styles.breadcrumbDot,
+              !isWeb && isActive && styles.breadcrumbDotActive,
+              {
+                backgroundColor: isActive || isCompleted ? sc : 'transparent',
+                borderColor: sc,
+              },
+            ]}
+          >
+            {isCompleted && !isActive && (
+              <Text style={isWeb ? styles.breadcrumbCheckSmall : styles.breadcrumbCheck}>{'\u2713'}</Text>
+            )}
+          </Pressable>
+        );
+      })}
+    </View>
+  ) : null;
+
   if (!loaded) return null;
 
   return (
@@ -492,6 +533,7 @@ function SpeedWizard({ protocol }: { protocol: string }) {
         prValue={driverPR}
         prCaption={isMaxOut ? 'DRIVER PR' : 'PR \u00B7 MPH'}
         onBack={handleBack}
+        compact={isWeb}
       />
 
       <ScrollView
@@ -499,6 +541,7 @@ function SpeedWizard({ protocol }: { protocol: string }) {
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
+        scrollEnabled={!isWeb}
       >
         <SectionHeading
           eyebrow={config.eyebrow}
@@ -506,6 +549,8 @@ function SpeedWizard({ protocol }: { protocol: string }) {
           helper={config.helper}
           progressNum={`${filledCount} / ${config.totalFields}`}
           progressCaption={config.progressCaption}
+          accessory={isWeb ? breadcrumbDots : undefined}
+          compact={isWeb}
         />
 
         {step < 2 ? (
@@ -522,7 +567,7 @@ function SpeedWizard({ protocol }: { protocol: string }) {
                 <Animated.View
                   key={`${step}-${stick.key}`}
                   entering={FadeInUp.duration(250).springify()}
-                  style={styles.wideCard}
+                  style={[styles.wideCard, isWeb && styles.wideCardCompact]}
                 >
                   {/* Color accent band */}
                   <View style={[styles.wideCardBand, { backgroundColor: sc }]}>
@@ -532,7 +577,7 @@ function SpeedWizard({ protocol }: { protocol: string }) {
                   </View>
 
                   {/* DOM + NON-DOM side by side */}
-                  <View style={styles.wideCardCells}>
+                  <View style={[styles.wideCardCells, isWeb && styles.wideCardCellsCompact]}>
                     <View style={styles.wideCardCellWrapper}>
                       <SpeedCell
                         label="DOM"
@@ -562,42 +607,8 @@ function SpeedWizard({ protocol }: { protocol: string }) {
               );
             })()}
 
-            {/* Stick color breadcrumb */}
-            <View style={styles.breadcrumbRow}>
-              {STICK_COLORS.map((stick, i) => {
-                const sc = stickColors[stick.key];
-                const drillKey = DRILL_STEPS[step].key as 'normalStance' | 'stepDrill';
-                const domId = `${drillKey}.${stick.key}.dom`;
-                const nonDomId = `${drillKey}.${stick.key}.nonDom`;
-                const bothFilled =
-                  getFieldValue(session, domId) !== null &&
-                  getFieldValue(session, nonDomId) !== null;
-                const isActive = i === activeStickIndex;
-                const isCompleted = i < activeStickIndex || bothFilled;
-
-                return (
-                  <Pressable
-                    key={stick.key}
-                    onPress={() => {
-                      setActiveStickIndex(i);
-                      setActiveField(currentFields[i * 2]);
-                    }}
-                    style={[
-                      styles.breadcrumbDot,
-                      isActive && styles.breadcrumbDotActive,
-                      {
-                        backgroundColor: isActive || isCompleted ? sc : 'transparent',
-                        borderColor: sc,
-                      },
-                    ]}
-                  >
-                    {isCompleted && !isActive && (
-                      <Text style={styles.breadcrumbCheck}>{'\u2713'}</Text>
-                    )}
-                  </Pressable>
-                );
-              })}
-            </View>
+            {/* Standalone breadcrumb — native only (on web it's in the section heading) */}
+            {!isWeb && breadcrumbDots}
           </>
         ) : (
           // Max Out — green stick + driver
@@ -879,11 +890,19 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 0,
   },
+  wideCardCompact: {
+    marginHorizontal: 12,
+    marginBottom: 8,
+  },
   wideCardCells: {
     flexDirection: 'row',
     padding: 16,
     gap: 16,
     justifyContent: 'center',
+  },
+  wideCardCellsCompact: {
+    padding: 10,
+    gap: 12,
   },
   wideCardCellWrapper: {
     flex: 1,
@@ -913,6 +932,25 @@ const styles = StyleSheet.create({
   },
   breadcrumbCheck: {
     fontSize: 12,
+    color: '#fff',
+    fontWeight: '700',
+  },
+  // Inline breadcrumb (web compact — sits next to eyebrow)
+  breadcrumbRowInline: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  breadcrumbDotSmall: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  breadcrumbCheckSmall: {
+    fontSize: 8,
     color: '#fff',
     fontWeight: '700',
   },
