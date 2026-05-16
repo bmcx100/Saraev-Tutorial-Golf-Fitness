@@ -1,5 +1,5 @@
 {
-  "buildCommand": "printf 'EXPO_PUBLIC_SUPABASE_URL=%s\nEXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=%s\nEXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID=%s\n' \"$EXPO_PUBLIC_SUPABASE_URL\" \"$EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY\" \"$EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID\" > .env && npm run build:web",
+  "buildCommand": "npm run build:web",
   "outputDirectory": "dist",
   "framework": null,
   "rewrites": [
