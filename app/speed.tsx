@@ -538,7 +538,7 @@ function SpeedWizard({ protocol }: { protocol: string }) {
 
       <ScrollView
         style={{ flex: 1, backgroundColor: paper }}
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={isWeb ? { flex: 1, justifyContent: 'center' } : { flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         scrollEnabled={!isWeb}
