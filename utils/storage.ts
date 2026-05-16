@@ -191,6 +191,7 @@ export interface SpeedStats {
   driverPR: { mph: number; date: string } | null;
   previousDriverPR: { mph: number; date: string } | null;
   lastSessionDate: string | null;
+  fieldPRs: Record<string, number>;
 }
 
 export interface StrengthStats {
@@ -239,12 +240,30 @@ export async function rebuildStatsAggregates(userId?: string): Promise<void> {
   }
   speedSessions.sort((a, b) => a.date.localeCompare(b.date));
 
-  let speedStats: SpeedStats = { driverPR: null, previousDriverPR: null, lastSessionDate: null };
+  const { SPEED_FIELD_KEYS } = require('@/constants/speed-protocols');
+
+  let speedStats: SpeedStats = { driverPR: null, previousDriverPR: null, lastSessionDate: null, fieldPRs: {} };
   for (const session of speedSessions) {
     if (session.maxOut.driver != null) {
       if (!speedStats.driverPR || session.maxOut.driver > speedStats.driverPR.mph) {
         speedStats.previousDriverPR = speedStats.driverPR;
         speedStats.driverPR = { mph: session.maxOut.driver, date: session.date };
+      }
+    }
+    // Populate per-field PRs
+    for (const { key } of SPEED_FIELD_KEYS) {
+      const parts = key.split('.');
+      let val: number | null = null;
+      if (parts[0] === 'maxOut') {
+        val = session.maxOut[parts[1] as keyof typeof session.maxOut];
+      } else {
+        const drill = parts[0] as 'normalStance' | 'stepDrill';
+        const stick = parts[1] as 'green' | 'blue' | 'red';
+        const side = parts[2] as 'dom' | 'nonDom';
+        val = session[drill][stick][side];
+      }
+      if (val != null && (speedStats.fieldPRs[key] == null || val > speedStats.fieldPRs[key])) {
+        speedStats.fieldPRs[key] = val;
       }
     }
     speedStats.lastSessionDate = session.date;

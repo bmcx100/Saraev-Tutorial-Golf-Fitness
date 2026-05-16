@@ -32,6 +32,8 @@ interface ChallengeContextType {
   completedChallenges: Challenge[];
   startChallenge: (templateId: string) => Promise<void>;
   checkChallengeCompletion: () => void;
+  justCompletedChallenge: Challenge | null;
+  clearCompletedChallenge: () => void;
 }
 
 const ChallengeContext = createContext<ChallengeContextType>({
@@ -41,6 +43,8 @@ const ChallengeContext = createContext<ChallengeContextType>({
   completedChallenges: [],
   startChallenge: async () => {},
   checkChallengeCompletion: () => {},
+  justCompletedChallenge: null,
+  clearCompletedChallenge: () => {},
 });
 
 export const useChallenges = () => useContext(ChallengeContext);
@@ -50,6 +54,11 @@ export function ChallengeProvider({ children }: { children: React.ReactNode }) {
   const { todayLogs } = useHabits();
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [challengeProgress, setChallengeProgress] = useState(0);
+  const [justCompletedChallenge, setJustCompletedChallenge] = useState<Challenge | null>(null);
+
+  const clearCompletedChallenge = useCallback(() => {
+    setJustCompletedChallenge(null);
+  }, []);
 
   // Load persisted challenges
   useEffect(() => {
@@ -122,6 +131,9 @@ export function ChallengeProvider({ children }: { children: React.ReactNode }) {
     }
 
     if (newStatus) {
+      if (newStatus === 'completed') {
+        setJustCompletedChallenge(activeChallenge);
+      }
       setChallenges((prev) => {
         const next = prev.map((c) =>
           c.id === activeChallenge.id ? { ...c, status: newStatus! } : c,
@@ -173,6 +185,8 @@ export function ChallengeProvider({ children }: { children: React.ReactNode }) {
         completedChallenges,
         startChallenge,
         checkChallengeCompletion,
+        justCompletedChallenge,
+        clearCompletedChallenge,
       }}
     >
       {children}

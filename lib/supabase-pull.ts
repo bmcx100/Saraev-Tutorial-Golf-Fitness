@@ -67,6 +67,7 @@ export async function pullSpeedStats(userId: string): Promise<SpeedStats | null>
         ? { mph: data.previous_driver_pr_mph, date: data.previous_driver_pr_date }
         : null,
     lastSessionDate: data.last_session_date,
+    fieldPRs: (data as any).field_prs ?? {},
   };
 }
 

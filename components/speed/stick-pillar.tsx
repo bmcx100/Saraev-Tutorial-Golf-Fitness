@@ -25,6 +25,8 @@ interface StickPillarNormalProps extends StickPillarBaseProps {
   nonDomValue: number | null;
   focusedCell: 'dom' | 'nonDom' | null;
   onCellPress: (cell: 'dom' | 'nonDom') => void;
+  domPR?: number;
+  nonDomPR?: number;
 }
 
 interface StickPillarMaxOutProps extends StickPillarBaseProps {
@@ -32,6 +34,7 @@ interface StickPillarMaxOutProps extends StickPillarBaseProps {
   value: number | null;
   focused: boolean;
   onCellPress: () => void;
+  prValue?: number;
 }
 
 type StickPillarProps = StickPillarNormalProps | StickPillarMaxOutProps;
@@ -144,6 +147,7 @@ export function StickPillar(props: StickPillarProps) {
             accentColor={sc}
             variant="large"
             onPress={props.onCellPress}
+            prValue={props.prValue}
           />
         ) : (
           // DOM + NON-DOM cells for Normal Stance / Step Drill
@@ -156,6 +160,7 @@ export function StickPillar(props: StickPillarProps) {
               accentColor={sc}
               variant="small"
               onPress={() => props.onCellPress('dom')}
+              prValue={props.domPR}
             />
             <SpeedCell
               label="NON-DOM"
@@ -165,6 +170,7 @@ export function StickPillar(props: StickPillarProps) {
               accentColor={sc}
               variant="small"
               onPress={() => props.onCellPress('nonDom')}
+              prValue={props.nonDomPR}
             />
           </>
         )}

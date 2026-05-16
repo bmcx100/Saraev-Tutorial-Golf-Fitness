@@ -14,9 +14,13 @@ import {
   saveSpeedStats,
 } from '@/utils/storage';
 import type { SpeedStats } from '@/utils/storage';
+import * as Haptics from 'expo-haptics';
+import { Confetti } from '@/components/confetti';
+import { playSound } from '@/constants/sounds';
 import {
   STICK_COLORS,
   DRILL_STEPS,
+  SPEED_FIELD_KEYS,
   emptySession,
   type SpeedSession,
   type StickColor,
@@ -204,9 +208,25 @@ function ProtocolPicker({ onSelect }: { onSelect: (p: 'superspeed-l1') => void }
 
 // ── Speed Input Wizard ────────────────────────────────────────
 
+interface SessionPR {
+  key: string;
+  label: string;
+  value: number;
+  previousBest: number | null;
+}
+
+interface Standout {
+  key: string;
+  label: string;
+  value: number;
+  prValue: number;
+  gap: number;
+}
+
 function SpeedWizard({ protocol }: { protocol: string }) {
   const { logHabit } = useHabits();
   const { user } = useAuth();
+  const { profile } = useUser();
   const today = formatDate(new Date());
 
   const [session, setSession] = useState<SpeedSession>(() => emptySession(today, protocol));
@@ -220,6 +240,13 @@ function SpeedWizard({ protocol }: { protocol: string }) {
   const [sessionNumber, setSessionNumber] = useState(1);
   const [driverPR, setDriverPR] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [fieldPRs, setFieldPRs] = useState<Record<string, number>>({});
+
+  // Session summary modal state
+  const [showSummary, setShowSummary] = useState(false);
+  const [summaryPRs, setSummaryPRs] = useState<SessionPR[]>([]);
+  const [summaryStandouts, setSummaryStandouts] = useState<Standout[]>([]);
+  const [summaryConfetti, setSummaryConfetti] = useState(false);
 
   // Load existing session, session count, and PR on mount
   useEffect(() => {
@@ -232,9 +259,10 @@ function SpeedWizard({ protocol }: { protocol: string }) {
       const sessionCount = allKeys.filter((k) => k.startsWith('speed-session-')).length;
       setSessionNumber(sessionCount + 1);
 
-      // Driver PR
+      // Driver PR + field PRs
       const stats = await loadSpeedStats();
       if (stats?.driverPR) setDriverPR(stats.driverPR.mph);
+      if (stats?.fieldPRs) setFieldPRs(stats.fieldPRs);
 
       setLoaded(true);
     })();
@@ -322,7 +350,38 @@ function SpeedWizard({ protocol }: { protocol: string }) {
       driverPR: null,
       previousDriverPR: null,
       lastSessionDate: null,
+      fieldPRs: {},
     };
+    if (!stats.fieldPRs) stats.fieldPRs = {};
+
+    // Track all 14 field PRs
+    const sessionPRList: SessionPR[] = [];
+    const standoutList: Standout[] = [];
+
+    for (const { key, label } of SPEED_FIELD_KEYS) {
+      const val = getFieldValue(final, key);
+      if (val == null) continue;
+      const storedPR = stats.fieldPRs[key];
+      if (storedPR == null || val > storedPR) {
+        sessionPRList.push({
+          key,
+          label,
+          value: val,
+          previousBest: storedPR ?? null,
+        });
+        stats.fieldPRs[key] = val;
+      } else if (storedPR - val <= 3 && storedPR - val > 0) {
+        standoutList.push({
+          key,
+          label,
+          value: val,
+          prValue: storedPR,
+          gap: storedPR - val,
+        });
+      }
+    }
+
+    // Driver PR logic (existing)
     if (final.maxOut.driver != null) {
       if (!stats.driverPR || final.maxOut.driver > stats.driverPR.mph) {
         stats.previousDriverPR = stats.driverPR;
@@ -333,8 +392,34 @@ function SpeedWizard({ protocol }: { protocol: string }) {
     await saveSpeedStats(stats, user?.id);
 
     logHabit('speed-training');
-    router.back();
-  }, [logHabit, today, user?.id]);
+
+    // Show session summary modal if PRs or standouts exist
+    if (sessionPRList.length > 0 || standoutList.length > 0) {
+      setSummaryPRs(sessionPRList);
+      setSummaryStandouts(standoutList);
+
+      const hasMaxOutPR = sessionPRList.some(
+        (pr) => pr.key === 'maxOut.driver' || pr.key === 'maxOut.green',
+      );
+      setSummaryConfetti(hasMaxOutPR);
+
+      if (hasMaxOutPR) {
+        if (process.env.EXPO_OS === 'ios') {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        }
+        playSound('confetti', profile.soundEnabled);
+      } else {
+        if (process.env.EXPO_OS === 'ios') {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        }
+        playSound('success', profile.soundEnabled);
+      }
+
+      setShowSummary(true);
+    } else {
+      router.back();
+    }
+  }, [logHabit, today, user?.id, profile.soundEnabled]);
 
   // CTA helpers
   const focusedValue = activeField ? getFieldValue(session, activeField) : null;
@@ -432,6 +517,8 @@ function SpeedWizard({ protocol }: { protocol: string }) {
                     setActiveField(cell === 'dom' ? domId : nonDomId);
                   }}
                   animDelay={i * 60}
+                  domPR={fieldPRs[domId]}
+                  nonDomPR={fieldPRs[nonDomId]}
                 />
               );
             })}
@@ -447,6 +534,7 @@ function SpeedWizard({ protocol }: { protocol: string }) {
               focused={activeField === 'maxOut.green'}
               onCellPress={() => setActiveField('maxOut.green')}
               animDelay={0}
+              prValue={fieldPRs['maxOut.green']}
             />
             <DriverPillar
               active={activeField === 'maxOut.driver'}
@@ -454,6 +542,7 @@ function SpeedWizard({ protocol }: { protocol: string }) {
               focused={activeField === 'maxOut.driver'}
               onCellPress={() => setActiveField('maxOut.driver')}
               animDelay={60}
+              prValue={fieldPRs['maxOut.driver']}
             />
           </View>
         )}
@@ -503,6 +592,78 @@ function SpeedWizard({ protocol }: { protocol: string }) {
                 <Text style={styles.discardBtnDiscardText}>Discard</Text>
               </Pressable>
             </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Session Summary Modal */}
+      <Modal visible={showSummary} transparent animationType="fade">
+        <View style={summaryStyles.overlay}>
+          {summaryConfetti && (
+            <Confetti active={summaryConfetti} particleCount={60} />
+          )}
+          <View style={summaryStyles.card}>
+            {summaryConfetti ? (
+              <>
+                {summaryPRs
+                  .filter((pr) => pr.key === 'maxOut.driver' || pr.key === 'maxOut.green')
+                  .map((pr) => (
+                    <View key={pr.key} style={summaryStyles.heroBlock}>
+                      <Text style={summaryStyles.heroNumber}>{pr.value}</Text>
+                      <Text style={summaryStyles.heroLabel}>
+                        {pr.key === 'maxOut.driver' ? 'New Driver PR' : 'New Green Stick PR'}
+                      </Text>
+                      {pr.previousBest != null && (
+                        <Text style={summaryStyles.heroDelta}>
+                          {'\u2191'} {pr.value - pr.previousBest} mph
+                        </Text>
+                      )}
+                    </View>
+                  ))}
+              </>
+            ) : (
+              <View style={summaryStyles.headerBar}>
+                <Text style={summaryStyles.headerText}>Session Highlights</Text>
+              </View>
+            )}
+
+            {/* Other PRs */}
+            {summaryPRs
+              .filter((pr) => !(summaryConfetti && (pr.key === 'maxOut.driver' || pr.key === 'maxOut.green')))
+              .map((pr) => (
+                <View key={pr.key} style={summaryStyles.prRow}>
+                  <Text style={summaryStyles.prLabel}>{pr.label}</Text>
+                  <Text style={summaryStyles.prValue}>{pr.value} mph</Text>
+                  {pr.previousBest != null && (
+                    <Text style={summaryStyles.prDelta}>
+                      {'\u2191'} {pr.value - pr.previousBest}
+                    </Text>
+                  )}
+                  {pr.previousBest == null && (
+                    <Text style={summaryStyles.prBadge}>NEW PR</Text>
+                  )}
+                </View>
+              ))}
+
+            {/* Standouts */}
+            {summaryStandouts.map((s) => (
+              <View key={s.key} style={summaryStyles.standoutRow}>
+                <Text style={summaryStyles.standoutLabel}>{s.label}</Text>
+                <Text style={summaryStyles.standoutValue}>
+                  {s.value} mph {'\u2014'} {s.gap} mph from PR
+                </Text>
+              </View>
+            ))}
+
+            <Pressable
+              onPress={() => {
+                setShowSummary(false);
+                router.back();
+              }}
+              style={summaryStyles.continueBtn}
+            >
+              <Text style={summaryStyles.continueBtnText}>Continue</Text>
+            </Pressable>
           </View>
         </View>
       </Modal>
@@ -700,6 +861,121 @@ const styles = StyleSheet.create({
   },
   discardBtnDiscardText: {
     fontFamily: FontFamily.outfitSemiBold,
+    fontSize: 15,
+    color: greenDeep,
+  },
+});
+
+const summaryStyles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  card: {
+    borderRadius: 20,
+    padding: 24,
+    width: '100%',
+    maxWidth: 340,
+    gap: 12,
+    backgroundColor: paper,
+    shadowColor: '#11371f',
+    shadowOffset: { width: 0, height: 22 },
+    shadowOpacity: 0.18,
+    shadowRadius: 40,
+    elevation: 8,
+  },
+  heroBlock: {
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  heroNumber: {
+    fontFamily: FontFamily.outfitExtraBold,
+    fontSize: 64,
+    color: ink,
+    letterSpacing: -2,
+  },
+  heroLabel: {
+    fontFamily: FontFamily.outfitBold,
+    fontSize: 17,
+    color: ink,
+  },
+  heroDelta: {
+    fontFamily: FontFamily.outfitBold,
+    fontSize: 15,
+    color: citron,
+    marginTop: 2,
+  },
+  headerBar: {
+    backgroundColor: citron,
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    marginBottom: 4,
+  },
+  headerText: {
+    fontFamily: FontFamily.outfitExtraBold,
+    fontSize: 15,
+    color: greenDeep,
+    textAlign: 'center',
+  },
+  prRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 4,
+  },
+  prLabel: {
+    fontFamily: FontFamily.outfitSemiBold,
+    fontSize: 13,
+    color: ink,
+    flex: 1,
+  },
+  prValue: {
+    fontFamily: FontFamily.monoBold,
+    fontSize: 13,
+    color: greenDeep,
+  },
+  prDelta: {
+    fontFamily: FontFamily.outfitBold,
+    fontSize: 12,
+    color: citron,
+  },
+  prBadge: {
+    fontFamily: FontFamily.outfitExtraBold,
+    fontSize: 10,
+    color: citron,
+    letterSpacing: 1,
+  },
+  standoutRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 3,
+    opacity: 0.8,
+  },
+  standoutLabel: {
+    fontFamily: FontFamily.outfitMedium,
+    fontSize: 12,
+    color: '#6b756f',
+    flex: 1,
+  },
+  standoutValue: {
+    fontFamily: FontFamily.outfitMedium,
+    fontSize: 12,
+    color: '#6b756f',
+  },
+  continueBtn: {
+    backgroundColor: citron,
+    borderRadius: 14,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  continueBtnText: {
+    fontFamily: FontFamily.outfitExtraBold,
     fontSize: 15,
     color: greenDeep,
   },

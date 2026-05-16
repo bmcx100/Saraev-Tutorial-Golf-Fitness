@@ -16,6 +16,7 @@ interface DriverPillarProps {
   focused: boolean;
   onCellPress: () => void;
   animDelay?: number;
+  prValue?: number;
 }
 
 function DriverHead() {
@@ -36,6 +37,7 @@ export function DriverPillar({
   focused,
   onCellPress,
   animDelay = 0,
+  prValue,
 }: DriverPillarProps) {
   const accentBand = greenDeep;
 
@@ -113,6 +115,7 @@ export function DriverPillar({
           accentColor={accentBand}
           variant="large"
           onPress={onCellPress}
+          prValue={prValue}
         />
 
         <SwingDots color={accentBand} muted={!active} />

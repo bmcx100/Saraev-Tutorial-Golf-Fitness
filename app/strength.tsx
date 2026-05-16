@@ -28,6 +28,8 @@ import {
   type ExerciseSet,
   type StrengthSession,
 } from '@/constants/strength-protocols';
+import * as Haptics from 'expo-haptics';
+import { playSound } from '@/constants/sounds';
 import {
   ink,
   forest,
@@ -45,6 +47,16 @@ import { AdjustSheet, type AdjustField, type AdjustScope } from '@/components/st
 // ── Types ─────────────────────────────────────────────────────
 
 type ExerciseDefaults = Record<string, { weight: number | null; reps: number }[]>;
+
+const STREAK_MILESTONES = [7, 14, 21, 30, 60, 90];
+
+interface ExercisePRResult {
+  exerciseId: string;
+  exerciseName: string;
+  weight: number;
+  reps: number;
+  previousBest: number | null;
+}
 
 // ── Helpers ───────────────────────────────────────────────────
 
@@ -249,6 +261,7 @@ const submitStyles = StyleSheet.create({
 function WorkoutTracker() {
   const { logHabit } = useHabits();
   const { user } = useAuth();
+  const { profile } = useUser();
   const today = formatDate(new Date());
 
   const [selectedDay, setSelectedDay] = useState<WorkoutDay>('legs1');
@@ -270,18 +283,28 @@ function WorkoutTracker() {
   // Pending day change (when there's unsaved progress)
   const [pendingDay, setPendingDay] = useState<WorkoutDay | null>(null);
 
+  // PR detection state
+  const [strengthPRs, setStrengthPRs] = useState<Record<string, { weight: number; reps: number; date: string }>>({});
+
+  // Session summary modal state
+  const [showSummary, setShowSummary] = useState(false);
+  const [summaryExPRs, setSummaryExPRs] = useState<ExercisePRResult[]>([]);
+  const [summaryMilestone, setSummaryMilestone] = useState<number | null>(null);
+
   const scrollRef = useRef<ScrollView>(null);
 
   // Load initial state
   useEffect(() => {
     (async () => {
-      const [lastDay, defs, todaySession] = await Promise.all([
+      const [lastDay, defs, todaySession, sStats] = await Promise.all([
         loadLastStrengthWorkoutDay(),
         loadExerciseDefaults(),
         loadStrengthSession(today),
+        loadStrengthStats(),
       ]);
 
       setDefaults(defs);
+      if (sStats?.exercisePRs) setStrengthPRs(sStats.exercisePRs);
 
       if (todaySession) {
         setSelectedDay(todaySession.workoutDay);
@@ -478,9 +501,57 @@ function WorkoutTracker() {
       await saveStrengthStats(stats, user?.id);
 
       logHabit('gym');
-      router.replace('/(tabs)');
+
+      // Compute session PRs and milestone for summary modal
+      const newExPRs: ExercisePRResult[] = [];
+      for (const exLog of current) {
+        let maxWeight = 0;
+        let maxReps = 0;
+        for (const set of exLog.sets) {
+          if (set.completed && set.weight != null && set.weight > maxWeight) {
+            maxWeight = set.weight;
+            maxReps = set.reps;
+          }
+        }
+        if (maxWeight > 0) {
+          const prevPR = strengthPRs[exLog.exerciseId];
+          if (!prevPR || maxWeight > prevPR.weight) {
+            const exDef = dayDef.exercises.find((e) => e.id === exLog.exerciseId);
+            newExPRs.push({
+              exerciseId: exLog.exerciseId,
+              exerciseName: exDef?.name ?? exLog.exerciseId,
+              weight: maxWeight,
+              reps: maxReps,
+              previousBest: prevPR?.weight ?? null,
+            });
+          }
+        }
+      }
+
+      // Check streak milestone
+      let milestone: number | null = null;
+      for (const m of STREAK_MILESTONES) {
+        const prevStreak = strengthPRs ? (stats.streak.days - 1) : 0;
+        if (stats.streak.days >= m && (prevStreak < m || stats.streak.days === m)) {
+          milestone = m;
+        }
+      }
+
+      if (newExPRs.length > 0 || milestone != null) {
+        setSummaryExPRs(newExPRs);
+        setSummaryMilestone(milestone);
+
+        if (process.env.EXPO_OS === 'ios') {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        }
+        playSound('success', profile.soundEnabled);
+
+        setShowSummary(true);
+      } else {
+        router.replace('/(tabs)');
+      }
     },
-    [today, selectedDay, defaults, logHabit, user?.id],
+    [today, selectedDay, defaults, logHabit, user?.id, strengthPRs, profile.soundEnabled],
   );
 
   // Submit handler (shows partial confirmation if incomplete)
@@ -548,6 +619,7 @@ function WorkoutTracker() {
               onLogSet={() => handleLogSet(exDef.id)}
               onEditWeight={() => handleOpenAdjust(exDef.id, 'weight')}
               onEditReps={() => handleOpenAdjust(exDef.id, 'reps')}
+              prWeight={strengthPRs[exDef.id]?.weight}
             />
           );
         })}
@@ -620,6 +692,52 @@ function WorkoutTracker() {
                 <Text style={modalStyles.submitPartialBtnText}>Submit</Text>
               </Pressable>
             </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Session Summary Modal */}
+      <Modal visible={showSummary} transparent animationType="fade">
+        <View style={summaryStyles.overlay}>
+          <View style={summaryStyles.card}>
+            <View style={summaryStyles.headerBar}>
+              <Text style={summaryStyles.headerText}>Session Highlights</Text>
+            </View>
+
+            {summaryExPRs.map((pr) => (
+              <View key={pr.exerciseId} style={summaryStyles.prRow}>
+                <Text style={summaryStyles.prName}>{pr.exerciseName}</Text>
+                <Text style={summaryStyles.prDetail}>
+                  {pr.weight} lb {'\u00D7'} {pr.reps} reps
+                </Text>
+                {pr.previousBest != null && (
+                  <Text style={summaryStyles.prDelta}>
+                    {'\u2191'} {pr.weight - pr.previousBest} lbs
+                  </Text>
+                )}
+                {pr.previousBest == null && (
+                  <Text style={summaryStyles.prBadge}>NEW PR</Text>
+                )}
+              </View>
+            ))}
+
+            {summaryMilestone != null && (
+              <View style={summaryStyles.milestoneBlock}>
+                <Text style={summaryStyles.milestoneText}>
+                  {summaryMilestone}-Day Streak!
+                </Text>
+              </View>
+            )}
+
+            <Pressable
+              onPress={() => {
+                setShowSummary(false);
+                router.replace('/(tabs)');
+              }}
+              style={summaryStyles.continueBtn}
+            >
+              <Text style={summaryStyles.continueBtnText}>Continue</Text>
+            </Pressable>
           </View>
         </View>
       </Modal>
@@ -729,6 +847,92 @@ const modalStyles = StyleSheet.create({
   },
   submitPartialBtnText: {
     fontFamily: FontFamily.outfitBold,
+    fontSize: 15,
+    color: greenDeep,
+  },
+});
+
+const summaryStyles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  card: {
+    borderRadius: 20,
+    padding: 24,
+    width: '100%',
+    maxWidth: 340,
+    gap: 12,
+    backgroundColor: paper,
+    ...shadows.formCard,
+  },
+  headerBar: {
+    backgroundColor: citron,
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    marginBottom: 4,
+  },
+  headerText: {
+    fontFamily: FontFamily.outfitExtraBold,
+    fontSize: 15,
+    color: greenDeep,
+    textAlign: 'center',
+  },
+  prRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 4,
+    flexWrap: 'wrap',
+  },
+  prName: {
+    fontFamily: FontFamily.outfitSemiBold,
+    fontSize: 13,
+    color: ink,
+    flex: 1,
+  },
+  prDetail: {
+    fontFamily: FontFamily.monoBold,
+    fontSize: 13,
+    color: greenDeep,
+  },
+  prDelta: {
+    fontFamily: FontFamily.outfitBold,
+    fontSize: 12,
+    color: citron,
+  },
+  prBadge: {
+    fontFamily: FontFamily.outfitExtraBold,
+    fontSize: 10,
+    color: citron,
+    letterSpacing: 1,
+  },
+  milestoneBlock: {
+    backgroundColor: citron + '30',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  milestoneText: {
+    fontFamily: FontFamily.outfitExtraBold,
+    fontSize: 18,
+    color: greenDeep,
+  },
+  continueBtn: {
+    backgroundColor: citron,
+    borderRadius: 14,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  continueBtnText: {
+    fontFamily: FontFamily.outfitExtraBold,
     fontSize: 15,
     color: greenDeep,
   },

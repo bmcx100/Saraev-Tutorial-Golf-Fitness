@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import Animated, {
@@ -7,6 +8,7 @@ import Animated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
+import * as Haptics from 'expo-haptics';
 import {
   ink,
   forest,
@@ -31,6 +33,7 @@ interface ExerciseCardProps {
   onLogSet: () => void;
   onEditWeight: () => void;
   onEditReps: () => void;
+  prWeight?: number;
 }
 
 // ── Check Icon (stroke 3 per spec) ──────────────────────────
@@ -309,10 +312,30 @@ export function ExerciseCard({
   onLogSet,
   onEditWeight,
   onEditReps,
+  prWeight,
 }: ExerciseCardProps) {
   const isActive = tone === 'next';
   const isDone = tone === 'done';
   const pulseScale = useSharedValue(1);
+
+  // PR detection for weight
+  const isNewPR = prWeight != null && weight != null && weight > prWeight;
+  const prCelebratedRef = useRef(false);
+
+  useEffect(() => {
+    if (isNewPR && !prCelebratedRef.current) {
+      prCelebratedRef.current = true;
+      pulseScale.value = withSequence(
+        withTiming(1.05, { duration: 100 }),
+        withTiming(1, { duration: 100 }),
+      );
+      if (process.env.EXPO_OS === 'ios') {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      }
+    } else if (!isNewPR) {
+      prCelebratedRef.current = false;
+    }
+  }, [isNewPR, pulseScale]);
 
   const label =
     isDone
@@ -350,6 +373,13 @@ export function ExerciseCard({
           <Text style={cardStyles.badgeText}>
             NOW {'\u00B7'} SET {done + 1}
           </Text>
+        </View>
+      )}
+
+      {/* PR badge */}
+      {isNewPR && (
+        <View style={cardStyles.prBadge}>
+          <Text style={cardStyles.prBadgeText}>PR</Text>
         </View>
       )}
 
@@ -449,6 +479,22 @@ const cardStyles = StyleSheet.create({
     elevation: 4,
   },
   badgeText: {
+    fontFamily: FontFamily.monoExtraBold,
+    fontSize: 9,
+    letterSpacing: 9 * 0.2,
+    color: greenDeep,
+  },
+  prBadge: {
+    position: 'absolute',
+    top: -10,
+    right: 14,
+    backgroundColor: citron,
+    paddingVertical: 3,
+    paddingHorizontal: 9,
+    borderRadius: 99,
+    zIndex: 10,
+  },
+  prBadgeText: {
     fontFamily: FontFamily.monoExtraBold,
     fontSize: 9,
     letterSpacing: 9 * 0.2,

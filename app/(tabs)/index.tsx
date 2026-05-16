@@ -67,11 +67,19 @@ const CATEGORY_ORDER: HabitCategory[] = ['golf', 'workout', 'lifestyle'];
 
 export default function TodayScreen() {
   const { todayHabits, logHabit, getHabitProgress } = useHabits();
-  const { activeChallenge, challengeProgress, checkChallengeCompletion } = useChallenges();
+  const {
+    activeChallenge,
+    challengeProgress,
+    checkChallengeCompletion,
+    justCompletedChallenge,
+    clearCompletedChallenge,
+  } = useChallenges();
   const { profile, devDateOverride } = useUser();
 
   const [confettiActive, setConfettiActive] = useState(false);
   const [confettiMessage, setConfettiMessage] = useState<string | undefined>();
+  const [confettiParticleCount, setConfettiParticleCount] = useState(40);
+  const [showChallengeCelebration, setShowChallengeCelebration] = useState(false);
 
   const { celebrationHabits, warningHabits } = usePace();
   const [showCelebrationToast, setShowCelebrationToast] = useState(false);
@@ -114,6 +122,20 @@ export default function TodayScreen() {
     })();
   }, [todayStr, celebrationHabits, warningHabits]);
 
+  // Challenge completion celebration
+  useEffect(() => {
+    if (justCompletedChallenge) {
+      setShowChallengeCelebration(true);
+      setConfettiParticleCount(80);
+      setConfettiMessage(`${justCompletedChallenge.name} Complete!`);
+      setConfettiActive(true);
+      if (process.env.EXPO_OS === 'ios') {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+      }
+      playSound('confetti', profile.soundEnabled);
+    }
+  }, [justCompletedChallenge, profile.soundEnabled]);
+
   const handleLog = useCallback(
     (habitId: string) => {
       if (habitId === 'speed-training') {
@@ -132,7 +154,8 @@ export default function TodayScreen() {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         }
         playSound('confetti', profile.soundEnabled);
-        setConfettiMessage(undefined);
+        setConfettiParticleCount(40);
+        setConfettiMessage(`All ${todayHabits.length} habits done!`);
         setConfettiActive(true);
       } else if (justCompleted) {
         playSound('success', profile.soundEnabled);
@@ -239,8 +262,15 @@ export default function TodayScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       <Confetti
         active={confettiActive}
+        particleCount={confettiParticleCount}
         message={confettiMessage}
-        onComplete={() => setConfettiActive(false)}
+        onComplete={() => {
+          setConfettiActive(false);
+          if (showChallengeCelebration) {
+            setShowChallengeCelebration(false);
+            clearCompletedChallenge();
+          }
+        }}
       />
 
       {showCelebrationToast && celebrationHabits.length > 0 && (
