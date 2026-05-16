@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Subpar · Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  html, body { margin: 0; padding: 0; background: #ece8e0; height: 100%; }
+  body { font-family: 'Outfit', system-ui, sans-serif; }
+  *::-webkit-scrollbar { width: 0; height: 0; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="pillars-shared.jsx"></script>
+<script type="text/babel" src="settings-screen.jsx"></script>
+
+<script type="text/babel">
+const PHONE_W = 390, PHONE_H = 844;
+
+function Phone({ children }) {
+  return (
+    <IOSDevice width={PHONE_W} height={PHONE_H} dark>
+      <div style={{ height: '100%', overflow: 'hidden' }}>{children}</div>
+    </IOSDevice>
+  );
+}
+
+function App() {
+  const states = [
+    { id: 'overview',      label: '01 · Default · all collapsed',     expanded: 'none' },
+    { id: 'tracking',      label: '02 · Tracking expanded',            expanded: 'tracking' },
+    { id: 'notifications', label: '03 · Notifications expanded',       expanded: 'notifications' },
+    { id: 'preferences',   label: '04 · Preferences expanded',         expanded: 'preferences' },
+    { id: 'account',       label: '05 · Account expanded',             expanded: 'account' },
+    { id: 'dev',           label: '06 · Dev Tools expanded',           expanded: 'dev' },
+  ];
+
+  return (
+    <DesignCanvas
+      title="Subpar · Settings"
+      subtitle="Collapsible topic groups. One section open at a time. Dev Tools gets the clay accent so it reads as a different surface from the user-facing four.">
+
+      <DCSection id="notes" title="System"
+        subtitle="Translating the existing UI into the Build Strong design vocabulary.">
+        <DCArtboard id="notes" label="System notes" width={1180} height={300}>
+          <SystemNotes/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="screens" title="States" subtitle="Six states, one screen.">
+        {states.map(s => (
+          <DCArtboard key={s.id} id={s.id} label={s.label}
+            width={PHONE_W + 40} height={PHONE_H + 40}>
+            <div style={{ width: '100%', height: '100%',
+              display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Phone><SettingsScreen expanded={s.expanded}/></Phone>
+            </div>
+          </DCArtboard>
+        ))}
+      </DCSection>
+
+    </DesignCanvas>
+  );
+}
+
+function SystemNotes() {
+  const ink = '#0e2118', sub = '#6b756f', rule = '#e2dcc0', paper = '#f7f4ea';
+  const forest = '#1d4e34', citron = '#cfde50', clay = '#cc6f4a';
+  const Tile = ({ tag, title, body }) => (
+    <div style={{ background: '#fff', border: `1px solid ${rule}`,
+      borderRadius: 14, padding: '14px 16px', flex: 1 }}>
+      <div style={{ fontFamily: '"JetBrains Mono", monospace',
+        fontSize: 10, fontWeight: 800, color: sub, letterSpacing: '0.22em' }}>
+        {tag}
+      </div>
+      <div style={{ marginTop: 4, fontSize: 15, fontWeight: 800,
+        color: ink, letterSpacing: '-0.018em' }}>{title}</div>
+      <div style={{ marginTop: 6, fontSize: 12.5, color: sub, fontWeight: 500,
+        lineHeight: 1.55 }}>{body}</div>
+    </div>
+  );
+  return (
+    <div style={{ width: '100%', height: '100%', background: paper, color: ink,
+      fontFamily: '"Outfit", system-ui, sans-serif',
+      padding: '22px 26px', boxSizing: 'border-box',
+      display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div>
+        <div style={{ fontFamily: '"JetBrains Mono", monospace',
+          fontSize: 10.5, fontWeight: 800, color: sub, letterSpacing: '0.22em' }}>
+          DESIGN NOTES
+        </div>
+        <div style={{ marginTop: 4, fontSize: 22, fontWeight: 800,
+          letterSpacing: '-0.025em', lineHeight: 1.15 }}>
+          One topic open at a time. The rest stay quiet so the page never feels long.
+        </div>
+      </div>
+      <div style={{ display: 'flex', gap: 12 }}>
+        <Tile tag="HEADERS"
+          title="JetBrains Mono · uppercase · tracked"
+          body="Reuses the all-caps mono treatment from Speed Training. Sliders glyph on the right (kept from the current screen) signals tappable."/>
+        <Tile tag="ACCENTS"
+          title="Forest for primary, clay for dev"
+          body="Toggles use a muted forest-green (#3aa57c) for ON. Dev Tools border + DATA header use clay (#cc6f4a) — same accent already used for destructive moments."/>
+        <Tile tag="DESTRUCTIVE"
+          title="Outline clay buttons"
+          body="Sign Out, Reset, Clear all share one button style: 1.5px clay outline on white. No filled red — keeps the page calm and matches the rest of the system."/>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

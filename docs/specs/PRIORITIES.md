@@ -5,11 +5,15 @@
 - **016 -- Build Strong Hero Card (BS6-XL)** -- Full-size Build Strong hero card for Today screen: barbell photo background with forest-tint stack, glass stat tiles (top lift, volume, delta), 12-segment progress bar, streak readout, dual CTA. Replaces UpNextHero when gym is up next.
 
 ## Up Next
+- **019 -- Training Session Celebrations** -- Inline PR micro-celebrations during speed/strength input, per-field PR tracking, session summary modals on save (hero moment for max out PRs, PR list, near-PR standouts), challenge completion celebration, streak milestones, enhanced all-done confetti. Supersedes the celebration portions of draft-010.
+- **020 -- History Tab** -- Replace Stats tab with speed-first History tab: speed hero card, weekly activity strip, gym-to-speed connection narrative, monthly consistency calendar, reverse-chronological activity feed. Strength framed through speed lens. Detail views preserved.
 - **017 -- Supabase Training Schema** -- Postgres tables, types, indexes, and RLS policies for speed/strength sessions, stats aggregates, exercise defaults, and training state. Foundation for cross-device sync.
 - **018 -- Training Data Sync** -- Offline-first dual-write sync: AsyncStorage + Supabase write-through on save, cloud pull on first login, last-write-wins merge for multi-device.
-- **010 -- Gamification & Emotional Hooks** -- PR celebrations, number-to-beat displays, milestone badges, gap-closing signals, streak jeopardy, protocol completion summaries (see draft: `docs/specs/drafts/draft-010-gamification-emotional-hooks.md`)
 - **027 -- Stay on Track (Notifications)** -- Personalized per-habit reminders, configurable timing, push notification setup
 - **028 -- Challenge Goal Setting** -- Personalized challenge goals: speed targets for Get Long, streak goals for Get Strong, cardio/core duration goals for Tighten It Up (see draft: `docs/specs/drafts/draft-challenge-goal-setting.md`)
+
+## Deferred
+- **010 -- Gamification & Emotional Hooks (remaining)** -- Gap-closing signals, streak jeopardy passive indicators, protocol completion summaries. The celebration portions (PR moments, number-to-beat, milestone badges) are covered by spec 019. Remaining items can be specced individually when prioritized.
 
 ## Completed
 - **014 -- Password Recovery Flow** -- Forgot Password link on login, PASSWORD_RECOVERY event detection, dedicated reset-password screen, works on web + native
