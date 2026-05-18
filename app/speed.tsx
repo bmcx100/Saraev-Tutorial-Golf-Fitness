@@ -891,6 +891,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 0,
   },
   wideCardCompact: {
+    marginTop: 6,
     marginHorizontal: 12,
     marginBottom: 8,
   },

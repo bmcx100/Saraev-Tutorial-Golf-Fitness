@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   containerCompact: {
     paddingTop: 8,
-    paddingBottom: 2,
+    paddingBottom: 10,
   },
   left: {
     flex: 1,
