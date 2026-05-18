@@ -2,7 +2,8 @@ import { supabase } from '@/lib/supabase';
 import type { SpeedSession } from '@/constants/speed-protocols';
 import type { StrengthSession, WorkoutDay } from '@/constants/strength-protocols';
 import type { SpeedStats, StrengthStats } from '@/utils/storage';
-import type { SpeedSessionRow, StrengthSessionRow } from '@/lib/database.types';
+import type { SpeedSessionRow, StrengthSessionRow, UserProfileRow } from '@/lib/database.types';
+import type { UserProfile, ScheduleConfig } from '@/contexts/user-context';
 
 /**
  * Cloud read (pull) functions. Used during initial sync to fetch all
@@ -12,7 +13,7 @@ import type { SpeedSessionRow, StrengthSessionRow } from '@/lib/database.types';
 
 export async function pullSpeedSessions(userId: string): Promise<SpeedSession[]> {
   const { data, error } = await supabase
-    .from('speed_sessions')
+    .from('gf_speed_sessions')
     .select('*')
     .eq('user_id', userId);
 
@@ -33,7 +34,7 @@ export async function pullSpeedSessions(userId: string): Promise<SpeedSession[]>
 
 export async function pullStrengthSessions(userId: string): Promise<StrengthSession[]> {
   const { data, error } = await supabase
-    .from('strength_sessions')
+    .from('gf_strength_sessions')
     .select('*')
     .eq('user_id', userId);
 
@@ -50,7 +51,7 @@ export async function pullStrengthSessions(userId: string): Promise<StrengthSess
 
 export async function pullSpeedStats(userId: string): Promise<SpeedStats | null> {
   const { data, error } = await supabase
-    .from('speed_stats')
+    .from('gf_speed_stats')
     .select('*')
     .eq('user_id', userId)
     .single();
@@ -73,7 +74,7 @@ export async function pullSpeedStats(userId: string): Promise<SpeedStats | null>
 
 export async function pullStrengthStats(userId: string): Promise<StrengthStats | null> {
   const { data, error } = await supabase
-    .from('strength_stats')
+    .from('gf_strength_stats')
     .select('*')
     .eq('user_id', userId)
     .single();
@@ -95,7 +96,7 @@ export async function pullExerciseDefaults(
   userId: string,
 ): Promise<Record<string, { weight: number | null; reps: number }[]> | null> {
   const { data, error } = await supabase
-    .from('exercise_defaults')
+    .from('gf_exercise_defaults')
     .select('*')
     .eq('user_id', userId)
     .single();
@@ -107,7 +108,7 @@ export async function pullExerciseDefaults(
 
 export async function pullTrainingState(userId: string): Promise<WorkoutDay | null> {
   const { data, error } = await supabase
-    .from('training_state')
+    .from('gf_training_state')
     .select('*')
     .eq('user_id', userId)
     .single();
@@ -115,4 +116,27 @@ export async function pullTrainingState(userId: string): Promise<WorkoutDay | nu
   if (error || !data) return null;
 
   return data.last_workout_day as WorkoutDay | null;
+}
+
+export async function pullUserProfile(userId: string): Promise<UserProfile | null> {
+  const { data, error } = await supabase
+    .from('gf_user_profiles')
+    .select('*')
+    .eq('user_id', userId)
+    .single();
+
+  if (error || !data) return null;
+
+  const row = data as unknown as UserProfileRow;
+  return {
+    activeHabitIds: row.active_habit_ids,
+    schedule: row.schedule as unknown as ScheduleConfig,
+    speedProtocol: row.speed_protocol as UserProfile['speedProtocol'],
+    strengthProtocol: row.strength_protocol as UserProfile['strengthProtocol'],
+    onboardingComplete: row.onboarding_complete,
+    soundEnabled: row.sound_enabled,
+    notificationsEnabled: row.notifications_enabled,
+    notificationMorning: row.notification_morning,
+    notificationEvening: row.notification_evening,
+  };
 }

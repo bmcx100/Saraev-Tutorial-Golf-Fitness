@@ -9,18 +9,22 @@ import {
   rebuildStatsAggregates,
   loadExerciseDefaults,
   loadLastStrengthWorkoutDay,
+  loadProfile,
+  saveProfile,
 } from '@/utils/storage';
 import {
   pullSpeedSessions,
   pullStrengthSessions,
   pullExerciseDefaults,
   pullTrainingState,
+  pullUserProfile,
 } from '@/lib/supabase-pull';
 import {
   syncSpeedSession,
   syncStrengthSession,
   syncExerciseDefaults,
   syncTrainingState,
+  syncUserProfile,
 } from '@/lib/supabase-sync';
 
 /**
@@ -134,6 +138,17 @@ export async function initialSync(userId: string): Promise<void> {
   } else if (localLastDay) {
     // Both exist — push local (most recent action)
     await syncTrainingState(userId, localLastDay);
+  }
+
+  // 8. Merge user profile
+  const cloudProfile = await pullUserProfile(userId);
+  const localProfile = await loadProfile();
+  if (cloudProfile && (!localProfile || !localProfile.onboardingComplete)) {
+    // Cloud exists and local is default (not onboarded) — use cloud
+    await saveProfile(cloudProfile);
+  } else if (localProfile && localProfile.onboardingComplete) {
+    // Local is onboarded — keep local and push to cloud
+    await syncUserProfile(userId, localProfile);
   }
 }
 

@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { loadProfile, saveProfile } from '@/utils/storage';
+import { useAuth } from '@/contexts/auth-context';
+import { syncUserProfile } from '@/lib/supabase-sync';
 
 export interface HabitGoalConfig {
   count: number;
@@ -78,6 +80,7 @@ const UserContext = createContext<UserContextType>({
 export const useUser = () => useContext(UserContext);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile>(DEFAULT_PROFILE);
   const [isLoading, setIsLoading] = useState(true);
   const [devDateOverride, setDevDateOverride] = useState<string | null>(null);
@@ -95,10 +98,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       setProfile((prev) => {
         const next = { ...prev, ...updates };
         saveProfile(next);
+        if (user) syncUserProfile(user.id, next);
         return next;
       });
     },
-    [],
+    [user],
   );
 
   const resetProfile = useCallback(() => {

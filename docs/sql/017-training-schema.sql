@@ -1,6 +1,8 @@
 -- ============================================================
--- Spec 017: Supabase Training Schema
--- Run this in the Supabase dashboard SQL editor.
+-- Spec 017: Supabase Training Schema (SUPERSEDED)
+-- Table names below are the original unprefixed names.
+-- See 021-gf-prefix-migration.sql for the rename to gf_* prefix
+-- and the addition of gf_user_profiles.
 -- ============================================================
 
 -- ── 1. speed_sessions ────────────────────────────────────────

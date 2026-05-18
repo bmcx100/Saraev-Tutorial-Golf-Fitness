@@ -230,45 +230,95 @@ export type TrainingStateUpdate = {
   updated_at?: string;
 };
 
+// ── gf_user_profiles ────────────────────────────────────────
+
+export type UserProfileRow = {
+  user_id: string;
+  active_habit_ids: string[];
+  schedule: Record<string, unknown>;
+  speed_protocol: string | null;
+  strength_protocol: string | null;
+  onboarding_complete: boolean;
+  sound_enabled: boolean;
+  notifications_enabled: boolean;
+  notification_morning: string;
+  notification_evening: string;
+  updated_at: string;
+};
+
+export type UserProfileInsert = {
+  user_id: string;
+  active_habit_ids?: string[];
+  schedule?: Record<string, unknown>;
+  speed_protocol?: string | null;
+  strength_protocol?: string | null;
+  onboarding_complete?: boolean;
+  sound_enabled?: boolean;
+  notifications_enabled?: boolean;
+  notification_morning?: string;
+  notification_evening?: string;
+  updated_at?: string;
+};
+
+export type UserProfileUpdate = {
+  user_id?: string;
+  active_habit_ids?: string[];
+  schedule?: Record<string, unknown>;
+  speed_protocol?: string | null;
+  strength_protocol?: string | null;
+  onboarding_complete?: boolean;
+  sound_enabled?: boolean;
+  notifications_enabled?: boolean;
+  notification_morning?: string;
+  notification_evening?: string;
+  updated_at?: string;
+};
+
 // ── Database type ────────────────────────────────────────────
 
 export type Database = {
   public: {
     Tables: {
-      speed_sessions: {
+      gf_speed_sessions: {
         Row: SpeedSessionRow;
         Insert: SpeedSessionInsert;
         Update: SpeedSessionUpdate;
         Relationships: [];
       };
-      strength_sessions: {
+      gf_strength_sessions: {
         Row: StrengthSessionRow;
         Insert: StrengthSessionInsert;
         Update: StrengthSessionUpdate;
         Relationships: [];
       };
-      speed_stats: {
+      gf_speed_stats: {
         Row: SpeedStatsRow;
         Insert: SpeedStatsInsert;
         Update: SpeedStatsUpdate;
         Relationships: [];
       };
-      strength_stats: {
+      gf_strength_stats: {
         Row: StrengthStatsRow;
         Insert: StrengthStatsInsert;
         Update: StrengthStatsUpdate;
         Relationships: [];
       };
-      exercise_defaults: {
+      gf_exercise_defaults: {
         Row: ExerciseDefaultsRow;
         Insert: ExerciseDefaultsInsert;
         Update: ExerciseDefaultsUpdate;
         Relationships: [];
       };
-      training_state: {
+      gf_training_state: {
         Row: TrainingStateRow;
         Insert: TrainingStateInsert;
         Update: TrainingStateUpdate;
+        Relationships: [];
+      };
+      gf_user_profiles: {
+        Row: UserProfileRow;
+        Insert: UserProfileInsert;
+        Update: UserProfileUpdate;
         Relationships: [];
       };
     };

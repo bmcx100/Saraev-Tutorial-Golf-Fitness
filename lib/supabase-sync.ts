@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase';
 import type { SpeedSession } from '@/constants/speed-protocols';
 import type { StrengthSession, WorkoutDay } from '@/constants/strength-protocols';
 import type { SpeedStats, StrengthStats } from '@/utils/storage';
+import type { UserProfile } from '@/contexts/user-context';
 
 /**
  * Cloud write (upsert) functions that mirror the AsyncStorage save API.
@@ -10,7 +11,7 @@ import type { SpeedStats, StrengthStats } from '@/utils/storage';
 
 export async function syncSpeedSession(userId: string, session: SpeedSession): Promise<void> {
   try {
-    await supabase.from('speed_sessions').upsert(
+    await supabase.from('gf_speed_sessions').upsert(
       {
         user_id: userId,
         session_date: session.date,
@@ -30,7 +31,7 @@ export async function syncSpeedSession(userId: string, session: SpeedSession): P
 
 export async function syncStrengthSession(userId: string, session: StrengthSession): Promise<void> {
   try {
-    await supabase.from('strength_sessions').upsert(
+    await supabase.from('gf_strength_sessions').upsert(
       {
         user_id: userId,
         session_date: session.date,
@@ -48,7 +49,7 @@ export async function syncStrengthSession(userId: string, session: StrengthSessi
 
 export async function syncSpeedStats(userId: string, stats: SpeedStats): Promise<void> {
   try {
-    await supabase.from('speed_stats').upsert(
+    await supabase.from('gf_speed_stats').upsert(
       {
         user_id: userId,
         driver_pr_mph: stats.driverPR?.mph ?? null,
@@ -66,7 +67,7 @@ export async function syncSpeedStats(userId: string, stats: SpeedStats): Promise
 
 export async function syncStrengthStats(userId: string, stats: StrengthStats): Promise<void> {
   try {
-    await supabase.from('strength_stats').upsert(
+    await supabase.from('gf_strength_stats').upsert(
       {
         user_id: userId,
         exercise_prs: stats.exercisePRs,
@@ -87,7 +88,7 @@ export async function syncExerciseDefaults(
   defaults: Record<string, { weight: number | null; reps: number }[]>,
 ): Promise<void> {
   try {
-    await supabase.from('exercise_defaults').upsert(
+    await supabase.from('gf_exercise_defaults').upsert(
       {
         user_id: userId,
         defaults: defaults,
@@ -101,7 +102,7 @@ export async function syncExerciseDefaults(
 
 export async function syncTrainingState(userId: string, lastWorkoutDay: WorkoutDay): Promise<void> {
   try {
-    await supabase.from('training_state').upsert(
+    await supabase.from('gf_training_state').upsert(
       {
         user_id: userId,
         last_workout_day: lastWorkoutDay,
@@ -110,5 +111,27 @@ export async function syncTrainingState(userId: string, lastWorkoutDay: WorkoutD
     );
   } catch (e) {
     console.warn('syncTrainingState failed:', e);
+  }
+}
+
+export async function syncUserProfile(userId: string, profile: UserProfile): Promise<void> {
+  try {
+    await supabase.from('gf_user_profiles').upsert(
+      {
+        user_id: userId,
+        active_habit_ids: profile.activeHabitIds,
+        schedule: profile.schedule as unknown as Record<string, unknown>,
+        speed_protocol: profile.speedProtocol,
+        strength_protocol: profile.strengthProtocol,
+        onboarding_complete: profile.onboardingComplete,
+        sound_enabled: profile.soundEnabled,
+        notifications_enabled: profile.notificationsEnabled,
+        notification_morning: profile.notificationMorning,
+        notification_evening: profile.notificationEvening,
+      },
+      { onConflict: 'user_id' },
+    );
+  } catch (e) {
+    console.warn('syncUserProfile failed:', e);
   }
 }
